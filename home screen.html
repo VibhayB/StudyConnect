@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIML StudyConnect</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <button class="menu-button" id = "menu" onclick="toggleMenu()">&#9776;</button>
+        <div class="logo">AIML StudyConnect</div>
+        <button class="home-button" onclick="handleHomeClick()">Home</button>
+    </header>
+<!-- Sign In Popup -->
+<div id="sign-in-popup" class="popup closed">
+    <div class="popup-content">
+        <button class="close-popup" onclick="closeSignInPopup()">&#10005;</button>
+        <h2>Sign In</h2>
+        <form id="sign-in-form">
+            <label for="roll-number">Roll Number:</label>
+            <input type="text" id="roll-number" name="roll-number" required>
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="overlay" class="closed" onclick="closeSignInPopup()"></div>
+
+    <nav id="hamburger-menu" class="closed">
+        <button class="close-menu" onclick="toggleMenu()">&#10005;</button>
+        <ul>
+            <li onclick="showTab('course')">Course</li>
+            <li onclick="showTab('feed')">Feed</li>
+            <li onclick="showTab('tasks')">Tasks</li>
+            <li onclick="showTab('exams')">Exams</li>
+            <li onclick="showTab('apps')">Apps</li>
+            <li onclick="showTab('calendar')">Academic Calendar</li>
+            <li onclick="showTab('forms')">Important Forms/Sheets</li>
+            <li onclick="showTab('contacts')">Important Contacts</li>
+            <li onclick="showTab('installers')">Installers</li>
+            <li onclick="showTab('timetable')">TimeTable</li>
+            <li onclick="showTab('sites')">Online Sites</li>
+            <li onclick="showTab('guide')">Guide</li>
+            <li onclick="showTab('others')">Others</li>
+            <li onclick="showTab('about')">About</li>
+            <li onclick="showTab('feedback')">Feedback</li>
+        </ul>
+    </nav>
+    <div id="overlay" class="closed" onclick="toggleMenu()"></div>
+    <main>
+        <div id="home" class="content active">
+            <div class="slideshow-container">
+                <div class="slide">Welcome to AIML StudyConnect</div>
+                <div class="slide">Your one-stop platform for all academic needs</div>
+                <div class="slide">Stay organized with our task management tools</div>
+                <a class="prev" onclick="changeSlide(-1)">&#10094;</a>
+                <a class="next" onclick="changeSlide(1)">&#10095;</a>
+            </div>
+            <div class="dots">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+            </div>
+        </div>
+        <!-- Add more tab content sections like below for each menu item -->
+        <div id="course" class="content">Course Content</div>
+        <div id="feed" class="content">Feed Content</div>
+        <div id="tasks" class="content">Tasks Content</div>
+        <!-- Continue adding content sections for all tabs -->
+    </main>
+
+    <script src="scripts.js"></script>
+</body>
+</html>
