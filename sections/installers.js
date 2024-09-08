@@ -11,6 +11,8 @@ function populateInstallers(installers) {
     installersContainer.style.backgroundColor = '#f9f9f9';
     installersContainer.style.borderRadius = '8px';
     installersContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    installersContainer.style.justifyContent = 'center';
+    installersContainer.style.alignItems  = 'center';
 
     // Clear existing content
     installersContainer.innerHTML = '';
@@ -30,6 +32,7 @@ function populateInstallers(installers) {
         installerItem.style.cursor = 'pointer';
         installerItem.style.transition = 'transform 0.3s, box-shadow 0.3s';
         installerItem.style.boxSizing = 'border-box';
+        installerItem.style.justifyContent = 'center';
         
         installerItem.onmouseover = () => {
             installerItem.style.transform = 'scale(1.05)';
