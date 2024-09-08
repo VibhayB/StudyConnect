@@ -1,11 +1,13 @@
-// Function to create clickable entities and add them to the div 
 function populateForms(forms) {
     const formsContainer = document.getElementById('forms');
 
     // Apply styles using JavaScript
-    formsContainer.style.display = 'none';
-    formsContainer.style.flexWrap = 'wrap';
-    formsContainer.style.gap = '20px';
+    formsContainer.style.display = 'flex';
+    formsContainer.style.flexDirection = 'row'; // Arrange items in a row
+    formsContainer.style.justifyContent = 'center'; // Center items horizontally
+    formsContainer.style.alignItems = 'center'; // Center items vertically
+    formsContainer.style.flexWrap = 'wrap'; // Allow wrapping of items
+    formsContainer.style.gap = '20px'; // Space between items
     formsContainer.style.padding = '20px';
     formsContainer.style.maxWidth = '100%';
     formsContainer.style.boxSizing = 'border-box';
@@ -19,7 +21,7 @@ function populateForms(forms) {
     // Create and append new form items
     forms.forEach(form => {
         const formItem = document.createElement('div');
-        formItem.style.display = 'flex'; // Use 'flex' to allow proper styling
+        formItem.style.display = 'flex';
         formItem.style.flexDirection = 'column';
         formItem.style.alignItems = 'center';
         formItem.style.justifyContent = 'center';
@@ -35,7 +37,7 @@ function populateForms(forms) {
         formItem.style.boxSizing = 'border-box';
         formItem.style.textAlign = 'center';
         formItem.style.padding = '10px';
-    
+
         formItem.onmouseover = () => {
             formItem.style.transform = 'scale(1.05)';
             formItem.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.2)';
@@ -44,27 +46,28 @@ function populateForms(forms) {
             formItem.style.transform = 'scale(1)';
             formItem.style.boxShadow = 'none';
         };
-    
+
         const link = document.createElement('a');
         link.href = form.url;
         link.target = '_blank';
         link.style.textDecoration = 'none';
         link.style.color = '#333';
-        link.style.display = 'block'; // Make link cover the entire formItem
+        link.style.display = 'flex';
+        link.style.alignItems = 'center'; // Center text vertically
+        link.style.justifyContent = 'center'; // Center text horizontally
         link.style.height = '100%';
         link.style.width = '100%';
-    
+
         const name = document.createElement('p');
         name.textContent = form.name;
         name.style.margin = '0';
         name.style.fontSize = '14px';
         name.style.fontWeight = 'bold';
-        name.style.boxSizing = 'border-box';
-    
+        name.style.textAlign = 'center'; // Center text within the paragraph
+
         link.appendChild(name);
         formItem.appendChild(link);
-    
+
         formsContainer.appendChild(formItem);
     });
-    
 }
