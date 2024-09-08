@@ -435,6 +435,112 @@ homeContent.appendChild(footer);
         reportButton.addEventListener('click', function() {
             window.open(reporturl, '_blank');
         });
+    }  
+    
+    // Check if chatbot has already been added
+    if (!document.getElementById('chatbot-container')) {
+        // Create and add chatbot container
+        const chatbotContainer = document.createElement('div');
+        chatbotContainer.id = 'chatbot-container';
+        chatbotContainer.innerHTML = `
+            <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 10px; border-radius: 50%; z-index: 1000;">
+                <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 30px; height: 30px;">
+            </div>
+            <div id="chatbot" style="display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; overflow: hidden;">
+                <div id="chatbot-header" style="background-color: #007bff; color: white; padding: 10px; text-align: left; position: relative;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 20px; height: 20px; position: absolute; top: 10px; left: 10px;">
+                    <span style="margin-left: 40px;">StudyBuddy</span>
+                    <span id="close-chatbot" style="float: right; cursor: pointer;">&times;</span>
+                </div>
+                <div id="messages" style="padding: 10px; height: calc(100% - 80px); overflow-y: auto; background-color: #f9f9f9; display: flex; flex-direction: column-reverse;">
+                </div>
+                <div style="padding: 10px; border-top: 1px solid #ddd; background-color: white; position: absolute; bottom: 0; width: calc(100% - 20px); box-sizing: border-box;">
+                    <input id="message-input" type="text" placeholder="Type your message..." style="width: calc(100% - 50px); padding: 5px; box-sizing: border-box;" />
+                    <button id="send-message" style="width: 40px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
+                </div>
+            </div>
+        `;
+        homeContent.appendChild(chatbotContainer);
+
+        // Chatbot functionality
+        const chatbotToggle = document.getElementById('chatbot-toggle');
+        const closeChatbot = document.getElementById('close-chatbot');
+        const chatImage = document.getElementById('chatbot-image');
+        const messageInput = document.getElementById('message-input');
+        const sendMessageButton = document.getElementById('send-message');
+        const messagesContainer = document.getElementById('messages');
+
+        // Function to toggle chat visibility
+        chatImage.onclick = () => {
+            const chatbot = document.getElementById('chatbot');
+            chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+        };
+
+        // Function to close chat
+        closeChatbot.onclick = () => {
+            document.getElementById('chatbot').style.display = 'none';
+        };
+
+        // Function to create and display messages
+         // Function to create and display messages
+         function displayMessage(text, sender) {
+            const messageBubble = document.createElement('div');
+            messageBubble.classList.add('message');
+            messageBubble.style.display = 'flex';
+            messageBubble.style.alignItems = 'flex-end';
+            messageBubble.style.marginBottom = '10px';
+            messageBubble.style.flexDirection = sender === 'user' ? 'row-reverse' : 'row';
+
+            const messageText = document.createElement('div');
+            messageText.classList.add('message-text');
+            messageText.textContent = text;
+            messageText.style.maxWidth = '70%';
+            messageText.style.padding = '10px';
+            messageText.style.borderRadius = '15px';
+            messageText.style.backgroundColor = sender === 'user' ? '#007bff' : '#ddd';
+            messageText.style.color = sender === 'user' ? 'white' : 'black';
+            messageText.style.margin = '5px';
+
+            const icon = document.createElement('img');
+            icon.classList.add('message-icon');
+            icon.src = sender === 'user' 
+                ? 'https://cdn-icons-png.flaticon.com/512/552/552721.png' 
+                : 'https://cdn-icons-png.flaticon.com/512/8943/8943377.png';
+            icon.style.width = '20px';
+            icon.style.height = '20px';
+            icon.style.marginLeft = sender === 'user' ? '10px' : '0';
+            icon.style.marginRight = sender === 'user' ? '0' : '10px';
+
+            messageBubble.appendChild(icon);
+            messageBubble.appendChild(messageText);
+            messagesContainer.appendChild(messageBubble);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            messagesContainer.style.display = 'flex';
+            messagesContainer.style.flexDirection = 'column'; // Change this line to column
+            messagesContainer.style.padding = '10px';
+            messagesContainer.style.height = 'calc(100% - 80px)';
+            messagesContainer.style.overflowY = 'auto';
+            messagesContainer.style.backgroundColor = '#f9f9f9';
+        }
+
+        sendMessageButton.onclick = () => {
+            const userMessage = messageInput.value.trim();
+            if (userMessage) {
+                displayMessage(userMessage, 'user');
+                messageInput.value = '';
+
+                // Simulate a bot response
+                setTimeout(() => {
+                    displayMessage('Hey There! I am currently in development', 'bot');
+                }, 1000);
+            }
+        };
+
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendMessageButton.click();
+            }
+        });
     }
 }
 
