@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SGPA Calculator</title>
+  <style>
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+
+    th, td {
+      padding: 8px 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>SGPA Calculator</h1>
+
+  <label for="semester">Select Semester:</label>
+  <select id="semester" onchange="populateSubjects()">
+  </select>
+
+  <form id="sgpaCalculator">
+    <table id="subjectsTable">
+      <tr>
+        <th>Subject</th>
+        <th>Credits</th>
+        <th>Total Marks</th>
+        <th>Grade</th>
+      </tr>
+    </table>
+
+    <button type="button" onclick="calculateSGPA()">Calculate SGPA</button>
+  </form>
+
+  <p id="result"></p>
+
+  <script>
+    const storedSemesters  = localStorage.getItem("semesters");
+    const semesters = storedSemesters ? JSON.parse(storedSemesters) : {};
+    function populateSemesterOptions() {
+      const semesterSelect = document.getElementById("semester");
+      semesterSelect.innerHTML = ''; // Clear existing options
+
+      // Generate options based on available semesters
+      for (const [semester, subjects] of Object.entries(semesters)) {
+        const option = document.createElement("option");
+        option.value = semester;
+        option.textContent = `Semester ${semester}`;
+        semesterSelect.appendChild(option);
+      }
+    }
+    function populateSubjects() {
+      const semester = document.getElementById("semester").value;
+      const subjects = semesters[semester];
+
+      const table = document.getElementById("subjectsTable");
+      table.innerHTML = `
+        <tr>
+          <th>Subject</th>
+          <th>Credits</th>
+          <th>Total Marks</th>
+          <th>Grade</th>
+        </tr>
+      `;
+
+      subjects.forEach((subject, index) => {
+        const row = table.insertRow();
+        row.innerHTML = `
+          <td>${subject.name} (${subject.maxMarks} marks)</td>
+          <td>${subject.credits}</td>
+          <td><input type="number" id="subject${index + 1}" placeholder="Enter marks" min="0" max="${subject.maxMarks}"></td>
+          <td id="grade${index + 1}"></td>
+        `;
+      });
+    }
+
+    function calculateSGPA() {
+      const semester = document.getElementById("semester").value;
+      const subjects = semesters[semester];
+      const maxMarks = subjects.map(subject => subject.maxMarks);
+      const credits = subjects.map(subject => subject.credits);
+
+      const marks = subjects.map((_, index) => {
+        const value = document.getElementById(`subject${index + 1}`).value.trim();
+        return value !== '' ? parseFloat(value) : null;
+      });
+
+      const gradePoints = {
+        'O': 10,
+        'A+': 9,
+        'A': 8,
+        'B+': 7,
+        'B': 6,
+        'C': 5,
+        'P': 4,
+        'F': 0,
+        'X': 0 // 'X' for display purposes
+      };
+
+      const resultTable = document.getElementById('subjectsTable').getElementsByTagName('tr');
+      let totalGradePoints = 0;
+
+      for (let i = 1; i < resultTable.length; i++) {
+        const markInput = resultTable[i].getElementsByTagName('input')[0];
+        const gradeCell = resultTable[i].getElementsByTagName('td')[3];
+
+        const enteredMark = marks[i - 1];
+        const subjectMaxMarks = maxMarks[i - 1];
+        
+        const percentage = enteredMark !== null ? (enteredMark / subjectMaxMarks) * 100 : 0;
+        const grade = getGrade(percentage);
+        const gradePoint = gradePoints[grade];
+
+        totalGradePoints += gradePoint * credits[i - 1];
+        gradeCell.innerText = grade;
+      }
+
+      const totalCredits = credits.reduce((a, b) => a + b, 0);
+      const sgpa = totalGradePoints / totalCredits;
+
+      document.getElementById('result').innerText = `Your SGPA is: ${sgpa.toFixed(2)}`;
+    }
+
+    function getGrade(percentage) {
+      if (percentage >= 90) return 'O';
+      if (percentage >= 80) return 'A+';
+      if (percentage >= 70) return 'A';
+      if (percentage >= 60) return 'B+';
+      if (percentage >= 50) return 'B';
+      if (percentage >= 45) return 'C';
+      if (percentage >= 40) return 'P';
+      return 'F';
+    }
+
+    window.onload = () => {
+      populateSemesterOptions();
+      populateSubjects(); // Populate subjects based on default selected semester
+    };
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xebia Content</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.file-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.file {
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.file h2 {
+    margin-top: 0;
+    color: #00509e;
+}
+
+.file a {
+    display: inline-block;
+    margin-top: 10px;
+    color: #00509e;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.file a:hover {
+    text-decoration: underline;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Xebia Content</h1>
+        <div class="file-container" id="fileContainer">
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Retrieve links from localStorage
+            const fileLinks = JSON.parse(localStorage.getItem('xebiacontent')) || [];
+
+            // Get the container where links will be displayed
+            const fileContainer = document.getElementById('fileContainer');
+
+            // Populate the container with links
+            fileLinks.forEach(link => {
+                const fileDiv = document.createElement('div');
+                fileDiv.className = 'file';
+
+                const title = document.createElement('h2');
+                title.textContent = link.title;
+
+                const anchor = document.createElement('a');
+                anchor.href = link.url;
+                anchor.target = '_blank';
+                anchor.textContent = 'View File';
+
+                fileDiv.appendChild(title);
+                fileDiv.appendChild(anchor);
+                fileContainer.appendChild(fileDiv);
+            });
+        });
+    </script>
+</body>
+</html>

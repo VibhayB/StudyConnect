@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CGPA Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin: 50px;
+    }
+    input {
+      margin-bottom: 10px;
+    }
+    #error-message {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>CGPA Calculator (2nd Year) </h2>
+
+  <label for="sgpa1">SGPA Semester 3:</label>
+  <input type="number" id="sgpa1" step="0.01" required><br>
+
+  <label for="sgpa2">SGPA Semester 4:</label>
+  <input type="number" id="sgpa2" step="0.01" required><br>
+
+  <button onclick="calculateCGPA()">Calculate CGPA</button>
+
+  <h3>CGPA: <span id="result"></span></h3>
+
+  <p id="error-message"></p>
+
+  <script>
+    function calculateCGPA() {
+      // Get input values
+      var sgpa1 = parseFloat(document.getElementById('sgpa1').value);
+      var sgpa2 = parseFloat(document.getElementById('sgpa2').value);
+
+      // Validate SGPA values
+      if (isNaN(sgpa1) || isNaN(sgpa2) || sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
+        document.getElementById('error-message').innerText = 'Invalid SGPA values. Please enter valid SGPA values between 0 and 10.';
+        return;
+      } else {
+        document.getElementById('error-message').innerText = ''; // Clear error message if valid values are entered
+      }
+
+      // Set fixed credit values
+      var credits1 = 24;
+      var credits2 = 27;
+
+      // Calculate CGPA
+      var totalCredits = credits1 + credits2;
+      var weightedSum = (sgpa1 * credits1) + (sgpa2 * credits2);
+      var cgpa = weightedSum / totalCredits;
+
+      // Display result
+      document.getElementById('result').innerText = cgpa.toFixed(2);
+    }
+  </script>
+
+</body>
+</html>

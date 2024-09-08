@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clan Links</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            width: 80%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .clan-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .clan {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .clan h2 {
+            margin-top: 0;
+            color: #00509e;
+        }
+
+        .clan p {
+            margin: 5px 0;
+            color: #666;
+        }
+
+        .clan a {
+            display: inline-block;
+            margin-top: 10px;
+            color: #00509e;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .clan a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Clans and Their Links</h1>
+        <div class="clan-container" id="clanContainer">
+            <!-- Dynamic content will be inserted here -->
+        </div>
+    </div>
+    <script>
+        // Array of clan data
+        const clans = JSON.parse(localStorage.getItem('clanlinks')) || [];
+
+        // Get the container element
+        const container = document.getElementById('clanContainer');
+
+        // Iterate over the clan data and create HTML elements
+        clans.forEach(clan => {
+            const clanDiv = document.createElement('div');
+            clanDiv.className = 'clan';
+            
+            // Create clan title and batch info
+            const clanTitle = document.createElement('h2');
+            clanTitle.textContent = clan.head;
+
+            const batchInfo = document.createElement('p');
+            batchInfo.textContent = 'Batch 2022✨';
+
+            // Create link
+            const clanLink = document.createElement('a');
+            clanLink.href = clan.url;
+            clanLink.textContent = 'Join the Clan';
+            clanLink.target = '_blank';
+
+            // Append elements to clanDiv
+            clanDiv.appendChild(clanTitle);
+            clanDiv.appendChild(batchInfo);
+            clanDiv.appendChild(clanLink);
+
+            // Append clanDiv to container
+            container.appendChild(clanDiv);
+        });
+    </script>
+</body>
+</html>

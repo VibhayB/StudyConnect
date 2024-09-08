@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Department Overview</title>
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h2 {
+    color: #333;
+    border-bottom: 2px solid #00509e;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+}
+
+.department-vision, .department-mission, .program-outcomes {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+ul, ol {
+    margin: 0;
+    padding-left: 20px;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+strong {
+    color: #00509e;
+}
+
+.department-mission ul, .program-outcomes ol {
+    padding-left: 20px;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <section class="department-vision">
+            <h2>Department Vision</h2>
+            <p id="department-vision-text"></p>
+        </section>
+
+        <section class="department-mission">
+            <h2>Department Mission</h2>
+            <ul id="department-mission-list">
+            </ul>
+        </section>
+
+        <section class="program-outcomes">
+            <h2>Program Outcomes</h2>
+            <ol id = "program-outcomes-list">
+
+            </ol>
+        </section>
+    </div>
+    <script>
+            const courseInfo = JSON.parse(localStorage.getItem("courseInfo"));
+
+            if (courseInfo) {
+                // Update department vision
+                const visionTextElement = document.getElementById("department-vision-text");
+                visionTextElement.textContent = courseInfo.head;
+
+                // Update department mission
+                const missionListElement = document.getElementById("department-mission-list");
+                missionListElement.innerHTML = courseInfo.DM.map(dm => 
+                    `<li><strong>${dm.label}:</strong> ${dm.description}</li>`
+                ).join('');
+
+                // Update program outcomes
+                const outcomesListElement = document.getElementById("program-outcomes-list");
+                outcomesListElement.innerHTML = courseInfo.PO.map(po => 
+                    `<li><strong>${po.label}:</strong> ${po.description}</li>`
+                ).join('');
+            }
+    </script>
+</body>
+</html>
