@@ -443,6 +443,7 @@ function signInWithGoogleDirectly(val = false) {
       window.signInWithGoogle(val).then(async (user) => {
 
         if (user) {
+            showLoadingScreen(); 
             userRead();
             fetchAndDisplayData();
         } else {
@@ -493,7 +494,6 @@ setInterval(nextSlide, 5000);
 
 // Initial setup when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
-    showLoadingScreen(); 
     const menuButton = document.getElementById('menu');
     const menu = document.getElementById('hamburger-menu');
     menuButton.style.display = isSignedIn ? 'block' : 'none';
@@ -517,6 +517,8 @@ document.addEventListener('DOMContentLoaded', function() {
     } 
     const storedUserId = localStorage.getItem("efusereId");
     if (storedUserId && readability) {
+        
+        showLoadingScreen(); 
         console.log("Initializing");
         fetchAndDisplayData();
         userRead();
