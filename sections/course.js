@@ -412,6 +412,7 @@ function showDetailContent(detailName, detailValues) {
     subjectContent.style.marginLeft = '20px';
     const breadcrumbNav = document.querySelector('#breadcrumb-nav');
     breadcrumbNav.style.marginLeft = '20px';
+
     if (typeof detailValues === 'object' && detailValues !== null) {
         // Check if it's a simple object with a single URL
         const keys = Object.keys(detailValues);
@@ -421,6 +422,7 @@ function showDetailContent(detailName, detailValues) {
             return; // Exit function after opening the URL
         }
     }
+
     // Update breadcrumb navigation
     breadcrumbNav.innerHTML = `
         <a href="#" id="course-link">Course</a> > 
@@ -451,6 +453,11 @@ function showDetailContent(detailName, detailValues) {
     const detailContent = document.createElement('div');
     detailContent.classList.add('detail-content');
     detailContent.style.marginLeft = '20px';
+
+    // Create a container for the items
+    const itemsContainer = document.createElement('div');
+    itemsContainer.classList.add('container');
+    detailContent.appendChild(itemsContainer);
     
     // Add note if the section is "Videos"
     if (detailName === "Videos") {
@@ -471,23 +478,39 @@ function showDetailContent(detailName, detailValues) {
 
     if (typeof detailValues === 'string') {
         // If detailValues is a string, display it directly
-        detailContent.innerHTML = `<p>${detailValues}</p>`;
+        detailContent.innerHTML += `<p>${detailValues}</p>`;
     } else if (typeof detailValues === 'object' && detailValues !== null) {
         // Apply styles directly
         const style = document.createElement('style');
         style.textContent = `
+            .detail-content {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 20px;
+            }
+            .container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: center; /* Center items horizontally */
+                width: 100%;
+                max-width: 1200px; /* Max width for the container */
+            }
             .item-container {
+                flex: 1 1 calc(25% - 20px); /* Responsive width */
+                max-width: calc(25% - 20px); /* Prevent overflow */
                 border: 1px solid #ddd;
                 border-radius: 5px;
                 padding: 15px;
-                margin-bottom: 10px;
                 background-color: #fafafa;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
                 transition: background-color 0.3s, box-shadow 0.3s;
+                box-sizing: border-box; /* Include padding and border in element's total width */
             }
             .item-container h3 {
                 margin-top: 0;
-                font-size: 1.5em; /* Increased font size */
+                font-size: 1.2em;
                 color: #333;
             }
             .item-container a {
@@ -497,9 +520,9 @@ function showDetailContent(detailName, detailValues) {
                 font-weight: bold;
                 border: 2px solid #007bff;
                 border-radius: 5px;
-                padding: 7px 15px; /* Increased padding */
+                padding: 8px 12px;
                 transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-                font-size: 1.2em; /* Increased font size */
+                font-size: 1em;
             }
             .item-container a:hover {
                 background-color: #007bff;
@@ -510,32 +533,46 @@ function showDetailContent(detailName, detailValues) {
                 background-color: #e9ecef;
                 box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
             }
+            @media (max-width: 768px) {
+                .item-container {
+                    flex: 1 1 calc(50% - 20px); /* Two items per row on medium screens */
+                    max-width: calc(50% - 20px);
+                }
+            }
+            @media (max-width: 480px) {
+                .item-container {
+                    flex: 1 1 calc(100% - 20px); /* Full width on small screens */
+                    max-width: calc(100% - 20px);
+                }
+            }
             .video-container {
-                margin-top: 30px; /* Increased margin-top for better positioning */
+                margin-top: 30px;
                 display: flex;
-                align-items: flex-start;
+                flex-wrap: wrap;
                 gap: 20px;
+                justify-content: center;
             }
             .video-container iframe {
-                width: 560px;  /* Standard YouTube video width */
-                height: 315px; /* 16:9 aspect ratio */
-                max-width: 100%; /* Responsive */
+                width: 560px;
+                height: 315px;
+                max-width: 100%;
                 border: none;
                 border-radius: 5px;
                 box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
             }
             .video-info {
-                max-width: 300px; /* Adjust based on your preference */
-                margin-top: 15px; /* Added margin-top to position text a bit lower */
+                max-width: 300px;
+                margin-top: 15px;
+                text-align: center;
             }
             .video-info .video-title {
-                font-size: 1.6em; /* Increased font size */
+                font-size: 1.6em;
                 font-weight: bold;
                 color: #333;
             }
             .video-info .video-description {
                 margin-top: 10px;
-                font-size: 1.2em; /* Increased font size */
+                font-size: 1.2em;
                 color: #555;
             }
             .video-note {
@@ -546,6 +583,10 @@ function showDetailContent(detailName, detailValues) {
                 font-size: 1.1em;
                 color: #333;
                 border-radius: 5px;
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+                text-align: center;
             }
             .video-note p {
                 margin: 0;
@@ -559,31 +600,16 @@ function showDetailContent(detailName, detailValues) {
                 const value = detailValues[key];
 
                 if (typeof value === 'string') {
-                    // Check if the value is a YouTube embed link
-                    if (value.includes('youtube.com/embed/')) {
-                        const [title, description] = key.split('/desc');
-                        const videoContainer = document.createElement('div');
-                        videoContainer.classList.add('video-container');
-                        videoContainer.innerHTML = `
-                            <iframe src="${value}" allowfullscreen></iframe>
-                            <div class="video-info">
-                                <div class="video-title">${title.trim()}</div>
-                                ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
-                            </div>
-                        `;
-                        detailContent.appendChild(videoContainer);
-                    } else {
-                        // Display as a link for non-YouTube content
-                        const itemContainer = document.createElement('div');
-                        itemContainer.classList.add('item-container');
-                        itemContainer.innerHTML = `
-                            <h3>${key}</h3>
-                            <a href="${value}" target="_blank">Open Link</a>
-                        `;
-                        detailContent.appendChild(itemContainer);
-                    }
+                    // Display as a link for non-YouTube content
+                    const itemContainer = document.createElement('div');
+                    itemContainer.classList.add('item-container');
+                    itemContainer.innerHTML = `
+                        <h3>${key}</h3>
+                        <a href="${value}" target="_blank">Open Link</a>
+                    `;
+                    itemsContainer.appendChild(itemContainer);
                 } else if (typeof value === 'object' && value.file) {
-                    // Display YouTube videos or files from the "file" property
+                    // Display files from the "file" property
                     if (value.file.includes('youtube.com/embed/')) {
                         const [title, description] = key.split('/desc');
                         const videoContainer = document.createElement('div');
@@ -603,14 +629,14 @@ function showDetailContent(detailName, detailValues) {
                             <h3>${key}</h3>
                             <a href="${value.file}" target="_blank">Open Link</a>
                         `;
-                        detailContent.appendChild(itemContainer);
+                        itemsContainer.appendChild(itemContainer);
                     }
                 }
             }
         }
     } else {
-        // In case detailValues is neither string nor object (unlikely but good to handle)
-        detailContent.innerHTML = `<p>Unsupported content type</p>`;
+        // In case of unexpected detailValues type
+        detailContent.innerHTML += `<p>Unexpected content type: ${typeof detailValues}</p>`;
     }
 
     subjectContent.appendChild(detailContent);
