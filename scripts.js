@@ -443,22 +443,23 @@ homeContent.appendChild(footer);
         const chatbotContainer = document.createElement('div');
         chatbotContainer.id = 'chatbot-container';
         chatbotContainer.innerHTML = `
-            <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 10px; border-radius: 50%; z-index: 1000;">
-                <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 30px; height: 30px;">
-            </div>
-            <div id="chatbot" style="display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; overflow: hidden;">
-                <div id="chatbot-header" style="background-color: #007bff; color: white; padding: 10px; text-align: left; position: relative;">
-                    <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 20px; height: 20px; position: absolute; top: 10px; left: 10px;">
-                    <span style="margin-left: 40px;">StudyBuddy</span>
-                    <span id="close-chatbot" style="float: right; cursor: pointer;">&times;</span>
-                </div>
-                <div id="messages" style="padding: 10px; height: calc(100% - 80px); overflow-y: auto; background-color: #f9f9f9; display: flex; flex-direction: column-reverse;">
-                </div>
-                <div style="padding: 10px; border-top: 1px solid #ddd; background-color: white; position: absolute; bottom: 0; width: calc(100% - 20px); box-sizing: border-box;">
-                    <input id="message-input" type="text" placeholder="Type your message..." style="width: calc(100% - 50px); padding: 5px; box-sizing: border-box;" />
-                    <button id="send-message" style="width: 40px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
-                </div>
-            </div>
+            <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 10px; border-radius: 50%; z-index: 1000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;">
+    <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 30px; height: 30px;">
+</div>
+<div id="chatbot" style="display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; overflow: hidden;">
+    <div id="chatbot-header" style="background-color: #007bff; color: white; padding: 10px; text-align: left; position: relative;">
+        <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 20px; height: 20px; position: absolute; top: 10px; left: 10px;">
+        <span style="margin-left: 40px;">StudyBuddy</span>
+        <span id="close-chatbot" style="float: right; cursor: pointer;">&times;</span>
+    </div>
+    <div id="messages" style="padding: 10px; height: calc(100% - 80px); overflow-y: auto; background-color: #f9f9f9; display: flex; flex-direction: column-reverse;">
+    </div>
+    <div style="padding: 10px; border-top: 1px solid #ddd; background-color: white; position: absolute; bottom: 0; width: calc(100% - 20px); box-sizing: border-box;">
+        <input id="message-input" type="text" placeholder="Type your message..." style="width: calc(100% - 50px); padding: 5px; box-sizing: border-box;" />
+        <button id="send-message" style="width: 40px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
+    </div>
+</div>
+
         `;
         homeContent.appendChild(chatbotContainer);
 
@@ -541,8 +542,28 @@ homeContent.appendChild(footer);
                 sendMessageButton.click();
             }
         });
+        
+        // Call this function after the chatbot container is added to the DOM
+        addChatbotHoverEffects();
     }
 }
+// Function to add hover effects and shadow to the chatbot toggle button
+function addChatbotHoverEffects() {
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+
+    chatbotToggle.addEventListener('mouseover', () => {
+        chatbotToggle.style.backgroundColor = '#0056b3'; // Darker shade on hover
+        chatbotToggle.style.transform = 'scale(1.1)'; // Slightly enlarge on hover
+        chatbotToggle.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)'; // More pronounced shadow
+    });
+
+    chatbotToggle.addEventListener('mouseout', () => {
+        chatbotToggle.style.backgroundColor = '#007bff'; // Reset background color
+        chatbotToggle.style.transform = 'scale(1)'; // Reset scale
+        chatbotToggle.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)'; // Reset shadow
+    });
+}
+
 
 function signInWithGoogleDirectly(val = false) {
     if (typeof window.signInWithGoogle === 'function' && readability) {
