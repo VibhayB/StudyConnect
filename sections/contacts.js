@@ -19,6 +19,8 @@ function populateContacts(contacts) {
     contactsContainer.style.backgroundColor = '#f9f9f9';
     contactsContainer.style.borderRadius = '8px';
     contactsContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    contactsContainer.style.justifyContent = 'center'; // Center items horizontally
+    contactsContainer.style.alignItems = 'center'; // Center items vertically
 
     // Clear existing content
     contactsContainer.innerHTML = '';
@@ -57,7 +59,7 @@ function populateContacts(contacts) {
         const buttonContainer = document.createElement('div');
         buttonContainer.style.display = 'flex';
         buttonContainer.style.gap = '10px';  // Space between buttons
-
+        buttonContainer.style.justifyContent = 'center'; // Center buttons horizontally
         // Call button with icon
         const callButton = document.createElement('button');
         callButton.innerHTML = '<i class="fas fa-phone-alt"></i>';
