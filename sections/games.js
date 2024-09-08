@@ -10,18 +10,21 @@ const games = [
 // Function to create app items and add them to the div
 function populateGames() {
     // Apply styles using JavaScript
-const appsContainer = document.getElementById('games');
+    const appsContainer = document.getElementById('games');
 
-// Set styles for the container
-appsContainer.style.display = 'none';
-appsContainer.style.flexWrap = 'wrap';
-appsContainer.style.gap = '20px';
-appsContainer.style.padding = '20px';
-appsContainer.style.maxWidth = '100%';
-appsContainer.style.boxSizing = 'border-box';
-appsContainer.style.backgroundColor = '#f9f9f9';
-appsContainer.style.borderRadius = '8px';
-appsContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    // Set styles for the container
+    appsContainer.style.display = 'flex';
+    appsContainer.style.flexWrap = 'wrap';
+    appsContainer.style.justifyContent = 'center'; // Center items horizontally
+    appsContainer.style.alignItems = 'center';     // Center items vertically
+    appsContainer.style.gap = '20px';
+    appsContainer.style.padding = '20px';
+    appsContainer.style.maxWidth = '100%';
+    appsContainer.style.boxSizing = 'border-box';
+    appsContainer.style.backgroundColor = '#f9f9f9';
+    appsContainer.style.borderRadius = '8px';
+    appsContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    
     // Clear existing content
     appsContainer.innerHTML = '';
 
@@ -29,8 +32,9 @@ appsContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
     games.forEach(game => {
         const appItem = document.createElement('div');
         appItem.style.display = 'flex';
-        appItem.style.alignItems = 'center';
-        appItem.style.justifyContent = 'center';
+        appItem.style.flexDirection = 'column'; // Stack image and name vertically
+        appItem.style.alignItems = 'center';    // Center contents horizontally
+        appItem.style.justifyContent = 'center'; // Center contents vertically
         appItem.style.position = 'relative';
         appItem.style.width = '150px';
         appItem.style.height = '150px';
@@ -41,7 +45,7 @@ appsContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
         appItem.style.cursor = 'pointer';
         appItem.style.transition = 'transform 0.3s, box-shadow 0.3s';
         appItem.style.boxSizing = 'border-box';
-        
+
         appItem.onmouseover = () => {
             appItem.style.transform = 'scale(1.05)';
             appItem.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.2)';
