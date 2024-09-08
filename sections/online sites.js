@@ -12,6 +12,8 @@ function populateOnlineSites(onlineSites) {
     onlineSitesContainer.style.backgroundColor = '#f9f9f9';
     onlineSitesContainer.style.borderRadius = '8px';
     onlineSitesContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    onlineSitesContainer.style.justifyContent = 'center';
+    onlineSitesContainer.style.alignItems  = 'center';
 
     // Clear existing content
     onlineSitesContainer.innerHTML = '';
@@ -31,6 +33,7 @@ function populateOnlineSites(onlineSites) {
         siteItem.style.cursor = 'pointer';
         siteItem.style.transition = 'transform 0.3s, box-shadow 0.3s';
         siteItem.style.boxSizing = 'border-box';
+        siteItem.style.justifyContent = 'center';
 
         siteItem.onmouseover = () => {
             siteItem.style.transform = 'scale(1.05)';
