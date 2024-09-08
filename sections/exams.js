@@ -15,31 +15,33 @@ function createTabs(abcData) {
         { name: "Question Banks", contentFunction: () => "No question banks yet" }
     ];
     tabsData.unshift({name: "Primary", contentFunction: () => "No Exams there<br><br>Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well." });
+    
     // Helper function to create card HTML
     function createCards(cards) {
-    return cards.map(card => `
-        <a href="${card.link}" target="_blank" style="
-            display: block; 
-            text-decoration: none; 
-            color: inherit; 
-            border: 1px solid #ddd; 
-            border-radius: 4px; 
-            padding: 10px; 
-            margin: 5px; 
-            background-color: #f9f9f9; 
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
-            transition: background-color 0.3s, box-shadow 0.3s;">
-            <div class="card" style="
-                border: none; 
+        return cards.map(card => `
+            <a href="${card.link}" target="_blank" style="
+                display: block; 
+                text-decoration: none; 
+                color: inherit; 
+                border: 1px solid #ddd; 
                 border-radius: 4px; 
                 padding: 10px; 
-                background-color: inherit; 
-                cursor: pointer;">
-                ${card.text}
-            </div>
-        </a>
-    `).join('');
+                margin: 5px; 
+                background-color: #f9f9f9; 
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+                transition: background-color 0.3s, box-shadow 0.3s;">
+                <div class="card" style="
+                    border: none; 
+                    border-radius: 4px; 
+                    padding: 10px; 
+                    background-color: inherit; 
+                    cursor: pointer;">
+                    ${card.text}
+                </div>
+            </a>
+        `).join('');
     }
+
     const examsContainer = document.getElementById('exams');
     examsContainer.innerHTML = "";
 
@@ -47,6 +49,7 @@ function createTabs(abcData) {
     const tabsContainer = document.createElement('div');
     tabsContainer.id = 'tabs';
     tabsContainer.style.display = 'flex';
+    tabsContainer.style.flexWrap = 'wrap'; // Allow tabs to wrap on smaller screens
     tabsContainer.style.borderBottom = '2px solid #ddd';
     tabsContainer.style.backgroundColor = '#f9f9f9';
     tabsContainer.style.borderRadius = '8px 8px 0 0';
@@ -57,6 +60,7 @@ function createTabs(abcData) {
     const contentContainer = document.createElement('div');
     contentContainer.id = 'tab-contents';
     contentContainer.style.padding = '20px';
+    contentContainer.style.overflowY = 'auto'; // Allow vertical scrolling if needed
 
     tabsData.forEach((tab, index) => {
         // Create tab element
@@ -71,6 +75,7 @@ function createTabs(abcData) {
         tabElement.style.transition = 'border-bottom 0.3s, background-color 0.3s';
         tabElement.style.borderRadius = '4px';
         tabElement.style.backgroundColor = '#e0e0e0';
+        tabElement.style.flex = '1'; // Allow tabs to stretch and fit available space
 
         // Add hover effect
         tabElement.onmouseover = () => {
@@ -139,5 +144,33 @@ function createTabs(abcData) {
         }
     });
 
-    examsContainer.style.display = "none";
+    examsContainer.style.display = "block";
+
+    // Add responsive styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @media (max-width: 768px) {
+            #tabs {
+                flex-direction: column;
+            }
+            .tab {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 5px;
+            }
+            .tab-content {
+                padding: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .tab {
+                padding: 8px;
+                font-size: 14px;
+            }
+            .tab-content {
+                padding: 8px;
+            }
+        }
+    `;
+    document.head.appendChild(style);
 }
