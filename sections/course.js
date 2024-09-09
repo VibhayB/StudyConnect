@@ -478,6 +478,12 @@ function showDetailContent(detailName, detailValues) {
 
     if (typeof detailValues === 'string') {
         // If detailValues is a string, display it directly
+
+        // Replace '\\n' with actual new line characters
+        detailValues = detailValues.replace(/\\n/g, '<br>');
+
+        // Replace URLs with clickable links
+        detailValues = detailValues.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
         detailContent.innerHTML += `<p>${detailValues}</p>`;
     } else if (typeof detailValues === 'object' && detailValues !== null) {
         // Apply styles directly
