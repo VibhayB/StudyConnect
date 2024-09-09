@@ -366,10 +366,10 @@ function displaySearchResult(input) {
         let displayHTML = chatbotmechanism(input);
 
         // Replace URLs with clickable links (with better handling of long URLs)
-        displayHTML = displayText.replace(/(https?:\/\/[^\s<>"']{20,})/g, '<a href="$1" target="_blank" title="$1">$1</a>');
+        displayHTML = displayHTML.replace(/(https?:\/\/[^\s<>"']{20,})/g, '<a href="$1" target="_blank" title="$1">$1</a>');
 
         // Replace phone numbers with clickable tel links
-        displayHTML = displayText.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
+        displayHTML = displayHTML.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
 
         // Display the formatted HTML content in the chat
         displayMessage(displayHTML, 'bot');
