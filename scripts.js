@@ -10,6 +10,36 @@ var reporturl;
 var imageMap;
 var courseData;
 var showbanner = 0;
+const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Forms/Sheets","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others"};
+
+
+// Tab names mapping
+const tabNames = {
+    "courseData": "course",
+    "posts": "feed",
+    "forms": "forms",
+    "examData": "exams",
+    "apps": "others",
+    "examSchedule": "calendar",
+    "onlineSites": "sites",
+    "contacts": "contacts",
+    "installers": "installers"
+};
+
+// Keywords mapping
+const keywords = {
+    "courseData": ["course", "study material", "course content"],
+    "posts": ["posts", "feed"],
+    "forms": ["forms", "sheets"],
+    "examData": ["examData"],
+    "apps": ["apps", "others"],
+    "examSchedule": ["examSchedule", "timers", "calendar", "date", "dates"],
+    "onlineSites": ["onlineSites", "sites", "websites"],
+    "contacts": ["contacts", "call", "email"],
+    "installers": ["installers", "install", "download"],
+    "games" : ["Games"]
+};
+
 
 function showLoadingScreen() {
     document.getElementById("screen").style.display = 'none';
@@ -305,7 +335,7 @@ function showTab(event, tabName) {
             showHome();
             localStorage.setItem("tabcurrentx","home");
             localStorage.setItem("tabcurrenty","AIML StudyConnect");
-            return;
+            return "Home showing";
         } localStorage.setItem("tabcurrentx", tabName);
         
         document.getElementById("home").style.display = 'none';
@@ -339,11 +369,14 @@ function showTab(event, tabName) {
                 localStorage.setItem("tabcurrenty", event.currentTarget.innerHTML);
             }
         } catch(error){
-            //if event not defined
+            logo.innerHTML = classLists[tabName];
+            localStorage.setItem("tabcurrenty", classLists[tabName]);
+        } finally{
+            return "Showing tab: " + classLists[tabName];
         }
     } catch(error){
         console.error(error);
-        return;
+        return "Error";
     }    
 }
 
@@ -354,11 +387,48 @@ function handleHomeClick() {
         return;
     } console.log("Already signed in");
 }
+
 // Function to show home content
-function chatbotmechanism(input){
-    return "I am currently under development";
-}
+
 function showHome() { 
+// Function to search for relevant data
+function chatbotmechanism(input){
+    return handleUserPrompt(input);
+}
+// Main function to handle user prompt
+function handleUserPrompt(userPrompt) {
+    // Normalize user prompt
+    const normalizedPrompt = userPrompt.toLowerCase();
+
+    // Search for keywords and match tab names
+    let foundTab = null;
+    for (const [id, keywordsList] of Object.entries(keywords)) {
+        for (const keyword of keywordsList) {
+            if (normalizedPrompt.includes(keyword)) {
+                foundTab = tabNames[id];
+                break;
+            }
+        }
+        if (foundTab) break;
+    } //additional logic
+    for (let i = 0; i < intents.intents.length; i++) {
+        const intent = intents.intents[i];
+        for (let j = 0; j < intent.patterns.length; j++) {
+            const pattern = intent.patterns[j];
+            if (userPrompt.toLowerCase().includes(pattern.toLowerCase())) {
+            // Randomly select a response
+            return intent.responses[Math.floor(Math.random() * intent.responses.length)];
+            }
+        }
+    }
+    // If a tab was found through keywords but no other data was found
+    if (foundTab) {
+        return showTab(null, foundTab);
+    }
+
+    // Default action if no data or tab was found
+    return "I couldn't find exactly what you're looking for right now. I’ll be updated with more information soon!";
+}
 // Function to display search results
 function displaySearchResult(input) {
     
@@ -369,7 +439,7 @@ function displaySearchResult(input) {
         displayHTML = displayHTML.replace(/(https?:\/\/[^\s<>"']{20,})/g, '<a href="$1" target="_blank" title="$1">$1</a>');
 
         // Replace phone numbers with clickable tel links
-        displayHTML = displayHTML.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
+        displayHTML = displayHTML.replace("\\n", '<br>');
 
         // Display the formatted HTML content in the chat
         displayMessage(displayHTML, 'bot');
@@ -556,8 +626,6 @@ homeContent.appendChild(footer);
             setTimeout(() => {
                 displaySearchResult(searchTerm);
             }, 700);
-        } else {
-            displayMessage("Please enter a search term.", 'bot');
         }
     };
 
