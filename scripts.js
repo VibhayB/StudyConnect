@@ -10,6 +10,7 @@ var reporturl;
 var imageMap;
 var courseData;
 var showbanner = 0;
+
 function showLoadingScreen() {
     document.getElementById("screen").style.display = 'none';
     document.getElementById("banner").style.display = 'none';
@@ -353,9 +354,27 @@ function handleHomeClick() {
         return;
     } console.log("Already signed in");
 }
-
 // Function to show home content
+function chatbotmechanism(input){
+    return "I am currently under development";
+}
 function showHome() { 
+// Function to display search results
+function displaySearchResult(input) {
+    
+        // Construct display text with HTML formatting
+        let displayHTML = chatbotmechanism(input);
+
+        // Replace URLs with clickable links (with better handling of long URLs)
+        displayHTML = displayText.replace(/(https?:\/\/[^\s<>"']{20,})/g, '<a href="$1" target="_blank" title="$1">$1</a>');
+
+        // Replace phone numbers with clickable tel links
+        displayHTML = displayText.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
+
+        // Display the formatted HTML content in the chat
+        displayMessage(displayHTML, 'bot');
+}
+
     document.querySelector("#header").innerHTML = 'AIML StudyConnnect';
 
     const content = document.getElementsByClassName("content");
@@ -441,126 +460,130 @@ homeContent.appendChild(footer);
     if (!document.getElementById('chatbot-container')) {
         // Create and add chatbot container
         const chatbotContainer = document.createElement('div');
-        chatbotContainer.id = 'chatbot-container';
-        chatbotContainer.innerHTML = `
-            <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 10px; border-radius: 50%; z-index: 1000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;">
-    <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 30px; height: 30px;">
-</div>
-<div id="chatbot" style="display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; overflow: hidden;">
-    <div id="chatbot-header" style="background-color: #007bff; color: white; padding: 10px; text-align: left; position: relative;">
-        <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 20px; height: 20px; position: absolute; top: 10px; left: 10px;">
-        <span style="margin-left: 40px;">StudyBuddy</span>
-        <span id="close-chatbot" style="float: right; cursor: pointer;">&times;</span>
-    </div>
-    <div id="messages" style="padding: 10px; height: calc(100% - 80px); overflow-y: auto; background-color: #f9f9f9; display: flex; flex-direction: column-reverse;">
-    </div>
-    <div style="padding: 10px; border-top: 1px solid #ddd; background-color: white; position: absolute; bottom: 0; width: calc(100% - 20px); box-sizing: border-box;">
-        <input id="message-input" type="text" placeholder="Type your message..." style="width: calc(100% - 50px); padding: 5px; box-sizing: border-box;" />
-        <button id="send-message" style="width: 40px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
-    </div>
-</div>
+    chatbotContainer.id = 'chatbot-container';
+    chatbotContainer.innerHTML = `
+        <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 10px; border-radius: 50%; z-index: 1000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;">
+            <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 30px; height: 30px;">
+        </div>
+        <div id="chatbot" style="display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; overflow: hidden;">
+            <div id="chatbot-header" style="background-color: #007bff; color: white; padding: 10px; text-align: left; position: relative;">
+                <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 20px; height: 20px; position: absolute; top: 10px; left: 10px;">
+                <span style="margin-left: 40px;">StudyBuddy</span>
+                <span id="close-chatbot" style="float: right; cursor: pointer;">&times;</span>
+            </div>
+            <div id="messages" style="padding: 10px; height: calc(100% - 80px); overflow-y: auto; background-color: #f9f9f9; display: flex; flex-direction: column-reverse;">
+            </div>
+            <div style="padding: 10px; border-top: 1px solid #ddd; background-color: white; position: absolute; bottom: 0; width: calc(100% - 20px); box-sizing: border-box;">
+                <input id="message-input" type="text" placeholder="Type your message..." style="width: calc(100% - 50px); padding: 5px; box-sizing: border-box;" />
+                <button id="send-message" style="width: 40px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(chatbotContainer);
 
-        `;
-        homeContent.appendChild(chatbotContainer);
+    // Chatbot functionality
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const closeChatbot = document.getElementById('close-chatbot');
+    const chatImage = document.getElementById('chatbot-image');
+    const messageInput = document.getElementById('message-input');
+    const sendMessageButton = document.getElementById('send-message');
+    const messagesContainer = document.getElementById('messages');
 
-        // Chatbot functionality
-        const chatbotToggle = document.getElementById('chatbot-toggle');
-        const closeChatbot = document.getElementById('close-chatbot');
-        const chatImage = document.getElementById('chatbot-image');
-        const messageInput = document.getElementById('message-input');
-        const sendMessageButton = document.getElementById('send-message');
-        const messagesContainer = document.getElementById('messages');
+    // Function to toggle chat visibility
+    chatImage.onclick = () => {
+        const chatbot = document.getElementById('chatbot');
+        chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+    };
 
-        // Function to toggle chat visibility
-        chatImage.onclick = () => {
-            const chatbot = document.getElementById('chatbot');
-            chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
-        };
+    // Function to close chat
+    closeChatbot.onclick = () => {
+        document.getElementById('chatbot').style.display = 'none';
+    };
 
-        // Function to close chat
-        closeChatbot.onclick = () => {
-            document.getElementById('chatbot').style.display = 'none';
-        };
+    // Function to create and display messages
+    function displayMessage(text, sender) {
+        const messageBubble = document.createElement('div');
+        messageBubble.classList.add('message');
+        messageBubble.style.display = 'flex';
+        messageBubble.style.alignItems = 'flex-end';
+        messageBubble.style.marginBottom = '10px';
+        messageBubble.style.flexDirection = sender === 'user' ? 'row-reverse' : 'row';
 
-        // Function to create and display messages
-         // Function to create and display messages
-         function displayMessage(text, sender) {
-            const messageBubble = document.createElement('div');
-            messageBubble.classList.add('message');
-            messageBubble.style.display = 'flex';
-            messageBubble.style.alignItems = 'flex-end';
-            messageBubble.style.marginBottom = '10px';
-            messageBubble.style.flexDirection = sender === 'user' ? 'row-reverse' : 'row';
+        const messageText = document.createElement('div');
+        messageText.classList.add('message-text');
+        messageText.style.maxWidth = '70%';
+        messageText.style.padding = '10px';
+        messageText.style.borderRadius = '15px';
+        messageText.style.backgroundColor = sender === 'user' ? '#007bff' : '#ddd';
+        messageText.style.color = sender === 'user' ? 'white' : 'black';
+        messageText.style.margin = '5px';
 
-            const messageText = document.createElement('div');
-            messageText.classList.add('message-text');
-            messageText.textContent = text;
-            messageText.style.maxWidth = '70%';
-            messageText.style.padding = '10px';
-            messageText.style.borderRadius = '15px';
-            messageText.style.backgroundColor = sender === 'user' ? '#007bff' : '#ddd';
-            messageText.style.color = sender === 'user' ? 'white' : 'black';
-            messageText.style.margin = '5px';
-
-            const icon = document.createElement('img');
-            icon.classList.add('message-icon');
-            icon.src = sender === 'user' 
-                ? 'https://cdn-icons-png.flaticon.com/512/552/552721.png' 
-                : 'https://cdn-icons-png.flaticon.com/512/8943/8943377.png';
-            icon.style.width = '20px';
-            icon.style.height = '20px';
-            icon.style.marginLeft = sender === 'user' ? '10px' : '0';
-            icon.style.marginRight = sender === 'user' ? '0' : '10px';
-
-            messageBubble.appendChild(icon);
-            messageBubble.appendChild(messageText);
-            messagesContainer.appendChild(messageBubble);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-            messagesContainer.style.display = 'flex';
-            messagesContainer.style.flexDirection = 'column'; // Change this line to column
-            messagesContainer.style.padding = '10px';
-            messagesContainer.style.height = 'calc(100% - 80px)';
-            messagesContainer.style.overflowY = 'auto';
-            messagesContainer.style.backgroundColor = '#f9f9f9';
-        }
-
-        sendMessageButton.onclick = () => {
-            const userMessage = messageInput.value.trim();
-            if (userMessage) {
-                displayMessage(userMessage, 'user');
-                messageInput.value = '';
-
-                // Simulate a bot response
-                setTimeout(() => {
-                    displayMessage('Hey There! I am currently in development', 'bot');
-                }, 1000);
-            }
-        };
-
-        messageInput.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                sendMessageButton.click();
-            }
-        });
+        const icon = document.createElement('img');
+        icon.classList.add('message-icon');
+        icon.src = sender === 'user'
+            ? 'https://cdn-icons-png.flaticon.com/512/552/552721.png'
+            : 'https://cdn-icons-png.flaticon.com/512/8943/8943377.png';
+        icon.style.width = '20px';
+        icon.style.height = '20px';
+        icon.style.marginLeft = sender === 'user' ? '10px' : '0';
+        icon.style.marginRight = sender === 'user' ? '0' : '10px';
         
-        // Call this function after the chatbot container is added to the DOM
-        addChatbotHoverEffects();
+        messageText.innerHTML = text;
+        messageBubble.appendChild(icon);
+        messageBubble.appendChild(messageText);
+        messagesContainer.appendChild(messageBubble);
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        messagesContainer.style.display = 'flex';
+        messagesContainer.style.flexDirection = 'column';
+        messagesContainer.style.padding = '10px';
+        messagesContainer.style.height = 'calc(100% - 80px)';
+        messagesContainer.style.overflowY = 'auto';
+        messagesContainer.style.backgroundColor = '#f9f9f9';
     }
+
+    sendMessageButton.onclick = () => {
+        const userMessage = messageInput.value.trim();
+        if (userMessage) {
+            displayMessage(userMessage, 'user');
+            messageInput.value = '';
+
+            // Process user input and search the nested data
+            const searchTerm = userMessage.toLowerCase();
+            console.log("Search Term:", searchTerm); // Debugging: check search term
+            //const results = searchKeys(maindata, searchTerm);
+
+            // Display the search result
+            setTimeout(() => {
+                displaySearchResult(searchTerm);
+            }, 700);
+        } else {
+            displayMessage("Please enter a search term.", 'bot');
+        }
+    };
+
+
+    messageInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            sendMessageButton.click();
+        }
+    });
+
+    // Call this function after the chatbot container is added to the DOM
+    addChatbotHoverEffects();
+}
 }
 // Function to add hover effects and shadow to the chatbot toggle button
 function addChatbotHoverEffects() {
     const chatbotToggle = document.getElementById('chatbot-toggle');
-
     chatbotToggle.addEventListener('mouseover', () => {
-        chatbotToggle.style.backgroundColor = '#0056b3'; // Darker shade on hover
-        chatbotToggle.style.transform = 'scale(1.1)'; // Slightly enlarge on hover
-        chatbotToggle.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)'; // More pronounced shadow
+        chatbotToggle.style.backgroundColor = '#0056b3';
+        chatbotToggle.style.transform = 'scale(1.1)';
+        chatbotToggle.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.4)';
     });
-
     chatbotToggle.addEventListener('mouseout', () => {
-        chatbotToggle.style.backgroundColor = '#007bff'; // Reset background color
-        chatbotToggle.style.transform = 'scale(1)'; // Reset scale
-        chatbotToggle.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)'; // Reset shadow
+        chatbotToggle.style.backgroundColor = '#007bff';
+        chatbotToggle.style.transform = 'scale(1)';
+        chatbotToggle.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.3)';
     });
 }
 
@@ -574,6 +597,7 @@ function signInWithGoogleDirectly(val = false) {
             userRead();
             fetchAndDisplayData();
         } else {
+          hideLoadingScreen(); 
           isSignedIn = false;
           updateHomeButton();
           console.log('Google sign-in failed. Please try again.');
@@ -581,8 +605,9 @@ function signInWithGoogleDirectly(val = false) {
       });
     } else {
       console.error('signInWithGoogle is not defined or not a function');
+      hideLoadingScreen(); 
     } 
-  }
+  } 
   
 
 // Functions for handling slides
@@ -621,6 +646,7 @@ setInterval(nextSlide, 5000);
 
 // Initial setup when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
+    showLoadingScreen(); 
     const menuButton = document.getElementById('menu');
     const menu = document.getElementById('hamburger-menu');
     menuButton.style.display = isSignedIn ? 'block' : 'none';
@@ -644,13 +670,11 @@ document.addEventListener('DOMContentLoaded', function() {
     } 
     const storedUserId = localStorage.getItem("efusereId");
     if (storedUserId && readability) {
-        
-        showLoadingScreen(); 
         console.log("Initializing");
         fetchAndDisplayData();
         userRead();
-    } else{
-        
+    } else{        
+        hideLoadingScreen(); 
     }
 });
 let isDropdownVisible = false;
