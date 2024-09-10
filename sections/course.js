@@ -268,7 +268,7 @@ function showSubjectPopup(subjectName) {
             let iconUrl = '';
             if (detailName.includes('Syllabus')) {
                 iconUrl = "https://static.vecteezy.com/system/resources/previews/014/636/881/non_2x/syllabus-clipboard-icon-flat-style-vector.jpg";
-            } else if (detailName.includes('Books')) {
+            } else if (detailName.includes('Book')) {
                 iconUrl = "https://t4.ftcdn.net/jpg/05/07/19/83/360_F_507198344_PPZmZ0ShfTohJBPUv7Dh0ATswkJrPjtr.jpg";
             } else if (detailName.includes('Online') || detailName.includes('NPTEL Dashboard') || detailName.includes('Website')) {
                 iconUrl = "https://i.pinimg.com/564x/4b/b0/37/4bb037397915f5efa68fdd79b604b822.jpg";
