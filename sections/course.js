@@ -477,7 +477,7 @@ function showDetailContent(detailName, detailValues) {
     }
 
     if (typeof detailValues === 'string') {
-        // If detailValues is a string, display it directly
+        // If detailValues is a string, display it directly    
         detailValues = detailValues.replace(/\/bold (.*?) bold\//g, "<strong>$1</strong>");
         // Replace '\\n' with actual new line characters
         detailValues = detailValues.replace(/\\n/g, '<br>');
@@ -492,7 +492,6 @@ function showDetailContent(detailName, detailValues) {
             .detail-content {
                 display: flex;
                 flex-direction: column;
-                align-items: center;
                 margin: 20px;
             }
             .container {
@@ -552,51 +551,46 @@ function showDetailContent(detailName, detailValues) {
                 }
             }
             .video-container {
-                margin-top: 30px;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 20px;
-                justify-content: center;
-            }
-            .video-container iframe {
-                width: 560px;
-                height: 315px;
-                max-width: 100%;
-                border: none;
-                border-radius: 5px;
-                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            }
-            .video-info {
-                max-width: 300px;
-                margin-top: 15px;
-                text-align: center;
-            }
-            .video-info .video-title {
-                font-size: 1.6em;
-                font-weight: bold;
-                color: #333;
-            }
-            .video-info .video-description {
-                margin-top: 10px;
-                font-size: 1.2em;
-                color: #555;
-            }
-            .video-note {
-                background-color: #ffebcc;
-                border-left: 6px solid #ff9900;
-                padding: 15px;
-                margin-bottom: 20px;
-                font-size: 1.1em;
-                color: #333;
-                border-radius: 5px;
-                max-width: 800px;
-                margin-left: auto;
-                margin-right: auto;
-                text-align: center;
-            }
-            .video-note p {
-                margin: 0;
-            }
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: flex-start; /* Aligns content to the left */
+    padding-left: 20px; /* Adds space to the left side */
+    padding-right: 20px; /* Adds space to the right side */
+}
+
+.video-item {
+    display: flex;
+    align-items: flex-start; /* Aligns video and text on the same vertical line */
+    margin-bottom: 20px; /* Adds space between video items */
+}
+
+.video-item iframe {
+    width: 400px; /* Makes the video smaller */
+    height: 225px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.video-info {
+    margin-left: 20px; /* Adds space between the video and the text */
+    text-align: left; /* Aligns text to the left */
+}
+
+.video-info .video-title {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: #333;
+}
+
+.video-info .video-description {
+    margin-top: 10px;
+    font-size: 1.2em;
+    color: #555;
+}
+
         `;
         document.head.appendChild(style);
 
@@ -604,8 +598,19 @@ function showDetailContent(detailName, detailValues) {
         for (const key in detailValues) {
             if (detailValues.hasOwnProperty(key)) {
                 const value = detailValues[key];
-
-                if (typeof value === 'string') {
+                if(typeof value === 'string' && value.includes('youtube.com/embed/')) {
+                    const [title, description] = key.split('/desc');
+                    const videoContainer = document.createElement('div');
+                    videoContainer.classList.add('video-container');
+                    videoContainer.innerHTML = `
+                        <iframe src="${value}" allowfullscreen></iframe>
+                        <div class="video-info">
+                            <div class="video-title">${title.trim()}</div>
+                            ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
+                        </div>
+                    `;
+                    detailContent.appendChild(videoContainer);
+                } else if(typeof value === 'string') {
                     // Display as a link for non-YouTube content
                     const itemContainer = document.createElement('div');
                     itemContainer.classList.add('item-container');
