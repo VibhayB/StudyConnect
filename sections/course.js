@@ -478,7 +478,7 @@ function showDetailContent(detailName, detailValues) {
 
     if (typeof detailValues === 'string') {
         // If detailValues is a string, display it directly
-
+        detailValues = detailValues.replace(/\/bold (.*?) bold\//g, "<strong>$1</strong>");
         // Replace '\\n' with actual new line characters
         detailValues = detailValues.replace(/\\n/g, '<br>');
 
