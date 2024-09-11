@@ -466,7 +466,7 @@ function populateFeed(posts) {// Function to create the announcement popup
         if (post.deadline) {
             const deadlineElement = document.createElement('div');
             const deadlineDate = new Date(post.deadline);
-
+            
             updateDeadlineDisplay(deadlineElement, deadlineDate);
             // Update the display every minute
             setInterval(() => {
@@ -475,7 +475,7 @@ function populateFeed(posts) {// Function to create the announcement popup
             
             deadlineElement.style.fontSize = '12px';
             deadlineElement.style.marginTop = '10px';
-            textContainer.appendChild(deadline); // Move below text
+            textContainer.appendChild(deadlineElement); // Move below text
         }
 
         // Tags
