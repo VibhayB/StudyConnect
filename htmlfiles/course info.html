@@ -72,25 +72,41 @@ strong {
         </section>
     </div>
     <script>
-            const courseInfo = JSON.parse(localStorage.getItem("courseInfo"));
+            // Retrieve courseInfo from localStorage
+const courseInfo = JSON.parse(localStorage.getItem("courseInfo"));
 
-            if (courseInfo) {
-                // Update department vision
-                const visionTextElement = document.getElementById("department-vision-text");
-                visionTextElement.textContent = courseInfo.head;
+if (courseInfo) {
+    // Update department vision
+    const visionTextElement = document.getElementById("department-vision-text");
+    if (courseInfo.head && visionTextElement) {
+        visionTextElement.textContent = courseInfo.head; // Sets the vision text
+    } else {
+        visionTextElement.textContent = "Vision information not available."; // Fallback if no vision info
+    }
 
-                // Update department mission
-                const missionListElement = document.getElementById("department-mission-list");
-                missionListElement.innerHTML = courseInfo.DM.map(dm => 
-                    `<li><strong>${dm.label}:</strong> ${dm.description}</li>`
-                ).join('');
+    // Update department mission (DM) with prefixed numbering
+    const missionListElement = document.getElementById("department-mission-list");
+    if (courseInfo.DM && Array.isArray(courseInfo.DM) && missionListElement) {
+        missionListElement.innerHTML = courseInfo.DM.map((dm, index) => 
+            `<li>DM ${index + 1}: ${dm}</li>` // Add "DM" prefix and numbering before each mission string
+        ).join('');
+    } else {
+        missionListElement.innerHTML = "<li>Mission information not available.</li>"; // Fallback if no missions exist
+    }
 
-                // Update program outcomes
-                const outcomesListElement = document.getElementById("program-outcomes-list");
-                outcomesListElement.innerHTML = courseInfo.PO.map(po => 
-                    `<li><strong>${po.label}:</strong> ${po.description}</li>`
-                ).join('');
-            }
+    // Update program outcomes (PO) with prefixed numbering
+    const outcomesListElement = document.getElementById("program-outcomes-list");
+    if (courseInfo.PO && Array.isArray(courseInfo.PO) && outcomesListElement) {
+        outcomesListElement.innerHTML = courseInfo.PO.map((po, index) => 
+            `<li>PO ${index + 1}: ${po}</li>` // Add "PO" prefix and numbering before each outcome string
+        ).join('');
+    } else {
+        outcomesListElement.innerHTML = "<li>Program outcomes not available.</li>"; // Fallback if no outcomes exist
+    }
+} else {
+    console.error("courseInfo is not available in localStorage."); // Error if courseInfo is missing
+}
+
     </script>
 </body>
 </html>
