@@ -347,180 +347,194 @@ function populateFeed(posts) {// Function to create the announcement popup
 
     feedContainer.appendChild(noteSection);
     // Function to create post element
-    function createPostElement(post) {
-        const postElement = document.createElement('div');
-        postElement.style.display = 'flex';
-        postElement.style.flexDirection = 'column';
-        postElement.style.backgroundColor = '#ffffff';
-        postElement.style.borderRadius = '8px';
-        postElement.style.border = '1px solid #ddd';
-        postElement.style.padding = '15px';
-        postElement.style.marginBottom = '20px';
-        postElement.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
-        postElement.style.width = '300px'; // Portrait orientation
-        postElement.style.maxWidth = '100%'; // Responsive design
-        postElement.style.boxSizing = 'border-box';
-        postElement.style.position = 'relative';
-        postElement.style.textAlign = 'center'; // Center text and images
-        postElement.style.margin = '0 auto'; // Center post element
-        // Add tags as data attribute for filtering
-        postElement.setAttribute('data-tags', post.tags.join(','));
-        // Header with sender name and time
-        const header = document.createElement('div');
-        header.style.marginBottom = '10px';
-        header.style.textAlign = 'left'; // Align sender name to the left
+    // Function to create post element
+function createPostElement(post) {
+    const postElement = document.createElement('div');
+    postElement.style.display = 'flex';
+    postElement.style.flexDirection = 'column';
+    postElement.style.backgroundColor = '#ffffff';
+    postElement.style.borderRadius = '8px';
+    postElement.style.border = '1px solid #ddd';
+    postElement.style.padding = '15px';
+    postElement.style.marginBottom = '20px';
+    postElement.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    postElement.style.width = '300px'; // Portrait orientation
+    postElement.style.maxWidth = '100%'; // Responsive design
+    postElement.style.boxSizing = 'border-box';
+    postElement.style.position = 'relative';
+    postElement.style.textAlign = 'center'; // Center text and images
+    postElement.style.margin = '0 auto'; // Center post element
+    // Add tags as data attribute for filtering
+    postElement.setAttribute('data-tags', post.tags.join(','));
 
-        const senderName = document.createElement('div');
-        senderName.innerHTML = `<strong>${post.sender}</strong>`;
-        senderName.style.fontSize = '14px';
-        senderName.style.color = '#333';
+    // Header with sender name and time
+    const header = document.createElement('div');
+    header.style.marginBottom = '10px';
+    header.style.textAlign = 'left'; // Align sender name to the left
 
-        const postTime = document.createElement('div');
-        postTime.textContent = new Date(post.time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-        postTime.style.fontSize = '12px';
-        postTime.style.color = '#777';
+    const senderName = document.createElement('div');
+    senderName.innerHTML = `<strong>${post.sender}</strong>`;
+    senderName.style.fontSize = '14px';
+    senderName.style.color = '#333';
 
-        header.appendChild(senderName);
-        header.appendChild(postTime);
+    const postTime = document.createElement('div');
+    postTime.textContent = new Date(post.time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
+    postTime.style.fontSize = '12px';
+    postTime.style.color = '#777';
 
-        // Post image
-        let img;
-        if (post.image) {
-            img = document.createElement('img');
-            img.src = post.image;
-            img.alt = post.title;
-            img.style.width = '100%';
-            img.style.borderRadius = '8px';
-            img.style.marginBottom = '10px';
-        }
+    header.appendChild(senderName);
+    header.appendChild(postTime);
 
-        // Post text
-        const textContainer = document.createElement('div');
-        textContainer.style.position = 'relative';
-        textContainer.style.textAlign = 'left'; // Align text to the left
-
-        const text = document.createElement('div');
-        text.style.fontSize = '14px';
-        text.style.position = 'relative';
-
-        const MAX_LENGTH = 150; // Max length of text before showing "Read more"
-        const originalText = post.text;
-        
-        function updateTextDisplay() {
-            function makeLinksClickable(text) {
-                // Replace '\\n' with actual new line characters
-                text = text.replace(/\\n/g, '<br>');
-
-                // Replace URLs with clickable links
-                text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
-
-                // Replace phone numbers with clickable tel links
-                text = text.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
-
-                return text;
-            }
-        
-            if (originalText.length > MAX_LENGTH) {
-                text.innerHTML = makeLinksClickable(originalText.slice(0, MAX_LENGTH)) + '... <a href="#" class="read-more">Read more</a>';
-                const readMoreLink = text.querySelector('.read-more');
-                readMoreLink.style.color = 'black'; // Change color to black
-                readMoreLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    text.innerHTML = makeLinksClickable(originalText) + ' <a href="#" class="read-less">Read less</a>';
-                    const readLessLink = text.querySelector('.read-less');
-                    readLessLink.style.color = 'black'; // Set "Read less" link color to black
-                    readLessLink.addEventListener('click', (e) => {
-                        e.preventDefault();
-                        // Revert to truncated text
-                        updateTextDisplay();
-                    });
-                });
-            } else {
-                text.innerHTML = makeLinksClickable(originalText);
-            }
-        }
-
-        updateTextDisplay();
-
-        textContainer.appendChild(text);
-        function updateDeadlineDisplay(deadlineElement, deadlineDate) {
-            const now = new Date();
-            const timeLeft = deadlineDate - now;
-        
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-        
-            let color;
-            let displayText;
-        
-            if (timeLeft < 0) {
-                // If deadline has passed
-                const passedDays = Math.abs(days);
-                displayText = `Due since ${passedDays} days`;
-                color = '#f00'; // Red
-            } else if (days < 1) {
-                // Less than a day left
-                color = '#f80'; // Orange
-                displayText = `Deadline in ${hours} hours, ${minutes} minutes`;
-            } else if (days < 7) {
-                // Less than a week left
-                color = '#0f0'; // Green
-                displayText = `Deadline in ${days} days, ${hours} hours, ${minutes} minutes`;
-            } else {
-                // More than a week left
-                color = '#00f'; // Blue
-                displayText = `Deadline in ${days} days, ${hours} hours, ${minutes} minutes`;
-            }
-        
-            deadlineElement.textContent = displayText;
-            deadlineElement.style.color = color;
-        }
-        
-        if (post.deadline) {
-            const deadlineElement = document.createElement('div');
-            const deadlineDate = new Date(post.deadline);
-            
-            updateDeadlineDisplay(deadlineElement, deadlineDate);
-            // Update the display every minute
-            setInterval(() => {
-                updateDeadlineDisplay(deadlineElement, deadlineDate);
-            }, 1000); // Update every 60 seconds
-            
-            deadlineElement.style.fontSize = '12px';
-            deadlineElement.style.marginTop = '10px';
-            textContainer.appendChild(deadlineElement); // Move below text
-        }
-
-        // Tags
-        if (post.tags) {
-            const tagsContainer = document.createElement('div');
-            tagsContainer.style.marginTop = '10px';
-
-            const viewTagsButton = document.createElement('button');
-            viewTagsButton.textContent = 'View Tags';
-            viewTagsButton.style.padding = '5px 10px';
-            viewTagsButton.style.border = 'none';
-            viewTagsButton.style.borderRadius = '5px';
-            viewTagsButton.style.backgroundColor = '#1a73e8';
-            viewTagsButton.style.color = '#fff';
-            viewTagsButton.style.cursor = 'pointer';
-            viewTagsButton.style.fontSize = '12px';
-            viewTagsButton.addEventListener('click', () => {
-                showAlert(`Tags: <br>${post.tags.join(', ')}`,"https://cdn.iconscout.com/icon/free/png-256/free-hang-tags-icon-download-in-svg-png-gif-file-formats--printing-label-pricing-tag-print-space-services-pack-icons-1556248.png");
-            });
-
-            tagsContainer.appendChild(viewTagsButton);
-            textContainer.appendChild(tagsContainer); // Move below text
-        }
-
-        // Append elements to post
-        postElement.appendChild(header);
-        if (img) postElement.appendChild(img);
-        postElement.appendChild(textContainer);
-        
-        return postElement;
+    // Post image
+    let img;
+    if (post.image) {
+        img = document.createElement('img');
+        img.src = post.image;
+        img.alt = post.title;
+        img.style.width = '100%';
+        img.style.borderRadius = '8px';
+        img.style.marginBottom = '10px';
     }
+
+    // Post title
+    let title;
+    if (post.title) {
+        title = document.createElement('div');
+        title.textContent = post.title;
+        title.style.fontSize = '16px';
+        title.style.fontWeight = 'bold';
+        title.style.marginBottom = '10px';
+        title.style.color = '#333';
+    }
+
+    // Post text
+    const textContainer = document.createElement('div');
+    textContainer.style.position = 'relative';
+    textContainer.style.textAlign = 'left'; // Align text to the left
+
+    const text = document.createElement('div');
+    text.style.fontSize = '14px';
+    text.style.position = 'relative';
+
+    const MAX_LENGTH = 150; // Max length of text before showing "Read more"
+    const originalText = post.text;
+    
+    function updateTextDisplay() {
+        function makeLinksClickable(text) {
+            // Replace '\\n' with actual new line characters
+            text = text.replace(/\\n/g, '<br>');
+
+            // Replace URLs with clickable links
+            text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
+
+            // Replace phone numbers with clickable tel links
+            text = text.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
+
+            return text;
+        }
+    
+        if (originalText.length > MAX_LENGTH) {
+            text.innerHTML = makeLinksClickable(originalText.slice(0, MAX_LENGTH)) + '... <a href="#" class="read-more">Read more</a>';
+            const readMoreLink = text.querySelector('.read-more');
+            readMoreLink.style.color = 'black'; // Change color to black
+            readMoreLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                text.innerHTML = makeLinksClickable(originalText) + ' <a href="#" class="read-less">Read less</a>';
+                const readLessLink = text.querySelector('.read-less');
+                readLessLink.style.color = 'black'; // Set "Read less" link color to black
+                readLessLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    // Revert to truncated text
+                    updateTextDisplay();
+                });
+            });
+        } else {
+            text.innerHTML = makeLinksClickable(originalText);
+        }
+    }
+
+    updateTextDisplay();
+
+    textContainer.appendChild(text);
+    function updateDeadlineDisplay(deadlineElement, deadlineDate) {
+        const now = new Date();
+        const timeLeft = deadlineDate - now;
+    
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+    
+        let color;
+        let displayText;
+    
+        if (timeLeft < 0) {
+            // If deadline has passed
+            const passedDays = Math.abs(days);
+            displayText = `Due since ${passedDays} days`;
+            color = '#f00'; // Red
+        } else if (days < 1) {
+            // Less than a day left
+            color = '#f80'; // Orange
+            displayText = `Deadline in ${hours} hours, ${minutes} minutes`;
+        } else if (days < 7) {
+            // Less than a week left
+            color = '#0f0'; // Green
+            displayText = `Deadline in ${days} days, ${hours} hours, ${minutes} minutes`;
+        } else {
+            // More than a week left
+            color = '#00f'; // Blue
+            displayText = `Deadline in ${days} days, ${hours} hours, ${minutes} minutes`;
+        }
+    
+        deadlineElement.textContent = displayText;
+        deadlineElement.style.color = color;
+    }
+    
+    if (post.deadline) {
+        const deadlineElement = document.createElement('div');
+        const deadlineDate = new Date(post.deadline);
+        
+        updateDeadlineDisplay(deadlineElement, deadlineDate);
+        // Update the display every minute
+        setInterval(() => {
+            updateDeadlineDisplay(deadlineElement, deadlineDate);
+        }, 1000); // Update every 60 seconds
+        
+        deadlineElement.style.fontSize = '12px';
+        deadlineElement.style.marginTop = '10px';
+        textContainer.appendChild(deadlineElement); // Move below text
+    }
+
+    // Tags
+    if (post.tags) {
+        const tagsContainer = document.createElement('div');
+        tagsContainer.style.marginTop = '10px';
+
+        const viewTagsButton = document.createElement('button');
+        viewTagsButton.textContent = 'View Tags';
+        viewTagsButton.style.padding = '5px 10px';
+        viewTagsButton.style.border = 'none';
+        viewTagsButton.style.borderRadius = '5px';
+        viewTagsButton.style.backgroundColor = '#1a73e8';
+        viewTagsButton.style.color = '#fff';
+        viewTagsButton.style.cursor = 'pointer';
+        viewTagsButton.style.fontSize = '12px';
+        viewTagsButton.addEventListener('click', () => {
+            showAlert(`Tags: <br>${post.tags.join(', ')}`,"https://cdn.iconscout.com/icon/free/png-256/free-hang-tags-icon-download-in-svg-png-gif-file-formats--printing-label-pricing-tag-print-space-services-pack-icons-1556248.png");
+        });
+
+        tagsContainer.appendChild(viewTagsButton);
+        textContainer.appendChild(tagsContainer); // Move below text
+    }
+
+    // Append elements to post
+    postElement.appendChild(header);
+    if (img) postElement.appendChild(img);
+    if (title) postElement.appendChild(title); // Add title here
+    postElement.appendChild(textContainer);
+    
+    return postElement;
+}
 
     // Append posts to the feed
     Object.keys(postsByDate).forEach(date => {
