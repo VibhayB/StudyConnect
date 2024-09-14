@@ -423,15 +423,32 @@ function createPostElement(post) {
         function makeLinksClickable(text) {
             // Replace '\\n' with actual new line characters
             text = text.replace(/\\n/g, '<br>');
-
-            // Replace URLs with clickable links
-            text = text.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank">$1</a>');
-
-            // Replace phone numbers with clickable tel links
-            text = text.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
-
-            return text;
-        }
+        
+            // Define regex for URLs and phone numbers
+            const urlRegex = /https?:\/\/[^\s]+/g;
+            const phoneRegex = /\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9}/g;
+        
+            // Create a temporary div to use innerHTML for parsing and escaping
+            const div = document.createElement('div');
+            div.innerHTML = text;  // Safely escape HTML
+        
+            // Find and replace URLs with clickable links
+            div.innerHTML = div.innerHTML.replace(urlRegex, match => `<a href="${match}" target="_blank">${match}</a>`);
+        
+            // Extract plain text from div
+            let html = div.innerHTML;
+        
+            // Find and replace phone numbers with clickable tel links
+            html = html.replace(phoneRegex, match => {
+                // Ensure the phone number is not part of an existing link
+                if (!html.includes(`<a href="${match}"`)) {
+                    return `<a href="tel:${match}">${match}</a>`;
+                }
+                return match;
+            });
+        
+            return html;
+        }        
     
         if (originalText.length > MAX_LENGTH) {
             text.innerHTML = makeLinksClickable(originalText.slice(0, MAX_LENGTH)) + '... <a href="#" class="read-more">Read more</a>';
