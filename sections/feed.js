@@ -421,34 +421,32 @@ function createPostElement(post) {
     
     function updateTextDisplay() {
         function makeLinksClickable(text) {
-            // Replace '\\n' with actual new line characters
-            text = text.replace(/\\n/g, '<br>');
-        
-            // Define regex for URLs and phone numbers
-            const urlRegex = /https?:\/\/[^\s]+/g;
-            const phoneRegex = /\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9}/g;
-        
-            // Create a temporary div to use innerHTML for parsing and escaping
-            const div = document.createElement('div');
-            div.innerHTML = text;  // Safely escape HTML
-        
-            // Find and replace URLs with clickable links
-            div.innerHTML = div.innerHTML.replace(urlRegex, match => `<a href="${match}" target="_blank">${match}</a>`);
-        
-            // Extract plain text from div
-            let html = div.innerHTML;
-        
-            // Find and replace phone numbers with clickable tel links
-            html = html.replace(phoneRegex, match => {
-                // Ensure the phone number is not part of an existing link
-                if (!html.includes(`<a href="${match}"`)) {
-                    return `<a href="tel:${match}">${match}</a>`;
-                }
-                return match;
-            });
-        
-            return html;
-        }        
+    // Step 1: Escape HTML characters to avoid conflicts
+    text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    // Step 2: Replace line breaks with <br> tags
+    text = text.replace(/\\n/g, '<br>');
+
+    // Step 3: Replace URLs with a unique placeholder to avoid overlap
+    const urlPlaceholder = 'URL_PLACEHOLDER_';
+    let urlCount = 0;
+    text = text.replace(/(https?:\/\/[^\s]+)/g, (match) => {
+        const placeholder = urlPlaceholder + urlCount++;
+        return `<a href="${match}" target="_blank" data-placeholder="${placeholder}">${match}</a>`;
+    });
+
+    // Step 4: Replace phone numbers with clickable tel links
+    text = text.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
+
+    // Step 5: Restore URLs from placeholders
+    text = text.replace(new RegExp(urlPlaceholder + '(\\d+)', 'g'), (match, p1) => {
+        const url = text.match(new RegExp(`<a [^>]*data-placeholder="${urlPlaceholder}${p1}"[^>]*>(https?:\/\/[^\s]+)</a>`))[1];
+        return `<a href="${url}" target="_blank">${url}</a>`;
+    });
+
+    return text;
+}
+
     
         if (originalText.length > MAX_LENGTH) {
             text.innerHTML = makeLinksClickable(originalText.slice(0, MAX_LENGTH)) + '... <a href="#" class="read-more">Read more</a>';
