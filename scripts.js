@@ -10,7 +10,7 @@ var reporturl;
 var imageMap;
 var courseData;
 var showbanner = 0;
-const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Forms/Sheets","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others"};
+const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others"};
 
 
 // Tab names mapping
