@@ -421,32 +421,35 @@ function createPostElement(post) {
     
     function updateTextDisplay() {
         function makeLinksClickable(text) {
-    // Step 1: Escape HTML characters to avoid conflicts
-    text = text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
-
-    // Step 2: Replace line breaks with <br> tags
-    text = text.replace(/\\n/g, '<br>');
-
-    // Step 3: Replace URLs with a unique placeholder to avoid overlap
-    const urlPlaceholder = 'URL_PLACEHOLDER_';
-    let urlCount = 0;
-    text = text.replace(/(https?:\/\/[^\s]+)/g, (match) => {
-        const placeholder = urlPlaceholder + urlCount++;
-        return `<a href="${match}" target="_blank" data-placeholder="${placeholder}">${match}</a>`;
-    });
-
-    // Step 4: Replace phone numbers with clickable tel links
-    text = text.replace(/(\+?\d{1,4}?[\s.-]?\(?\d{1,3}?\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
-
-    // Step 5: Restore URLs from placeholders
-    text = text.replace(new RegExp(urlPlaceholder + '(\\d+)', 'g'), (match, p1) => {
-        const url = text.match(new RegExp(`<a [^>]*data-placeholder="${urlPlaceholder}${p1}"[^>]*>(https?:\/\/[^\s]+)</a>`))[1];
-        return `<a href="${url}" target="_blank">${url}</a>`;
-    });
-
-    return text;
-}
-
+            // Placeholder markers for URLs
+            const urlStart = '/url';
+            const urlEnd = 'url/';
+            const urlPlaceholder = '__URL_PLACEHOLDER__';
+            let urls = [];
+            
+            // Step 1: Escape URLs with a placeholder
+            text = text.replace(/(https?:\/\/[^\s]+)/g, (match) => {
+                urls.push(match);
+                return `${urlStart}${urls.length - 1}${urlEnd}`;
+            });
+        
+            // Step 2: Replace phone numbers with clickable tel links
+            text = text.replace(/(\+?\d{1,4}[\s.-]?\(?\d{1,3}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
+        
+            // Step 3: Restore URLs from placeholders
+            text = text.replace(new RegExp(urlStart + '(\\d+)' + urlEnd, 'g'), (match, index) => {
+                return `<a href="${urls[index]}" target="_blank">${urls[index]}</a>`;
+            });
+        
+            // Step 4: Replace new lines with <br> tags
+            text = text.replace(/\\n/g, '<br>');
+        
+            return text;
+        }
+        
+        
+        
+        
     
         if (originalText.length > MAX_LENGTH) {
             text.innerHTML = makeLinksClickable(originalText.slice(0, MAX_LENGTH)) + '... <a href="#" class="read-more">Read more</a>';
