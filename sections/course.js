@@ -1,7 +1,7 @@
 // Example course data
 var displayed = false;
 // Example course data
-
+let removedSubjects = JSON.parse(localStorage.getItem('removedSubjects')) || [];
 // Function to create and inject CSS
 function injectCSS() {
     if(displayed){
@@ -99,11 +99,188 @@ function injectCSS() {
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+/* Button styling */
+        .styled-button {
+    margin: 10px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
 
+.styled-button:hover {
+    transform: translateY(-2px);
+}
+
+.styled-button:active {
+    transform: translateY(0);
+}
+.styled-button {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.styled-button:hover {
+    background: #0056b3;
+}   
+/* Add Button Styling */
+.add-subject-button {
+    background: linear-gradient(135deg, #28a745, #218838);
+}
+
+.add-subject-button:hover {
+    background: linear-gradient(135deg, #218838, #28a745);
+}
+
+/* Remove Button Styling */
+.remove-subject-button {
+    background: linear-gradient(135deg, #dc3545, #c82333);
+}
+
+.remove-subject-button:hover {
+    background: linear-gradient(135deg, #c82333, #dc3545);
+}
+            .remove-icon {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: #dc3545;
+            color: #fff;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            font-size: 16px;
+            font-weight: bold;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .remove-icon:hover {
+            background: #c82333;
+            transform: scale(1.1);
+        }
+
+        .remove-icon:active {
+            background: #bd2130;
+            transform: scale(1);
+        }
+        .subject {
+            position: relative;
+        }
+            .popup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 500px;
+    position: relative;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+.removed-subject-list {
+    margin: 20px 0;
+}
+
+.removed-subject-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+
+    .popup2 {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.popup2-content {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px; /* Set a fixed width for a small square popup */
+    height: 300px; /* Set a fixed height for a small square popup */
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    overflow: hidden; /* Ensure content doesn't overflow */
+}
+
+.popup2-close {
+     position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+} /* Title for the popup */
+.popup2-content h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+/* Scrollable container */
+.scrollable-container {
+    max-height: calc(100% - 60px); /* Adjust based on height and other elements */
+    overflow-y: auto; /* Add vertical scrollbar if content overflows */
+}
+
+/* Removed subject list styling */
+.removed-subject-list {
+    margin: 20px 0;
+    max-height: 100%; /* Ensure the list takes up the available space */
+    overflow-y: auto; /* Add scrollbar if needed */
+}
+
+/* Removed subject item styling */
+.removed-subject-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
     `;
     document.head.appendChild(style);
 }
-
+let removeMode = false; // Track whether remove mode is active
 // Function to initialize the semester selection UI
 function initializeSemesterSelection() {
     if(displayed){
@@ -140,7 +317,25 @@ function initializeSemesterSelection() {
         semesterSelection.appendChild(label);
     });
 
+    // Add buttons for adding and removing subjects
+    const addButton = document.createElement('button');
+    addButton.id = 'addbutton';
+    addButton.textContent = 'Add Subject';
+    addButton.classList.add('styled-button', 'add-subject-button');
+    addButton.addEventListener('click', openAddSubjectPopup); // Open popup on click
+
+    const removeButton = document.createElement('button');
+    removeButton.id = 'rmvbutton';
+    removeButton.textContent = 'Remove Subject';
+    removeButton.classList.add('styled-button', 'remove-subject-button');
+    removeButton.addEventListener('click', () => {
+        removeMode = !removeMode; // Toggle remove mode
+        updateSubjectList(); // Update the subject list to show/hide remove icons
+    });
+
     selectionContainer.appendChild(semesterSelection);
+    selectionContainer.appendChild(addButton);
+    selectionContainer.appendChild(removeButton);
     courseContainer.appendChild(selectionContainer);
 
     // Create a container for subjects
@@ -169,7 +364,10 @@ function saveSelectedSemesters() {
 
     localStorage.setItem('selectedSemesters', JSON.stringify(selectedSemesters));
 }
-
+// Function to save removed subjects to local storage
+function saveRemovedSubjects() {
+    localStorage.setItem('removedSubjects', JSON.stringify(removedSubjects));
+}
 // Function to display subjects based on selected semesters
 function updateSubjectList() {
     const subjectList = document.querySelector('.subject-list');
@@ -193,11 +391,21 @@ function updateSubjectList() {
 
         if (semester) {
             semester.subjects.forEach(subjectName => {
+                if (removedSubjects.includes(subjectName.name)) return;
                 const subjectDiv = document.createElement('div');
                 subjectDiv.textContent = subjectName.name;
                 subjectDiv.classList.add('subject');
                 subjectDiv.classList.add(`semester-${semesterId}`); // Add semester-based class
-                
+                if (removeMode) {
+                    const removeButton = document.createElement('div');
+                    removeButton.classList.add('remove-icon');
+                    removeButton.addEventListener('click', () => {
+                        removedSubjects.push(subjectName.name);
+                        saveRemovedSubjects();
+                        subjectDiv.remove();
+                    });
+                    subjectDiv.appendChild(removeButton);
+                }
                 subjectDiv.addEventListener('click', () => {
                     showSubjectPopup(subjectName);
                 });
@@ -206,8 +414,97 @@ function updateSubjectList() {
             });
         }
     });
+}function openAddSubjectPopup() {
+    // Create a popup container
+    const popup = document.createElement('div');
+    popup.id = 'add-subject-popup2';
+    popup.classList.add('popup2');
+
+    // Create a popup content container
+    const popupContent = document.createElement('div');
+    popupContent.classList.add('popup2-content');
+
+    // Create a close button for the popup
+    const closeButton = document.createElement('span');
+    closeButton.classList.add('popup2-close');
+    closeButton.textContent = '×';
+    closeButton.addEventListener('click', () => {
+        popup.remove(); // Remove the popup from the DOM
+    });
+
+    // Add close button to popup content
+    popupContent.appendChild(closeButton);
+
+    // Create a title for the popup
+    const title = document.createElement('h2');
+    title.textContent = 'Add Subjects';
+    popupContent.appendChild(title);
+
+    // Create a scrollable container for the subject list
+    const subjectListContainer = document.createElement('div');
+    subjectListContainer.classList.add('scrollable-container');
+    
+    // Create a list of removed subjects
+    const removedSubjectList = document.createElement('div');
+    removedSubjectList.classList.add('removed-subject-list');
+    removedSubjects.forEach(subject => {
+        const subjectItem = document.createElement('div');
+        subjectItem.classList.add('removed-subject-item');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `restore-${subject}`;
+        checkbox.value = subject;
+
+        const label = document.createElement('label');
+        label.htmlFor = checkbox.id;
+        label.textContent = subject;
+
+        subjectItem.appendChild(checkbox);
+        subjectItem.appendChild(label);
+        removedSubjectList.appendChild(subjectItem);
+    });
+
+    subjectListContainer.appendChild(removedSubjectList);
+    popupContent.appendChild(subjectListContainer);
+
+    // Create an Add button
+    const addButton = document.createElement('button');
+    addButton.textContent = 'Add';
+    addButton.classList.add('styled-button');
+    addButton.addEventListener('click', () => {
+        addSelectedSubjects();
+        popup.remove(); // Close the popup after adding subjects
+    });
+
+    popupContent.appendChild(addButton);
+
+    // Append the popup content to the popup container
+    popup.appendChild(popupContent);
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
 }
+
+function addSelectedSubjects() {
+    const checkboxes = document.querySelectorAll('#add-subject-popup2 .removed-subject-item input[type="checkbox"]');
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            const subjectName = checkbox.value;
+            // Remove the subject from the removedSubjects array
+            removedSubjects = removedSubjects.filter(subject => subject !== subjectName);
+            saveRemovedSubjects(); // Update local storage
+        }
+    });
+    updateSubjectList(); // Update the subject list to show newly added subjects
+}
+
 function showSubjectPopup(subjectName) {
+    if(removeMode){
+        return;
+    } document.getElementById("rmvbutton").style.display = "none";
+    document.getElementById("addbutton").style.display = "none";
+    document.getElementById("semester-selection").style.display = "none";
     // Check if subjectName has a URL
     if (subjectName.hasOwnProperty('url') && subjectName.url) {
         window.open(subjectName.url, '_blank');
@@ -242,6 +539,9 @@ function showSubjectPopup(subjectName) {
             document.querySelector('#subject-content')?.remove();
             document.querySelector('#breadcrumb-nav')?.remove();
             subjectList.style.display = 'flex';
+            document.getElementById("rmvbutton").style.display = "";
+            document.getElementById("addbutton").style.display = "";
+            document.getElementById("semester-selection").style.display = "";
         });
 
         breadcrumbNav.querySelector('#subject-link').addEventListener('click', (e) => {
