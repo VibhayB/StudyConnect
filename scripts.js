@@ -619,7 +619,6 @@ homeContent.appendChild(footer);
 
             // Process user input and search the nested data
             const searchTerm = userMessage.toLowerCase();
-            console.log("Search Term:", searchTerm); // Debugging: check search term
             //const results = searchKeys(maindata, searchTerm);
 
             // Display the search result
