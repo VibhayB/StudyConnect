@@ -1,160 +1,11 @@
 // Function to create and populate the feed
-function showFilterModal(posts) {
-    // Create modal background
-    const modalBackground = document.createElement('div');
-    modalBackground.style.position = 'fixed';
-    modalBackground.style.top = '0';
-    modalBackground.style.left = '0';
-    modalBackground.style.width = '100%';
-    modalBackground.style.height = '100%';
-    modalBackground.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-    modalBackground.style.display = 'flex';
-    modalBackground.style.justifyContent = 'center';
-    modalBackground.style.alignItems = 'center';
-    modalBackground.style.zIndex = '1000';
-
-    // Create modal container
-    const modalContainer = document.createElement('div');
-    modalContainer.style.width = '90%';
-    modalContainer.style.maxWidth = '400px';
-    modalContainer.style.backgroundColor = '#fff';
-    modalContainer.style.padding = '20px';
-    modalContainer.style.borderRadius = '8px';
-    modalContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
-    modalContainer.style.position = 'relative';
-    modalContainer.style.boxSizing = 'border-box';
-
-    // Create close button
-    const closeButton = document.createElement('span');
-    closeButton.innerHTML = '&times;'; // Close icon
-    closeButton.style.position = 'absolute';
-    closeButton.style.top = '10px';
-    closeButton.style.right = '10px';
-    closeButton.style.fontSize = '24px';
-    closeButton.style.cursor = 'pointer';
-    closeButton.style.color = '#aaa';
-    closeButton.style.transition = 'color 0.3s';
-
-    // Change color on hover
-    closeButton.addEventListener('mouseover', () => {
-        closeButton.style.color = '#000';
-    });
-    closeButton.addEventListener('mouseout', () => {
-        closeButton.style.color = '#aaa';
-    });
-
-    // Close modal when close button is clicked
-    closeButton.addEventListener('click', () => {
-        document.body.removeChild(modalBackground);
-    });
-
-    // Create search bar
-    const searchBar = document.createElement('input');
-    searchBar.type = 'text';
-    searchBar.placeholder = 'Search for tags...';
-    searchBar.style.width = 'calc(100% - 20px)';
-    searchBar.style.padding = '10px';
-    searchBar.style.marginBottom = '15px';
-    searchBar.style.border = '1px solid #ddd';
-    searchBar.style.borderRadius = '5px';
-    searchBar.style.boxSizing = 'border-box';
-    modalContainer.appendChild(searchBar);
-
-    // Create tag list container
-    const tagListContainer = document.createElement('div');
-    tagListContainer.style.maxHeight = '200px';
-    tagListContainer.style.overflowY = 'auto';
-    tagListContainer.style.marginBottom = '15px';
-    modalContainer.appendChild(tagListContainer);
-
-    // Get all unique tags from posts
-    const uniqueTags = [...new Set(posts.flatMap(post => post.tags))];
-
-    // Create tag list
-    const tagCheckboxes = {};
-    uniqueTags.forEach(tag => {
-        const label = document.createElement('label');
-        label.style.display = 'block';
-        label.style.marginBottom = '10px';
-
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.value = tag;
-        label.appendChild(checkbox);
-
-        label.appendChild(document.createTextNode(` ${tag}`));
-
-        tagListContainer.appendChild(label);
-        tagCheckboxes[tag] = checkbox;
-    });
-
-    // Filter tags as user types in search bar
-    searchBar.addEventListener('input', () => {
-        const searchTerm = searchBar.value.toLowerCase();
-        uniqueTags.forEach(tag => {
-            const label = tagCheckboxes[tag].parentElement;
-            if (tag.toLowerCase().includes(searchTerm)) {
-                label.style.display = 'block';
-            } else {
-                label.style.display = 'none';
-            }
-        });
-    });
-
-    // Create apply button
-    const applyButton = document.createElement('button');
-    applyButton.textContent = 'Apply Filter';
-    applyButton.style.padding = '10px 15px';
-    applyButton.style.border = 'none';
-    applyButton.style.borderRadius = '5px';
-    applyButton.style.backgroundColor = '#1a73e8';
-    applyButton.style.color = '#fff';
-    applyButton.style.cursor = 'pointer';
-    applyButton.style.fontSize = '16px';
-    applyButton.style.width = '100%'; // Make button full width
-    modalContainer.appendChild(applyButton);
-
-    // Close modal and apply filter
-    applyButton.addEventListener('click', () => {
-        const selectedTags = Object.keys(tagCheckboxes)
-            .filter(tag => tagCheckboxes[tag].checked);
-
-        // Apply the filter to the feed
-        filterPostsByTags(selectedTags);
-
-        // Close the modal
-        document.body.removeChild(modalBackground);
-    });
-
-    // Add close button and modal container to background and display modal
-    modalContainer.appendChild(closeButton);
-    modalBackground.appendChild(modalContainer);
-    document.body.appendChild(modalBackground);
-}
-
-
-// Function to filter posts based on selected tags
-function filterPostsByTags(selectedTags) {
-    const feedContainer = document.getElementById('feed');
-    const postElements = feedContainer.querySelectorAll('div[data-tags]');
-
-    postElements.forEach(postElement => {
-        const postTags = postElement.dataset.tags.split(',');
-        const hasAllTags = selectedTags.every(tag => postTags.includes(tag));
-
-        if (selectedTags.length === 0 || hasAllTags) {
-            postElement.style.display = 'block'; // Show post
-        } else {
-            postElement.style.display = 'none'; // Hide post
-        }
-    });
-}
 
 function populateFeed(posts) {// Function to create the announcement popup
     posts.sort((a, b) => {
         
         const dateA = new Date(a.time);
         const dateB = new Date(b.time);
+    
         
         // Ensure both dates are valid before comparing
         if (isNaN(dateA) || isNaN(dateB)) {
@@ -298,7 +149,156 @@ function populateFeed(posts) {// Function to create the announcement popup
         );
         displayPosts(filteredPosts);
     });
+    function showFilterModal() {
+        // Create modal background
+        const modalBackground = document.createElement('div');
+        modalBackground.style.position = 'fixed';
+        modalBackground.style.top = '0';
+        modalBackground.style.left = '0';
+        modalBackground.style.width = '100%';
+        modalBackground.style.height = '100%';
+        modalBackground.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
+        modalBackground.style.display = 'flex';
+        modalBackground.style.justifyContent = 'center';
+        modalBackground.style.alignItems = 'center';
+        modalBackground.style.zIndex = '1000';
+    
+        // Create modal container
+        const modalContainer = document.createElement('div');
+        modalContainer.style.width = '90%';
+        modalContainer.style.maxWidth = '400px';
+        modalContainer.style.backgroundColor = '#fff';
+        modalContainer.style.padding = '20px';
+        modalContainer.style.borderRadius = '8px';
+        modalContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+        modalContainer.style.position = 'relative';
+        modalContainer.style.boxSizing = 'border-box';
+    
+        // Create close button
+        const closeButton = document.createElement('span');
+        closeButton.innerHTML = '&times;'; // Close icon
+        closeButton.style.position = 'absolute';
+        closeButton.style.top = '10px';
+        closeButton.style.right = '10px';
+        closeButton.style.fontSize = '24px';
+        closeButton.style.cursor = 'pointer';
+        closeButton.style.color = '#aaa';
+        closeButton.style.transition = 'color 0.3s';
+    
+        // Change color on hover
+        closeButton.addEventListener('mouseover', () => {
+            closeButton.style.color = '#000';
+        });
+        closeButton.addEventListener('mouseout', () => {
+            closeButton.style.color = '#aaa';
+        });
+    
+        // Close modal when close button is clicked
+        closeButton.addEventListener('click', () => {
+            document.body.removeChild(modalBackground);
+        });
+    
+        // Create search bar
+        const searchBar = document.createElement('input');
+        searchBar.type = 'text';
+        searchBar.placeholder = 'Search for tags...';
+        searchBar.style.width = 'calc(100% - 20px)';
+        searchBar.style.padding = '10px';
+        searchBar.style.marginBottom = '15px';
+        searchBar.style.border = '1px solid #ddd';
+        searchBar.style.borderRadius = '5px';
+        searchBar.style.boxSizing = 'border-box';
+        modalContainer.appendChild(searchBar);
+    
+        // Create tag list container
+        const tagListContainer = document.createElement('div');
+        tagListContainer.style.maxHeight = '200px';
+        tagListContainer.style.overflowY = 'auto';
+        tagListContainer.style.marginBottom = '15px';
+        modalContainer.appendChild(tagListContainer);
+    
+        // Get all unique tags from posts
+        const uniqueTags = [...new Set(posts.flatMap(post => post.tags))];
+    
+        // Create tag list
+        const tagCheckboxes = {};
+        uniqueTags.forEach(tag => {
+            const label = document.createElement('label');
+            label.style.display = 'block';
+            label.style.marginBottom = '10px';
+    
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = tag;
+            label.appendChild(checkbox);
+    
+            label.appendChild(document.createTextNode(` ${tag}`));
+    
+            tagListContainer.appendChild(label);
+            tagCheckboxes[tag] = checkbox;
+        });
+    
+        // Filter tags as user types in search bar
+        searchBar.addEventListener('input', () => {
+            const searchTerm = searchBar.value.toLowerCase();
+            uniqueTags.forEach(tag => {
+                const label = tagCheckboxes[tag].parentElement;
+                if (tag.toLowerCase().includes(searchTerm)) {
+                    label.style.display = 'block';
+                } else {
+                    label.style.display = 'none';
+                }
+            });
+        });
+    
+        // Create apply button
+        const applyButton = document.createElement('button');
+        applyButton.textContent = 'Apply Filter';
+        applyButton.style.padding = '10px 15px';
+        applyButton.style.border = 'none';
+        applyButton.style.borderRadius = '5px';
+        applyButton.style.backgroundColor = '#1a73e8';
+        applyButton.style.color = '#fff';
+        applyButton.style.cursor = 'pointer';
+        applyButton.style.fontSize = '16px';
+        applyButton.style.width = '100%'; // Make button full width
+        modalContainer.appendChild(applyButton);
+    
+        // Close modal and apply filter
+        applyButton.addEventListener('click', () => {
+            const selectedTags = Object.keys(tagCheckboxes)
+                .filter(tag => tagCheckboxes[tag].checked);
+    
+            // Apply the filter to the feed
+            filterPostsByTags(selectedTags);
+    
+            // Close the modal
+            document.body.removeChild(modalBackground);
+        });
+    
+        // Add close button and modal container to background and display modal
+        modalContainer.appendChild(closeButton);
+        modalBackground.appendChild(modalContainer);
+        document.body.appendChild(modalBackground);
+    }
+    
+    // Function to filter posts based on selected tags
+    function filterPostsByTags(selectedTags) {
 
+        const filteredPosts = posts.filter(post => {
+            // Get tags for the current post
+            const postTags = post.tags; // Assuming `post.tags` is an array of tags
+    
+            // Check if the post has all the selected tags
+            const hasAllTags = selectedTags.every(tag => postTags.includes(tag));
+    
+            return selectedTags.length === 0 || hasAllTags;
+        });
+    
+        // Display the filtered posts
+        displayPosts(filteredPosts);
+    }
+    
     // Create and style the filter button
     const filterButton = document.createElement('button');
     filterButton.textContent = 'Filter by Tag';
@@ -309,9 +309,10 @@ function populateFeed(posts) {// Function to create the announcement popup
     filterButton.style.color = '#fff';
     filterButton.style.cursor = 'pointer';
     filterButton.style.fontSize = '16px';
-    filterButton.addEventListener('click', () => {
-        showFilterModal(posts);
+    filterButton.addEventListener('click', () => {        
+        showFilterModal();
     });// Append the search bar and filter button to the container
+    
     filterContainer.appendChild(searchBar);
     filterContainer.appendChild(searchButton);
     filterContainer.appendChild(filterButton);
@@ -443,8 +444,6 @@ function createPostElement(post) {
         
             return text;
         }
-        
-        
         
         
     
@@ -585,27 +584,35 @@ function createPostElement(post) {
         }, {});
 
         Object.entries(postsByDate).forEach(([date, posts]) => {
-            const dateHeading = document.createElement('h2');
-            dateHeading.textContent = date;
-            dateHeading.style.fontSize = '18px';
-            dateHeading.style.color = '#555';
-            dateHeading.style.marginBottom = '20px';
-            dateHeading.style.textAlign = 'center';
+            // Check if there are posts under the date
+            if (posts.length > 0) {
+                // Create and style the date heading
+                const dateHeading = document.createElement('h2');
+                dateHeading.textContent = date;
+                dateHeading.style.fontSize = '18px';
+                dateHeading.style.color = '#555';
+                dateHeading.style.marginBottom = '20px';
+                dateHeading.style.textAlign = 'center';
 
-            feedContainer.appendChild(dateHeading);
+                // Append the date heading to the feed container
+                feedContainer.appendChild(dateHeading);
 
-            const postsContainer = document.createElement('div');
-            postsContainer.style.display = 'flex';
-            postsContainer.style.flexWrap = 'wrap';
-            postsContainer.style.justifyContent = 'center';
-            postsContainer.style.gap = '20px';
-            
-            posts.forEach(post => {
-                const postElement = createPostElement(post);
-                postsContainer.appendChild(postElement);
-            });
+                // Create a container for the posts
+                const postsContainer = document.createElement('div');
+                postsContainer.style.display = 'flex';
+                postsContainer.style.flexWrap = 'wrap';
+                postsContainer.style.justifyContent = 'center';
+                postsContainer.style.gap = '20px';
 
-            feedContainer.appendChild(postsContainer);
+                // Append each post to the posts container
+                posts.forEach(post => {
+                    const postElement = createPostElement(post);
+                    postsContainer.appendChild(postElement);
+                });
+
+                // Append the posts container to the feed container
+                feedContainer.appendChild(postsContainer);
+            }
         });
 
         feedContainer.style.display = 'flex'; 
