@@ -2,8 +2,10 @@
 function populateOnlineSites(onlineSites) {
     const onlineSitesContainer = document.getElementById('sites');
 
+    // Clear existing content
+    onlineSitesContainer.innerHTML = '';
+
     // Apply styles using JavaScript
-    onlineSitesContainer.style.display = 'none';
     onlineSitesContainer.style.flexWrap = 'wrap';
     onlineSitesContainer.style.gap = '20px';
     onlineSitesContainer.style.padding = '20px';
@@ -25,26 +27,25 @@ function populateOnlineSites(onlineSites) {
     searchBar.style.border = '1px solid #ccc';
     searchBar.style.borderRadius = '4px';
     searchBar.style.boxSizing = 'border-box';
-    
-    // Add search bar to the container
-    if (!document.getElementById('searchBar')) {
-        searchBar.id = 'searchBar';
-        onlineSitesContainer.before(searchBar);
-    }
 
-    // Clear existing content
-    onlineSitesContainer.innerHTML = '';
+    searchBar.id = 'searchBar';
 
-    // Sort onlineSites in ascending order by name, keeping "suggest an app" at the end
-    onlineSites.sort((a, b) => {
-        if (a.name === 'Suggest an App') return 1;
-        if (b.name === 'Suggest an App') return -1;
-        return a.name.localeCompare(b.name);
-    });
+    // Create a new division for content
+    const onlineSitesContent = document.createElement('div');
+    onlineSitesContent.id = 'onlineSitesContent';
+    onlineSitesContent.style.display = 'flex';
+    onlineSitesContent.style.flexWrap = 'wrap';
+    onlineSitesContent.style.gap = '20px';
+    onlineSitesContent.style.justifyContent = 'center';
+    onlineSitesContent.style.alignItems = 'center';
+
+    // Append the search bar and the new division to the container
+    onlineSitesContainer.appendChild(searchBar);
+    onlineSitesContainer.appendChild(onlineSitesContent);
 
     // Function to render sites based on search
     const renderSites = (filteredSites) => {
-        onlineSitesContainer.innerHTML = ''; // Clear container for new rendering
+        onlineSitesContent.innerHTML = ''; // Clear content division for new rendering
 
         // Create and append new online site items
         filteredSites.forEach(site => {
@@ -95,10 +96,8 @@ function populateOnlineSites(onlineSites) {
             siteItem.appendChild(img);
             siteItem.appendChild(name);
 
-            onlineSitesContainer.appendChild(siteItem);
+            onlineSitesContent.appendChild(siteItem);
         });
-
-        onlineSitesContainer.style.display = 'flex'; // Make it visible after items are added
     };
 
     // Initial render of all sites
