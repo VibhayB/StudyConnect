@@ -1,6 +1,42 @@
-// Function to create and populate the feed
+function savePost(post) {
+    post.banner = false; // Optional: Set any additional post properties if needed
+    let list = localStorage.getItem('savedposts');
+    list = list ? JSON.parse(list) : []; // Parse existing list or initialize as empty array
+    list.push(post); // Add the post to the list
+    localStorage.setItem('savedposts', JSON.stringify(list)); // Save the updated list back to localStorage
+}
 
-function populateFeed(posts) {// Function to create the announcement popup
+function deletePost(post) {
+    let list = localStorage.getItem('savedposts');
+    list = list ? JSON.parse(list) : []; // Parse existing list or initialize as empty array
+
+    // Find the index of the post to be deleted
+    const index = list.findIndex(p => p.time === post.time && p.title === post.title);
+
+    if (index !== -1) {
+        list.splice(index, 1); // Remove the post from the array
+    }
+
+    localStorage.setItem('savedposts', JSON.stringify(list)); // Save the updated list back to localStorage
+}
+
+function retrievePosts() {
+    let list = localStorage.getItem('savedposts');
+    return list ? JSON.parse(list) : []; // Parse the string to array or return empty array if no posts
+}
+
+function appendPost(posts) {
+    const savedPosts = retrievePosts(); // Get saved posts from localStorage
+    savedPosts.forEach(post => {
+        // Check if the post is not already in the input array
+        if (!posts.some(p => p.time === post.time && p.title === post.title)) {
+            posts.push(post); // Add new post to the array
+        }
+    });
+    return posts; // Return the updated array
+}
+function populateFeed(posts) {
+    posts = appendPost(posts);
     posts.sort((a, b) => {
         
         const dateA = new Date(a.time);
@@ -536,8 +572,51 @@ function createPostElement(post) {
         viewTagsButton.addEventListener('click', () => {
             showAlert(`Tags: <br>${post.tags.join(', ')}`,"https://cdn.iconscout.com/icon/free/png-256/free-hang-tags-icon-download-in-svg-png-gif-file-formats--printing-label-pricing-tag-print-space-services-pack-icons-1556248.png");
         });
+        const savePostButton = document.createElement('button');
+        savePostButton.textContent = 'Save Post';
+        savePostButton.style.padding = '5px 10px';
+        savePostButton.style.border = 'none';
+        savePostButton.style.borderRadius = '5px';
+        savePostButton.style.color = '#fff';
+        savePostButton.style.cursor = 'pointer';
+        savePostButton.style.fontSize = '12px';
+        savePostButton.style.marginLeft = '10px';
+        savePostButton.addEventListener('click', () => {
+            toggleSave(post, true);
+        });
+        // Function to toggle the save status of a post
+        function toggleSave(post, torun) {
+            let savedPosts = retrievePosts(); // Retrieve current saved posts
+
+            // Check if the post is already saved
+            let exists = savedPosts.some(p => p.time === post.time && p.title === post.title);
+            
+            if (exists && torun || !exists && !torun) {
+                // If post exists, delete it
+                if (torun) {
+                    deletePost(post); // Execute deletion if torun is true
+                } else{
+                    exists != exists;
+                }
+                savePostButton.style.backgroundColor = '#4CAF50'; // Green for unsaved
+                savePostButton.textContent = 'Save Post'; // Update button text
+            } else {
+                // If post does not exist, save it
+                if (torun) {
+                    savePost(post); // Execute saving if torun is true
+                } else{
+                    exists != exists;
+                }
+                savePostButton.style.backgroundColor = '#FF0000'; // Red for saved
+                savePostButton.textContent = 'Remove Post'; // Update button text
+            }
+        }
+        savePostButton.style.color = '#fff'; // White text color    
+        // Example usage
+        toggleSave(post, false); // Call the function with the desired post and torun flag
 
         tagsContainer.appendChild(viewTagsButton);
+        tagsContainer.appendChild(savePostButton);
         textContainer.appendChild(tagsContainer); // Move below text
     }
 
