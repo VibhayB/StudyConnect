@@ -1,5 +1,11 @@
 // Function to create online site items and add them to the div
-function populateOnlineSites(onlineSites) {
+function populateOnlineSites(onlineSites){
+    // Sort onlineSites in ascending order by name, keeping "suggest an app" at the end
+    onlineSites.sort((a, b) => {
+        if (a.name === 'Suggest an App') return 1;
+        if (b.name === 'Suggest an App') return -1;
+        return a.name.localeCompare(b.name);
+    });
     const onlineSitesContainer = document.getElementById('sites');
 
     // Clear existing content
