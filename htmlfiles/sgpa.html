@@ -95,13 +95,33 @@
     button:focus {
       outline: none;
     }
-    p#result {
-      font-size: 1.5em;
-      margin-top: 20px;
-      font-weight: bold;
-      color: #4a90e2;
-      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-    }
+    .result-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 20px;
+}
+
+button {
+  font-size: 1.1em;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4a90e2;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+  margin-right: 20px; /* Add this to ensure space between button and result */
+}
+
+p#result {
+  font-size: 1.5em;
+  font-weight: bold;
+  color: #4a90e2;
+  margin: 0;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
   </style>
 </head>
 <body>
@@ -123,14 +143,15 @@
         </tr>
       </table>
 
-      <button type="button" onclick="calculateSGPA()">Calculate SGPA</button>
+      <div class="result-container">
+        <button type="button" onclick="calculateSGPA()">Calculate SGPA</button>
+        <p id="result"></p>
+      </div>
     </form>
-
-    <p id="result"></p>
   </div>
 
   <script>
-    const storedSemesters  = localStorage.getItem("semesters");
+    const storedSemesters = localStorage.getItem("semesters");
     const semesters = storedSemesters ? JSON.parse(storedSemesters) : {};
 
     function populateSemesterOptions() {
