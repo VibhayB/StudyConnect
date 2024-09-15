@@ -5,49 +5,134 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SGPA Calculator</title>
   <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+      color: #4a90e2;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-size: 1.2em;
+      margin-right: 10px;
+    }
+    select {
+      font-size: 1em;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      background: #fff;
+      color: #333;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    select:focus {
+      border-color: #4a90e2;
+      box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+      outline: none;
+    }
+    form {
+      margin: 20px auto;
+      width: 90%;
+      max-width: 900px;
+      background: #ffffff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      transition: box-shadow 0.3s;
+    }
+    form:hover {
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
+    }
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 15px;
     }
-
     th, td {
-      padding: 8px 10px;
+      padding: 12px 15px;
       text-align: left;
       border-bottom: 1px solid #ddd;
     }
-
     th {
-      background-color: #f2f2f2;
+      background-color: #4a90e2;
+      color: #fff;
+      font-size: 1.1em;
+    }
+    td input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 1em;
+    }
+    button {
+      font-size: 1.1em;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4a90e2;
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #357ABD;
+      transform: scale(1.05);
+    }
+    button:focus {
+      outline: none;
+    }
+    p#result {
+      font-size: 1.5em;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #4a90e2;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
     }
   </style>
 </head>
 <body>
 
-  <h1>SGPA Calculator</h1>
+  <div>
+    <h1>SGPA Calculator</h1>
 
-  <label for="semester">Select Semester:</label>
-  <select id="semester" onchange="populateSubjects()">
-  </select>
+    <label for="semester">Select Semester:</label>
+    <select id="semester" onchange="populateSubjects()">
+    </select>
 
-  <form id="sgpaCalculator">
-    <table id="subjectsTable">
-      <tr>
-        <th>Subject</th>
-        <th>Credits</th>
-        <th>Total Marks</th>
-        <th>Grade</th>
-      </tr>
-    </table>
+    <form id="sgpaCalculator">
+      <table id="subjectsTable">
+        <tr>
+          <th>Subject</th>
+          <th>Credits</th>
+          <th>Total Marks</th>
+          <th>Grade</th>
+        </tr>
+      </table>
 
-    <button type="button" onclick="calculateSGPA()">Calculate SGPA</button>
-  </form>
+      <button type="button" onclick="calculateSGPA()">Calculate SGPA</button>
+    </form>
 
-  <p id="result"></p>
+    <p id="result"></p>
+  </div>
 
   <script>
     const storedSemesters  = localStorage.getItem("semesters");
     const semesters = storedSemesters ? JSON.parse(storedSemesters) : {};
+
     function populateSemesterOptions() {
       const semesterSelect = document.getElementById("semester");
       semesterSelect.innerHTML = ''; // Clear existing options
@@ -59,7 +144,14 @@
         option.textContent = `Semester ${semester}`;
         semesterSelect.appendChild(option);
       }
+
+      // Automatically select the first semester if available
+      if (semesterSelect.options.length > 0) {
+        semesterSelect.value = semesterSelect.options[0].value;
+        populateSubjects();
+      }
     }
+
     function populateSubjects() {
       const semester = document.getElementById("semester").value;
       const subjects = semesters[semester];
@@ -145,7 +237,6 @@
 
     window.onload = () => {
       populateSemesterOptions();
-      populateSubjects(); // Populate subjects based on default selected semester
     };
   </script>
 
