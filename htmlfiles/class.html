@@ -8,98 +8,150 @@
     body {
       font-family: Arial, sans-serif;
       text-align: center;
-      margin: 50px;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(to right, #f8f9fa, #e9ecef);
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      font-size: 2.5em;
+      color: #333;
+      margin-bottom: 20px;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      font-size: 1.5em;
+      color: #555;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      color: #333;
     }
     input {
-      margin-bottom: 10px;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      width: calc(100% - 22px); /* Adjust width to fit padding and border */
+      box-sizing: border-box;
     }
-    #error-message {
-      color: red;
+    select {
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 15px;
+      width: calc(100% - 22px); /* Adjust width to fit padding and border */
+      box-sizing: border-box;
     }
     .section {
       display: none;
       margin-bottom: 20px;
     }
     #calculate-button {
-      display: none;
-    } h1 {
-  font-size: 2.5em; /* Adjust the size as needed */
-  color: #333; /* Dark grey color */
-  text-align: center;
-  margin-bottom: 20px; /* Space below the heading */
-}
-
-h2 {
-  font-size: 1.5em; /* Adjust the size as needed */
-  color: #555; /* Slightly lighter grey color */
-  text-align: center;
-  margin-bottom: 20px; /* Space below the heading */
-}
-
+      padding: 10px 20px;
+      font-size: 1em;
+      color: #fff;
+      background-color: #007bff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #calculate-button:hover {
+      background-color: #0056b3;
+    }
+    #error-message {
+      color: red;
+      font-size: 1.1em;
+      margin-top: 10px;
+    }
+    h3 {
+      font-size: 1.2em;
+      color: #333;
+      margin-top: 20px;
+    }
+    .result {
+      font-weight: bold;
+      color: #28a745;
+    }
   </style>
 </head>
 <body>
-  <h1>Class Need Calculator</h1>
-  <h2>Minimum Classes Needed to Reach 75% Attendance</h2>
+  <div class="container">
+    <h1>Class Need Calculator</h1>
+    <h2>Minimum Classes Needed to Reach 75% Attendance</h2>
 
-  <label for="input-option">Select Input Option:</label>
-  <select id="input-option" onchange="toggleInputSection()">
-    <option value="0">--Select an Option--</option>
-    <option value="1">Total Classes and Attended Classes</option>
-    <option value="2">Total Classes and Missed Classes</option>
-    <option value="3">Missed Classes and Attended Classes</option>
-    <option value="4">Current Attendance (%) and Total Classes</option>
-    <option value="5">Current Attendance (%) and Attended Classes</option>
-    <option value="6">Current Attendance (%) and Missed Classes</option>
-  </select>
+    <label for="input-option">Select Input Option:</label>
+    <select id="input-option" onchange="toggleInputSection()">
+      <option value="0">--Select an Option--</option>
+      <option value="1">Total Classes and Attended Classes</option>
+      <option value="2">Total Classes and Missed Classes</option>
+      <option value="3">Missed Classes and Attended Classes</option>
+      <option value="4">Current Attendance (%) and Total Classes</option>
+      <option value="5">Current Attendance (%) and Attended Classes</option>
+      <option value="6">Current Attendance (%) and Missed Classes</option>
+    </select>
 
-  <div id="section1" class="section">
-    <label for="total-classes-1">Total Classes:</label>
-    <input type="number" id="total-classes-1"><br>
-    <label for="attended-classes">Attended Classes:</label>
-    <input type="number" id="attended-classes"><br>
+    <div id="section1" class="section">
+      <label for="total-classes-1">Total Classes:</label>
+      <input type="number" id="total-classes-1"><br>
+      <label for="attended-classes">Attended Classes:</label>
+      <input type="number" id="attended-classes"><br>
+    </div>
+
+    <div id="section2" class="section">
+      <label for="total-classes-2">Total Classes:</label>
+      <input type="number" id="total-classes-2"><br>
+      <label for="missed-classes-1">Missed Classes:</label>
+      <input type="number" id="missed-classes-1"><br>
+    </div>
+
+    <div id="section3" class="section">
+      <label for="missed-classes-2">Missed Classes:</label>
+      <input type="number" id="missed-classes-2"><br>
+      <label for="attended-classes-2">Attended Classes:</label>
+      <input type="number" id="attended-classes-2"><br>
+    </div>
+
+    <div id="section4" class="section">
+      <label for="current-attendance">Current Attendance (%):</label>
+      <input type="number" id="current-attendance" step="0.01"><br>
+      <label for="total-classes-3">Total Classes:</label>
+      <input type="number" id="total-classes-3"><br>
+    </div>
+
+    <div id="section5" class="section">
+      <label for="current-attendance-2">Current Attendance (%):</label>
+      <input type="number" id="current-attendance-2" step="0.01"><br>
+      <label for="attended-classes-3">Attended Classes:</label>
+      <input type="number" id="attended-classes-3"><br>
+    </div>
+
+    <div id="section6" class="section">
+      <label for="current-attendance-3">Current Attendance (%):</label>
+      <input type="number" id="current-attendance-3" step="0.01"><br>
+      <label for="missed-classes-3">Missed Classes:</label>
+      <input type="number" id="missed-classes-3"><br>
+    </div>
+
+    <button id="calculate-button" onclick="calculateClassesNeeded()">Calculate Minimum Classes Needed</button>
+
+    <h3>Minimum Classes Needed: <span id="result" class="result"></span></h3>
+
+    <p id="error-message"></p>
   </div>
-
-  <div id="section2" class="section">
-    <label for="total-classes-2">Total Classes:</label>
-    <input type="number" id="total-classes-2"><br>
-    <label for="missed-classes-1">Missed Classes:</label>
-    <input type="number" id="missed-classes-1"><br>
-  </div>
-
-  <div id="section3" class="section">
-    <label for="missed-classes-2">Missed Classes:</label>
-    <input type="number" id="missed-classes-2"><br>
-    <label for="attended-classes-2">Attended Classes:</label>
-    <input type="number" id="attended-classes-2"><br>
-  </div>
-
-  <div id="section4" class="section">
-    <label for="current-attendance">Current Attendance (%):</label>
-    <input type="number" id="current-attendance" step="0.01"><br>
-    <label for="total-classes-3">Total Classes:</label>
-    <input type="number" id="total-classes-3"><br>
-  </div>
-
-  <div id="section5" class="section">
-    <label for="current-attendance-2">Current Attendance (%):</label>
-    <input type="number" id="current-attendance-2" step="0.01"><br>
-    <label for="attended-classes-3">Attended Classes:</label>
-    <input type="number" id="attended-classes-3"><br>
-  </div>
-
-  <div id="section6" class="section">
-    <label for="current-attendance-3">Current Attendance (%):</label>
-    <input type="number" id="current-attendance-3" step="0.01"><br>
-    <label for="missed-classes-3">Missed Classes:</label>
-    <input type="number" id="missed-classes-3"><br>
-  </div>
-
-  <button id="calculate-button" onclick="calculateClassesNeeded()">Calculate Minimum Classes Needed</button>
-
-  <h3>Minimum Classes Needed: <span id="result"></span></h3>
-
-  <p id="error-message"></p>
 
   <script>
     function toggleInputSection() {
@@ -182,6 +234,5 @@ h2 {
       document.getElementById('result').innerText = minimumClassesNeeded;
     }
   </script>
-
 </body>
 </html>
