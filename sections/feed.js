@@ -152,12 +152,9 @@ function filterPostsByTags(selectedTags) {
 
 function populateFeed(posts) {// Function to create the announcement popup
     posts.sort((a, b) => {
-        console.log('Comparing:', a.time, b.time);
         
         const dateA = new Date(a.time);
         const dateB = new Date(b.time);
-    
-        console.log('Parsed Dates:', dateA, dateB);
         
         // Ensure both dates are valid before comparing
         if (isNaN(dateA) || isNaN(dateB)) {
