@@ -861,18 +861,21 @@ function showDetailContent(detailName, detailValues) {
 }
 
 .video-item {
+    width: 4500px; /* Makes the video smaller */
+    height: 225px;
     display: flex;
     align-items: flex-start; /* Aligns video and text on the same vertical line */
     margin-bottom: 20px; /* Adds space between video items */
 }
 
 .video-item iframe {
-    width: 400px; /* Makes the video smaller */
-    height: 225px;
+    width: 400px;  /* Larger width */
+    height: 225px; /* Adjust the height for aspect ratio */
     border: none;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
+
 
 .video-info {
     margin-left: 20px; /* Adds space between the video and the text */
@@ -903,10 +906,12 @@ function showDetailContent(detailName, detailValues) {
                     const videoContainer = document.createElement('div');
                     videoContainer.classList.add('video-container');
                     videoContainer.innerHTML = `
-                        <iframe src="${value}" allowfullscreen></iframe>
-                        <div class="video-info">
-                            <div class="video-title">${title.trim()}</div>
-                            ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
+                     <div class="video-item">
+                            <iframe src="${value}" allowfullscreen></iframe>
+                            <div class="video-info">
+                                <div class="video-title">${title.trim()}</div>
+                                ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
+                            </div>
                         </div>
                     `;
                     detailContent.appendChild(videoContainer);
