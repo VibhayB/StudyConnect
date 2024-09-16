@@ -381,7 +381,6 @@ function populateFeed(posts) {
 
     feedContainer.appendChild(noteSection);
     // Function to create post element
-    // Function to create post element
 function createPostElement(post) {
     const postElement = document.createElement('div');
     postElement.style.display = 'flex';
@@ -449,6 +448,8 @@ function createPostElement(post) {
     const text = document.createElement('div');
     text.style.fontSize = '14px';
     text.style.position = 'relative';
+    text.style.wordBreak = 'break-word'; // Ensures long words/URLs break and wrap to the next line
+    text.style.overflowWrap = 'break-word'; // Alternative for compatibility
 
     const MAX_LENGTH = 150; // Max length of text before showing "Read more"
     const originalText = post.text;
