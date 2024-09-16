@@ -11,7 +11,7 @@ var imageMap;
 var courseData;
 var showbanner = 0;
 var noticeenabled = true;
-const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others"};
+const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity"};
 
 
 // Tab names mapping
@@ -161,9 +161,22 @@ var currentheader = localStorage.getItem("tabcurrenty");
 var examSchedule;
 var applist;
 //python -m http.server 8000
+function delayedFunction() {
+    console.log('This runs after 1 second');
+}
+
+// Call the function after a 1-second delay
+
 async function fetchAndDisplayData() {
     try {
       // Replace 'your-collection-name' with the actual collection name
+      const lastlogStr = localStorage.getItem("lastlog");
+      const lastlog = lastlogStr ? new Date(parseInt(lastlogStr, 10)) : null;
+      
+    // Check if lastlog exists
+    const currentTime = new Date();
+    
+    setTimeout(delayedFunction, 2000);
       const data = await window.loadCollectionData('categoriesData'); 
       console.log('Website Loaded');
       // You can process or display the data as needed here
@@ -179,13 +192,6 @@ async function fetchAndDisplayData() {
         return;
       } 
       if(!isSignedIn){
-        // Retrieve last login time from localStorage
-        const lastlogStr = localStorage.getItem("lastlog");
-        const lastlog = lastlogStr ? new Date(parseInt(lastlogStr, 10)) : null;
-        // If lastlog does not exist, set it to the current time
-
-        // Check if lastlog exists
-        const currentTime = new Date();
         const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
         if(!lastlog || (currentTime - lastlog > tenMinutesInMilliseconds)){
             showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
@@ -212,8 +218,7 @@ async function fetchAndDisplayData() {
                 populateFeed(data.data,lastlog);
             } else if(data.id == "courseData"){
                 courseData = data.data;
-            }
-            else if(data.id == "Others"){
+            } else if(data.id == "Others"){
                 otheritems.push(data.infoSection);
                 feedbackurl = data.URLs.feedback;
                 reporturl = data.URLs.report;
@@ -223,8 +228,11 @@ async function fetchAndDisplayData() {
                 localStorage.setItem("courseInfo", JSON.stringify(courseInfo));
                 localStorage.setItem("semesters",JSON.stringify(data.semesters));
                 imageMap = data.Images;
-            }
-        }
+            } /*elseif(data.id == "productivity"){
+                
+                populateProductivity(data.data);
+            }*/
+        } populateProductivity();
         populateApps();
         populateGames();
         injectCSS();
