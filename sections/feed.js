@@ -35,7 +35,8 @@ function appendPost(posts) {
     });
     return posts; // Return the updated array
 }
-function populateFeed(posts) {
+function populateFeed(posts,lastlog) {
+
     posts = appendPost(posts);
     posts.sort((a, b) => {
         
@@ -84,6 +85,11 @@ function populateFeed(posts) {
         image.style.maxWidth = "80%";
         image.style.maxHeight = "80%";
         image.style.borderRadius = "10px";
+        image.onclick = function() {
+            // Perform the desired action here
+            showTab(event,"feed");
+            document.body.removeChild(popup);
+        };
         popup.appendChild(image);
     
         // Create the cross button to close the popup
@@ -126,8 +132,15 @@ function populateFeed(posts) {
         // Add the popup to the body
         document.body.appendChild(popup);
     } 
-    // Call the function to create the popup
-    createAnnouncementPopup();
+    // Check if last login is more than 1 hour ago
+    const currentTime = new Date();
+    const lastLoginTime = new Date(lastlog);
+    const oneHourInMilliseconds = 20 * 60 * 1000; // 1 hour in milliseconds
+
+    if ((!lastlog || currentTime - lastLoginTime > oneHourInMilliseconds)&&noticeenabled) {
+        createAnnouncementPopup();
+        localStorage.setItem("lastlog", Date.now());
+    }
     const feedContainer = document.getElementById('feed');
     // Apply styles to the feed container
     feedContainer.style.display = 'none'; // Change to flex to show content
