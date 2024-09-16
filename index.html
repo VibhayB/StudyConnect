@@ -49,6 +49,7 @@
             <li onclick="showTab(event, 'exams')">Exams</li>
             <li onclick="showTab(event, 'feed')">Feed</li>
             <li onclick="showTab(event, 'forms')">Important Docs</li>
+            <li onclick="showTab(event, 'productivity')">Productivity</li>
             <li onclick="showTab(event, 'contacts')">Important Contacts</li>
             <li onclick="showTab(event, 'calendar')">Academic Calendar</li>
             <li onclick="showTab(event, 'sites')">Online Sites</li>
@@ -92,7 +93,11 @@
                 </div>
                 <div class="info-card">
                     <img src="https://images.ctfassets.net/lzny33ho1g45/2EAWzigqaiY0419zbfvRTs/c1a2565f7cff3fd16a7fe00b1354e5e4/Group_4075.jpg?w=1520&fm=jpg&q=30&fit=thumb&h=760" alt="Important Forms and Sheets">
-                    <div class="info-text">View the important sheets and form including academic calendars, details here</div>
+                    <div class="info-text">View the important sheets and form including academic calendars, details in Important Docs</div>
+                </div>
+                <div class="info-card">
+                    <img src="https://www.ismartrecruit.com/upload/blog/main_image/boost-employee-productivity.webp" alt="Important Forms and Sheets">
+                    <div class="info-text">Explore Productive Stuff in the Productivity tab</div>
                 </div>
                 <div class="info-card">
                     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkMEMzRWdsNhGuQ8iGX_hwC_5cCoThvx-dIQ&s" alt="Important Contacts">
@@ -131,6 +136,7 @@
                 <span class="dot" onclick="currentSlide(11)"></span>
                 <span class="dot" onclick="currentSlide(12)"></span>
                 <span class="dot" onclick="currentSlide(13)"></span>
+                <span class="dot" onclick="currentSlide(14)"></span>
             </div>
         </section>
         <div id="chatbot-toggle" style="display:none; z-index:1003;">
@@ -145,6 +151,7 @@
         <div id="games" class = "content">Games</div>
         <div id="calendar" class="content">Academic Calendar</div>
         <div id="forms" class="content">Important Docs</div>
+        <div id="productivity" class="content">Productivity</div>
         <div id="contacts" class="content">Important Contacts</div>
         <div id="installers" class="content">Installers</div>
         <div id="sites" class="content">Online Sites</div>
@@ -177,6 +184,7 @@
     })();*/
     </script>
     <script src="chatbot.js"></script>
+    <script src="sections/productivity.js"></script>
     <script src="scripts.js"></script>    
     <script src="sections/games.js"></script>
     <script src="sections/others.js"></script>
