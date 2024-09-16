@@ -10,6 +10,7 @@ var reporturl;
 var imageMap;
 var courseData;
 var showbanner = 0;
+var noticeenabled = true;
 const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others"};
 
 
@@ -178,7 +179,17 @@ async function fetchAndDisplayData() {
         return;
       } 
       if(!isSignedIn){
-        showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
+        // Retrieve last login time from localStorage
+        const lastlogStr = localStorage.getItem("lastlog");
+        const lastlog = lastlogStr ? new Date(parseInt(lastlogStr, 10)) : null;
+        // If lastlog does not exist, set it to the current time
+
+        // Check if lastlog exists
+        const currentTime = new Date();
+        const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
+        if(!lastlog || (currentTime - lastlog > tenMinutesInMilliseconds)){
+            showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
+        }
         console.log("Displaying");
         isSignedIn = true;
         for(let data of maindata){
@@ -198,7 +209,7 @@ async function fetchAndDisplayData() {
             } else if(data.id == "apps"){
                 applist = data.data;
             } else if(data.id == "posts"){
-                populateFeed(data.data);
+                populateFeed(data.data,lastlog);
             } else if(data.id == "courseData"){
                 courseData = data.data;
             }
@@ -214,7 +225,6 @@ async function fetchAndDisplayData() {
                 imageMap = data.Images;
             }
         }
-        
         populateApps();
         populateGames();
         injectCSS();
