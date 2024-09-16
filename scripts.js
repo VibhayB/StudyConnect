@@ -775,6 +775,8 @@ function updateHomeButton() {
             localStorage.removeItem("tabcurrentx");
             localStorage.removeItem("tabcurrenty");
             localStorage.removeItem("efusereId");
+            localStorage.removeItem("selectedSemesters");
+            localStorage.removeItem("removedSubjects");
             signInWithGoogleDirectly(true);
             window.location.reload(true); // For most modern browsers
         });
