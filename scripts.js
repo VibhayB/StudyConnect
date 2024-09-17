@@ -192,8 +192,7 @@ async function fetchAndDisplayData() {
         return;
       } 
       if(!isSignedIn){
-        const tenMinutesInMilliseconds = 10 * 60 * 1000; // 10 minutes in milliseconds
-        if(!lastlog || (currentTime - lastlog > tenMinutesInMilliseconds)){
+        if(!lastlog){
             showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
         }
         console.log("Displaying");
@@ -795,6 +794,7 @@ function updateHomeButton() {
             localStorage.removeItem("efusereId");
             localStorage.removeItem("selectedSemesters");
             localStorage.removeItem("removedSubjects");
+            localStorage.removeItem("lastlog");
             signInWithGoogleDirectly(true);
             window.location.reload(true); // For most modern browsers
         });
