@@ -242,7 +242,6 @@ main.dimmed {
 iframe {
     width: 100%;
     height: 100%;
-    display: none; /* Initially hidden */
 }
 
 .info-text {
