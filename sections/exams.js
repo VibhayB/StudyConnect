@@ -118,7 +118,6 @@ function createTabs(abcData) {
                     frameborder="0" 
                     allowfullscreen>
                 </iframe>
-                <p>${subjectData.studyMaterial || 'No study material available'}</p>
                 <h2 style="font-size: 22px; font-weight: bold;">Videos:</h2>`;
                 
 
