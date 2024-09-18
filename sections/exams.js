@@ -1,5 +1,10 @@
 function createTabs(abcData) {
+    
     var tabsData = [
+        {
+            name: "Primary",
+            contentFunction: () => createSpecialSection(abcData[4].data)
+        },
         {
             name: "Previous Papers",
             contentFunction: () => createCards(abcData[0].data)
@@ -12,12 +17,146 @@ function createTabs(abcData) {
             name: "Results",
             contentFunction: () => createCards(abcData[2].data)
         },
-        { name: "Question Banks", contentFunction: () => "No question banks yet" }
+        { 
+            name: "Question Banks", 
+            contentFunction: () => "No question banks yet" 
+        }
     ];
-    tabsData.unshift({name: "Primary", contentFunction: () => "No Exams there<br><br>Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well." });
+    function createSpecialSection(specialData) {
+    if (!specialData) return "No Exams there<br><br>Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.";
+    
+    let content = 'Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.<br><br>';
+    
+    // Add Timer Section
+    if (specialData.timer && specialData.timer.length > 0) {
+        content += `
+            <div id="timers-container">
+                ${specialData.timer.map(timer => `
+                    <div id="timer-${timer.name}" class="timer">
+                        <div class="exam-title">${timer.name}</div>
+                        <div id="countdown-${timer.name}" class="countdown"></div>
+                    </div>
+                `).join('')}
+            </div>
+            <style>
+                #timers-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 20px;
+                    margin: 0 auto;
+                }
+                .timer {
+                    font-size: 20px;
+                    font-weight: bold;
+                    padding: 15px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    width: 250px;
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 150px;
+                }
+                .exam-title {
+                    font-size: 22px;
+                    margin-bottom: 10px;
+                    color: #444;
+                }
+                .countdown {
+                    font-size: 18px;
+                    font-weight: normal;
+                    margin-top: 10px;
+                }
+                .ongoing {
+                    color: #00FF00;
+                    font-weight: bold;
+                }
+                .not-started {
+                    color: #CCCCCC;
+                    font-weight: bold;
+                }
+                .time-up {
+                    color: #FF0000;
+                    font-weight: bold;
+                }
+            </style>
+        `;
+    }
+    
+    // Add Main Images Section
+    if (specialData.mainimages && specialData.mainimages.length > 0) {
+        content += '<div class="main-images">';
+        specialData.mainimages.forEach(imageGroup => {
+            Object.entries(imageGroup).forEach(([imageName, imageUrl]) => {
+                content += `
+                    <br>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h1 style="font-size: 38px; font-weight: bold;">${imageName}</h1>
+                        <img src="${imageUrl}" alt="${imageName}" style="max-width: 100%; height: auto;"/>
+                    </div>`;
+            });
+        });
+        content += '</div>';
+    }
+    
+ // Add Subjects and Study Material
+ if (specialData.subjects && specialData.subjects.length > 0) {
+    specialData.subjects.forEach(subjectGroup => {
+        Object.entries(subjectGroup).forEach(([subjectName, subjectData]) => {
+            content += `
+                <br>
+                <h1 style="font-size: 38px; font-weight: bold; margin-top: 20px;">${subjectName}</h1>
+                <h2 style="font-size: 22px; font-weight: bold;">Syllabus:</h2>
+                <p>${subjectData.syllabus || 'No syllabus available'}</p>
+                <h2 style="font-size: 22px; font-weight: bold;">Study Material:</h2>
+                <iframe src="https://drive.google.com/embeddedfolderview?id=${subjectData.studyMaterial}#grid" 
+                    width="640" 
+                    height="480" 
+                    frameborder="0" 
+                    allowfullscreen>
+                </iframe>
+                <p>${subjectData.studyMaterial || 'No study material available'}</p>
+                <h2 style="font-size: 22px; font-weight: bold;">Videos:</h2>`;
+                
+
+            if (subjectData.videos && Object.keys(subjectData.videos).length > 0) {
+                content += '<div class="videos">';
+                Object.entries(subjectData.videos).forEach(([videoName, videoUrl]) => {
+                    content += `
+                        <div style="margin-bottom: 20px; text-align: center;">
+                        <p style="font-size: 18px;">${videoName}</p>
+                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000;">
+                            <iframe 
+                                src="${videoUrl}" 
+                                title="${videoName}" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+                            ></iframe>
+                        </div>
+                        </div>
+                        `;
+                });
+                content += '</div>';
+            } else {
+                content += '<p>No videos available</p>';
+            }
+        });
+    });
+}
+
+return content;
+}
+
     
     // Helper function to create card HTML
     function createCards(cards) {
+        if (!cards) return "No data available";
+
         return cards.map(card => `
             <a href="${card.link}" target="_blank" style="
                 display: block; 
@@ -109,7 +248,67 @@ function createTabs(abcData) {
         const contentElement = document.getElementById(contentId);
         contentElement.innerHTML = contentFunction();
         contentElement.style.display = 'block'; // Show content
+            // Update Countdown Timers
+            // Update Countdown Timers
+const timersContainer = document.getElementById('timers-container');
+
+if (timersContainer) {
+    abcData[4].data.timer.forEach(timer => {
+        const countdownElement = document.getElementById(`countdown-${timer.name}`);
+        if (countdownElement) {
+            const startTime = new Date(timer.start).getTime();
+            const endTime = new Date(timer.end).getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                
+                if (now < startTime) {
+                    // Timer is in countdown phase
+                    const distance = startTime - now;
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    let countdownText = '';
+                    if (days > 0) countdownText += `${days}d `;
+                    if (hours > 0 || days > 0) countdownText += `${hours}h `;
+                    if (minutes > 0 || hours > 0 || days > 0) countdownText += `${minutes}m `;
+                    countdownText += `${seconds}s`;
+
+                    countdownElement.textContent = `Starts in ${countdownText.trim()}`;
+                    countdownElement.style.color = getCountdownColor(days, hours, minutes, seconds);
+                    countdownElement.className = 'countdown not-started';
+                } else if (now >= startTime && now <= endTime) {
+                    // Timer is ongoing
+                    countdownElement.textContent = 'Ongoing';
+                    countdownElement.className = 'countdown ongoing';
+                } else {
+                    // Timer has ended
+                    countdownElement.textContent = '';
+                    countdownElement.className = 'countdown hidden';
+                }
+            }
+            updateCountdown();
+            setInterval(updateCountdown, 1000); // Update every second
+        } else {
+            console.log(`Countdown element not found for ${timer.name}`); // Debug
+        }
+    });
+} else {
+    console.log('Timers container not found'); // Debug
+} 
     }
+// Utility function to get countdown color based on time left
+function getCountdownColor(days, hours, minutes, seconds) {
+    if (days >= 365) return '#8A2BE2'; // Purple for long countdowns
+    if (days >= 30) return '#4B0082'; // Indigo for long countdowns
+    if (days >= 7) return '#0000FF'; // Blue for weekly countdowns
+    if (days >= 1) return '#008000'; // Green for daily countdowns
+    if (hours >= 1) return '#CCCC00'; // Yellow for hourly countdowns
+    if (minutes >= 1) return '#FFA500'; // Orange for minute countdowns
+    return '#FF0000'; // Red for last seconds
+}
 
     // Set the first tab as active
     const firstTab = tabsContainer.querySelector('.tab');
@@ -149,26 +348,11 @@ function createTabs(abcData) {
     // Add responsive styles
     const style = document.createElement('style');
     style.textContent = `
-        @media (max-width: 768px) {
-            #tabs {
-                flex-direction: column;
-            }
+        @media only screen and (max-width: 600px) {
             .tab {
-                width: 100%;
-                text-align: center;
-                margin-bottom: 5px;
-            }
-            .tab-content {
                 padding: 10px;
-            }
-        }
-        @media (max-width: 480px) {
-            .tab {
-                padding: 8px;
-                font-size: 14px;
-            }
-            .tab-content {
-                padding: 8px;
+                flex: 100%; /* Each tab takes full width on small screens */
+                text-align: center;
             }
         }
     `;
