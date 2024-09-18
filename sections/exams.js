@@ -112,12 +112,12 @@ function createTabs(abcData) {
                 <h2 style="font-size: 22px; font-weight: bold;">Syllabus:</h2>
                 <p>${subjectData.syllabus || 'No syllabus available'}</p>
                 <h2 style="font-size: 22px; font-weight: bold;">Study Material:</h2>
+                <div style="position: relative; padding-bottom: 30%; height: 0; overflow: hidden; max-width: 100%; background: #000; width: 560px; margin: 0 auto;">
                 <iframe src="https://drive.google.com/embeddedfolderview?id=${subjectData.studyMaterial}#grid" 
-                    width="640" 
-                    height="480" 
-                    frameborder="0" 
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;" 
                     allowfullscreen>
                 </iframe>
+                </div>
                 <h2 style="font-size: 22px; font-weight: bold;">Videos:</h2>`;
                 
 
@@ -126,18 +126,18 @@ function createTabs(abcData) {
                 Object.entries(subjectData.videos).forEach(([videoName, videoUrl]) => {
                     content += `
                         <div style="margin-bottom: 20px; text-align: center;">
-                        <p style="font-size: 18px;">${videoName}</p>
-                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; background: #000;">
-                            <iframe 
-                                src="${videoUrl}" 
-                                title="${videoName}" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-                            ></iframe>
-                        </div>
-                        </div>
+    <p style="font-size: 18px;">${videoName}</p>
+    <div style="position: relative; padding-bottom: 30%; height: 0; overflow: hidden; max-width: 100%; background: #000; width: 560px; margin: 0 auto;">
+        <iframe 
+            src="${videoUrl}" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen
+            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
+        ></iframe>
+    </div>
+</div>
+
                         `;
                 });
                 content += '</div>';
