@@ -82,6 +82,7 @@ function createTabs(abcData) {
                     color: #FF0000;
                     font-weight: bold;
                 }
+
             </style>
         `;
     }
@@ -108,40 +109,40 @@ function createTabs(abcData) {
         Object.entries(subjectGroup).forEach(([subjectName, subjectData]) => {
             content += `
                 <br>
-                <h1 style="font-size: 38px; font-weight: bold; margin-top: 20px;">${subjectName}</h1>
-                <h2 style="font-size: 22px; font-weight: bold;">Syllabus:</h2>
-                <p>${subjectData.syllabus || 'No syllabus available'}</p>
-                <h2 style="font-size: 22px; font-weight: bold;">Study Material:</h2>
-                <div style="position: relative; padding-bottom: 30%; height: 0; overflow: hidden; max-width: 100%; width: 560px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); background: linear-gradient(135deg, #f0f8ff, #e6e6fa);">
+    <h1 style="font-size: 38px; font-weight: bold; margin-top: 20px;">${subjectName}</h1>
+    <h2 style="font-size: 22px; font-weight: bold;">Syllabus:</h2>
+    <p>${subjectData.syllabus || 'No syllabus available'}</p>
+    <h2 style="font-size: 22px; font-weight: bold;">Study Material:</h2>
+    <div style="position: relative; padding-bottom: 40%; height: 0; overflow: hidden; max-width: 100%; width: 560px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); background: linear-gradient(135deg, #f0f8ff, #e6e6fa);">
     <iframe src="https://drive.google.com/embeddedfolderview?id=${subjectData.studyMaterial}#grid" 
         style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 10px;" 
         allowfullscreen>
     </iframe>
-</div>
-<h2 style="font-size: 22px; font-weight: bold; color: #333;">Videos:</h2>`;
+    </div>
+
+
+    <h2 style="font-size: 22px; font-weight: bold; color: #333;">Videos:</h2>`;
                 
 
-            if (subjectData.videos && Object.keys(subjectData.videos).length > 0) {
-                content += '<div class="videos">';
-                Object.entries(subjectData.videos).forEach(([videoName, videoUrl]) => {
-                    content += `
-                        <div style="margin-bottom: 20px; text-align: center;">
-    <p style="font-size: 18px;">${videoName}</p>
-    <div style="position: relative; padding-bottom: 30%; height: 0; overflow: hidden; max-width: 100%; background: #000; width: 560px; margin: 0 auto;">
-        <iframe 
-            src="${videoUrl}" 
-            frameborder="0" 
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-            allowfullscreen
-            style="position: absolute; top: 0; left: 0; width: 100%; height: 100%;"
-        ></iframe>
-    </div>
-</div>
-
-                        `;
-                });
-                content += '</div>';
-            } else {
+    if (subjectData.videos && Object.keys(subjectData.videos).length > 0) {
+        content += '<div class="videos">';
+        Object.entries(subjectData.videos).forEach(([videoName, videoUrl]) => {
+            content += `
+                <div style="margin-bottom: 20px; text-align: center;">
+                <p style="font-size: 18px;">${videoName}</p>
+                <div style="position: relative; width: 560px; height: 315px; margin: 0 auto;">
+                    <iframe 
+                        src="${videoUrl}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    ></iframe>
+                </div>
+            </div>`;
+        });
+        content += '</div>';
+    }else {
                 content += '<p>No videos available</p>';
             }
         });
