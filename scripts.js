@@ -9,8 +9,7 @@ var feedbackurl;
 var reporturl;
 var imageMap;
 var courseData;
-var showbanner = 0;
-var noticeenabled = true;
+var showbanner = "show"; //set to 'dont show' to disable and 'show' to enable
 const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity"};
 
 
@@ -194,6 +193,9 @@ async function fetchAndDisplayData() {
       if(!isSignedIn){
         if(!lastlog){
             showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
+            showbanner = "show later";
+        } else{
+            showbanner = "show already";
         }
         console.log("Displaying");
         isSignedIn = true;
@@ -283,9 +285,6 @@ const homeContent = document.getElementById('home');
 function showAlert(message,icon="load.png") {
     closeAlert();
     document.getElementById("alertimg").src=icon;
-    if(showbanner == 0){
-        showbanner = 1;
-    }
     // Update the message in the alert
     document.querySelector('.alert-message').innerHTML = message;
 
@@ -306,13 +305,13 @@ function showAlert(message,icon="load.png") {
     // Trigger the fade-out effect by changing the opacity
     alertBox.style.opacity = '0';
     alertBox.style.visibility = 'hidden';
-    if(showbanner == 1){
+    if(showbanner == "show later"){
         try{
             document.getElementById('initialbanner').style.display = "flex";
         } catch(error){
 
         }
-        showbanner = 2; 
+        showbanner = "dont show"; 
     }
   }
 
