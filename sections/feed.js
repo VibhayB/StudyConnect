@@ -1,715 +1,360 @@
-function savePost(post) {
-    post.banner = false; // Optional: Set any additional post properties if needed
-    let list = localStorage.getItem('savedposts');
-    list = list ? JSON.parse(list) : []; // Parse existing list or initialize as empty array
-    list.push(post); // Add the post to the list
-    localStorage.setItem('savedposts', JSON.stringify(list)); // Save the updated list back to localStorage
+function createTabs(abcData) {
+    
+    var tabsData = [
+        {
+            name: "Primary",
+            contentFunction: () => createSpecialSection(abcData[4].data)
+        },
+        {
+            name: "Previous Papers",
+            contentFunction: () => createCards(abcData[0].data)
+        },
+        {
+            name: "Datesheets",
+            contentFunction: () => createCards(abcData[1].data)
+        },
+        {
+            name: "Results",
+            contentFunction: () => createCards(abcData[2].data)
+        },
+        { 
+            name: "Question Banks", 
+            contentFunction: () => "No question banks yet" 
+        }
+    ];
+    function createSpecialSection(specialData) {
+    if (!specialData) return "No Exams there<br><br>Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.";
+    
+    let content = 'Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.<br><br>';
+    
+    // Add Timer Section
+    if (specialData.timer && specialData.timer.length > 0) {
+        content += `
+            <div id="timers-container">
+                ${specialData.timer.map(timer => `
+                    <div id="timer-${timer.name}" class="timer">
+                        <div class="exam-title">${timer.name}</div>
+                        <div id="countdown-${timer.name}" class="countdown"></div>
+                    </div>
+                `).join('')}
+            </div>
+            <style>
+                #timers-container {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                    gap: 20px;
+                    margin: 0 auto;
+                }
+                .timer {
+                    font-size: 20px;
+                    font-weight: bold;
+                    padding: 15px;
+                    background-color: #fff;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                    width: 250px;
+                    text-align: center;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    height: 150px;
+                }
+                .exam-title {
+                    font-size: 22px;
+                    margin-bottom: 10px;
+                    color: #444;
+                }
+                .countdown {
+                    font-size: 18px;
+                    font-weight: normal;
+                    margin-top: 10px;
+                }
+                .ongoing {
+                    color: #00FF00;
+                    font-weight: bold;
+                }
+                .not-started {
+                    color: #CCCCCC;
+                    font-weight: bold;
+                }
+                .time-up {
+                    color: #FF0000;
+                    font-weight: bold;
+                }
+
+            </style>
+        `;
+    }
+    
+    // Add Main Images Section
+    if (specialData.mainimages && specialData.mainimages.length > 0) {
+        content += '<div class="main-images">';
+        specialData.mainimages.forEach(imageGroup => {
+            Object.entries(imageGroup).forEach(([imageName, imageUrl]) => {
+                content += `
+                    <br>
+                    <div style="text-align: center; margin-bottom: 20px;">
+                        <h1 style="font-size: 38px; font-weight: bold;">${imageName}</h1>
+                        <img src="${imageUrl}" alt="${imageName}" style="max-width: 100%; height: auto;"/>
+                    </div>`;
+            });
+        });
+        content += '</div>';
+    }
+    
+ // Add Subjects and Study Material
+ if (specialData.subjects && specialData.subjects.length > 0) {
+    specialData.subjects.forEach(subjectGroup => {
+        Object.entries(subjectGroup).forEach(([subjectName, subjectData]) => {
+            content += `
+                <br>
+    <h1 style="font-size: 38px; font-weight: bold; margin-top: 20px;">${subjectName}</h1>
+    <h2 style="font-size: 22px; font-weight: bold;">Syllabus:</h2>
+    <p>${subjectData.syllabus || 'No syllabus available'}</p>
+    <h2 style="font-size: 22px; font-weight: bold;">Study Material:</h2>
+    <div style="position: relative; padding-bottom: 40%; height: 0; overflow: hidden; max-width: 100%; width: 560px; margin: 0 auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); background: linear-gradient(135deg, #f0f8ff, #e6e6fa);">
+    <iframe src="https://drive.google.com/embeddedfolderview?id=${subjectData.studyMaterial}#grid" 
+        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 10px;" 
+        allowfullscreen>
+    </iframe>
+    </div>
+
+
+    <h2 style="font-size: 22px; font-weight: bold; color: #333;">Videos:</h2>`;
+                
+
+    if (subjectData.videos && Object.keys(subjectData.videos).length > 0) {
+        content += '<div class="videos">';
+        Object.entries(subjectData.videos).forEach(([videoName, videoUrl]) => {
+            content += `
+                <div style="margin-bottom: 20px; text-align: center;">
+                <p style="font-size: 18px;">${videoName}</p>
+                <div style="position: relative; width: 560px; height: 315px; margin: 0 auto;">
+                    <iframe 
+                        src="${videoUrl}" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none;"
+                    ></iframe>
+                </div>
+            </div>`;
+        });
+        content += '</div>';
+    }else {
+                content += '<p>No videos available</p>';
+            }
+        });
+    });
 }
 
-function deletePost(post) {
-    let list = localStorage.getItem('savedposts');
-    list = list ? JSON.parse(list) : []; // Parse existing list or initialize as empty array
+return content;
+}
 
-    // Find the index of the post to be deleted
-    const index = list.findIndex(p => p.time === post.time && p.title === post.title);
+    
+    // Helper function to create card HTML
+    function createCards(cards) {
+        if (!cards) return "No data available";
 
-    if (index !== -1) {
-        list.splice(index, 1); // Remove the post from the array
+        return cards.map(card => `
+            <a href="${card.link}" target="_blank" style="
+                display: block; 
+                text-decoration: none; 
+                color: inherit; 
+                border: 1px solid #ddd; 
+                border-radius: 4px; 
+                padding: 10px; 
+                margin: 5px; 
+                background-color: #f9f9f9; 
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
+                transition: background-color 0.3s, box-shadow 0.3s;">
+                <div class="card" style="
+                    border: none; 
+                    border-radius: 4px; 
+                    padding: 10px; 
+                    background-color: inherit; 
+                    cursor: pointer;">
+                    ${card.text}
+                </div>
+            </a>
+        `).join('');
     }
 
-    localStorage.setItem('savedposts', JSON.stringify(list)); // Save the updated list back to localStorage
-}
+    const examsContainer = document.getElementById('exams');
+    examsContainer.innerHTML = "";
 
-function retrievePosts() {
-    let list = localStorage.getItem('savedposts');
-    return list ? JSON.parse(list) : []; // Parse the string to array or return empty array if no posts
-}
+    // Create tabs container
+    const tabsContainer = document.createElement('div');
+    tabsContainer.id = 'tabs';
+    tabsContainer.style.display = 'flex';
+    tabsContainer.style.flexWrap = 'wrap'; // Allow tabs to wrap on smaller screens
+    tabsContainer.style.borderBottom = '2px solid #ddd';
+    tabsContainer.style.backgroundColor = '#f9f9f9';
+    tabsContainer.style.borderRadius = '8px 8px 0 0';
+    tabsContainer.style.overflow = 'hidden';
+    tabsContainer.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.1)';
 
-function appendPost(posts) {
-    const savedPosts = retrievePosts(); // Get saved posts from localStorage
-    savedPosts.forEach(post => {
-        // Check if the post is not already in the input array
-        if (!posts.some(p => p.time === post.time && p.title === post.title)) {
-            posts.push(post); // Add new post to the array
-        }
-    });
-    return posts; // Return the updated array
-}
-function populateFeed(posts,lastlog) {
+    // Create content container
+    const contentContainer = document.createElement('div');
+    contentContainer.id = 'tab-contents';
+    contentContainer.style.padding = '20px';
+    contentContainer.style.overflowY = 'auto'; // Allow vertical scrolling if needed
 
-    posts = appendPost(posts);
-    posts.sort((a, b) => {
-        
-        const dateA = new Date(a.time);
-        const dateB = new Date(b.time);
-    
-        
-        // Ensure both dates are valid before comparing
-        if (isNaN(dateA) || isNaN(dateB)) {
-            console.error('Invalid date encountered:', a.time, b.time);
-            return 0;
-        }
-    
-        return dateB - dateA;
-    });
-    
-    function createAnnouncementPopup() {
-        // Filter posts where banner is true
-        const bannerPosts = posts.filter(post => post.banner);
-    
-        // If no banner posts are available, don't show the popup
-        if (bannerPosts.length === 0) {
-            return;
-        }
-    
-        // Select a random post from the filtered banner posts
-        const randomPost = bannerPosts[Math.floor(Math.random() * bannerPosts.length)];
-    
-        // Create the popup container
-        const popup = document.createElement("div");
-        popup.id = "initialbanner";
-        popup.style.position = "fixed";
-        popup.style.top = "0";
-        popup.style.left = "0";
-        popup.style.width = "100%";
-        popup.style.height = "100%";
-        popup.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
-        popup.style.display = "none";
-        popup.style.justifyContent = "center";
-        popup.style.alignItems = "center";
-        popup.style.zIndex = "1004";
-    
-        // Create the image element
-        const image = document.createElement("img");
-        image.src = randomPost.image;
-        image.style.maxWidth = "80%";
-        image.style.maxHeight = "80%";
-        image.style.borderRadius = "10px";
-        image.onclick = function() {
-            // Perform the desired action here
-            showTab(event,"feed");
-            document.body.removeChild(popup);
+    tabsData.forEach((tab, index) => {
+        // Create tab element
+        const tabElement = document.createElement('div');
+        tabElement.className = 'tab';
+        tabElement.textContent = tab.name;
+        tabElement.dataset.contentId = `content-${index}`;
+        tabElement.style.cursor = 'pointer';
+        tabElement.style.padding = '10px 20px';
+        tabElement.style.marginRight = '5px';
+        tabElement.style.borderBottom = '2px solid transparent';
+        tabElement.style.transition = 'border-bottom 0.3s, background-color 0.3s';
+        tabElement.style.borderRadius = '4px';
+        tabElement.style.backgroundColor = '#e0e0e0';
+        tabElement.style.flex = '1'; // Allow tabs to stretch and fit available space
+
+        // Add hover effect
+        tabElement.onmouseover = () => {
+            tabElement.style.backgroundColor = '#d0d0d0';
+            tabElement.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)';
         };
-        popup.appendChild(image);
-    
-        // Create the cross button to close the popup
-        const closeButton = document.createElement("button");
-        closeButton.innerHTML = "&times;";
-        closeButton.style.position = "absolute";
-        closeButton.style.top = "20px";
-        closeButton.style.right = "20px";
-        closeButton.style.fontSize = "24px";
-        closeButton.style.color = "white";
-        closeButton.style.backgroundColor = "transparent";
-        closeButton.style.border = "none";
-        closeButton.style.cursor = "pointer";
-        closeButton.onclick = function() {
-            document.body.removeChild(popup);
+        tabElement.onmouseout = () => {
+            tabElement.style.backgroundColor = '#e0e0e0';
+            tabElement.style.boxShadow = 'none';
         };
-        popup.appendChild(closeButton);
-    
-        // Create the "View Post" button
-        const viewPostButton = document.createElement("button");
-        viewPostButton.textContent = "View Post";
-        viewPostButton.style.position = "absolute";
-        viewPostButton.style.bottom = "20px";
-        viewPostButton.style.left = "50%";
-        viewPostButton.style.transform = "translateX(-50%)";
-        viewPostButton.style.padding = "10px 20px";
-        viewPostButton.style.fontSize = "16px";
-        viewPostButton.style.color = "white";
-        viewPostButton.style.backgroundColor = "dodgerblue";
-        viewPostButton.style.border = "none";
-        viewPostButton.style.borderRadius = "5px";
-        viewPostButton.style.cursor = "pointer";
-        viewPostButton.onclick = function() {
-            // Perform the desired action here
-            showTab(event,"feed");
-            document.body.removeChild(popup);
-        };
-        popup.appendChild(viewPostButton);
-    
-        // Add the popup to the body
-        document.body.appendChild(popup);
-    } 
-    // Check if last login is more than 1 hour ago
-    const currentTime = new Date();
-    const lastLoginTime = new Date(lastlog);
-    const oneHourInMilliseconds = 20 * 60 * 1000; // 1 hour in milliseconds
 
-    if ((!lastlog || currentTime - lastLoginTime > oneHourInMilliseconds)&&noticeenabled) {
-        createAnnouncementPopup();
-        localStorage.setItem("lastlog", Date.now());
-    }
-    const feedContainer = document.getElementById('feed');
-    // Apply styles to the feed container
-    feedContainer.style.display = 'none'; // Change to flex to show content
-    feedContainer.style.flexDirection = 'column';
-    feedContainer.style.alignItems = 'center'; // Center posts horizontally
-    feedContainer.style.gap = '20px';
-    feedContainer.style.padding = '20px';
-    feedContainer.style.maxWidth = '100%';
-    feedContainer.style.boxSizing = 'border-box';
-    feedContainer.style.backgroundColor = '#f9f9f9';
-    feedContainer.style.borderRadius = '8px';
-    feedContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+        // Create content element
+        const contentElement = document.createElement('div');
+        contentElement.id = `content-${index}`;
+        contentElement.className = 'tab-content';
+        contentElement.style.display = 'none'; // Hide all content initially
 
-    // Clear existing content
-    feedContainer.innerHTML = '';
+        // Append content to content container
+        contentContainer.appendChild(contentElement);
 
-    // Create a container for the filter button
-    const filterContainer = document.createElement('div');
-    filterContainer.style.marginBottom = '20px';
-    filterContainer.style.display = 'flex';
-    filterContainer.style.marginBottom = '20px';
-    filterContainer.style.width = '100%';
-    filterContainer.style.justifyContent = 'center';
-    filterContainer.style.gap = '10px';
-
-    // Create and style the search bar
-    const searchBar = document.createElement('input');
-    searchBar.type = 'text';
-    searchBar.placeholder = 'Search for posts...';
-    searchBar.style.padding = '10px';
-    searchBar.style.border = '1px solid #ddd';
-    searchBar.style.borderRadius = '5px';
-    searchBar.style.flex = '1';
-    searchBar.style.boxSizing = 'border-box';
-
-    const searchButton = document.createElement('button');
-    searchButton.style.padding = '10px 15px';
-    searchButton.style.border = 'none';
-    searchButton.style.borderRadius = '5px';
-    searchButton.style.backgroundColor = '#1a73e8';
-    searchButton.style.color = '#fff';
-    searchButton.style.cursor = 'pointer';
-    searchButton.style.fontSize = '16px';
-    searchButton.style.display = 'flex';
-    searchButton.style.alignItems = 'center';
-    searchButton.style.justifyContent = 'center';
-    searchButton.innerHTML = `<i class="fa fa-search" aria-hidden="true" style="font-size: 16px;"></i>`;
-    
-    searchButton.addEventListener('click', () => {
-        const searchTerm = searchBar.value.toLowerCase();
-        const filteredPosts = posts.filter(post => 
-            post.title.toLowerCase().includes(searchTerm) || 
-            post.text.toLowerCase().includes(searchTerm) ||
-            post.sender.toLowerCase().includes(searchTerm)
-        );
-        displayPosts(filteredPosts);
+        // Append tab to tabs container
+        tabsContainer.appendChild(tabElement);
     });
-    function showFilterModal() {
-        // Create modal background
-        const modalBackground = document.createElement('div');
-        modalBackground.style.position = 'fixed';
-        modalBackground.style.top = '0';
-        modalBackground.style.left = '0';
-        modalBackground.style.width = '100%';
-        modalBackground.style.height = '100%';
-        modalBackground.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-        modalBackground.style.display = 'flex';
-        modalBackground.style.justifyContent = 'center';
-        modalBackground.style.alignItems = 'center';
-        modalBackground.style.zIndex = '1000';
-    
-        // Create modal container
-        const modalContainer = document.createElement('div');
-        modalContainer.style.width = '90%';
-        modalContainer.style.maxWidth = '400px';
-        modalContainer.style.backgroundColor = '#fff';
-        modalContainer.style.padding = '20px';
-        modalContainer.style.borderRadius = '8px';
-        modalContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
-        modalContainer.style.position = 'relative';
-        modalContainer.style.boxSizing = 'border-box';
-    
-        // Create close button
-        const closeButton = document.createElement('span');
-        closeButton.innerHTML = '&times;'; // Close icon
-        closeButton.style.position = 'absolute';
-        closeButton.style.top = '10px';
-        closeButton.style.right = '10px';
-        closeButton.style.fontSize = '24px';
-        closeButton.style.cursor = 'pointer';
-        closeButton.style.color = '#aaa';
-        closeButton.style.transition = 'color 0.3s';
-    
-        // Change color on hover
-        closeButton.addEventListener('mouseover', () => {
-            closeButton.style.color = '#000';
-        });
-        closeButton.addEventListener('mouseout', () => {
-            closeButton.style.color = '#aaa';
-        });
-    
-        // Close modal when close button is clicked
-        closeButton.addEventListener('click', () => {
-            document.body.removeChild(modalBackground);
-        });
-    
-        // Create search bar
-        const searchBar = document.createElement('input');
-        searchBar.type = 'text';
-        searchBar.placeholder = 'Search for tags...';
-        searchBar.style.width = 'calc(100% - 20px)';
-        searchBar.style.padding = '10px';
-        searchBar.style.marginBottom = '15px';
-        searchBar.style.border = '1px solid #ddd';
-        searchBar.style.borderRadius = '5px';
-        searchBar.style.boxSizing = 'border-box';
-        modalContainer.appendChild(searchBar);
-    
-        // Create tag list container
-        const tagListContainer = document.createElement('div');
-        tagListContainer.style.maxHeight = '200px';
-        tagListContainer.style.overflowY = 'auto';
-        tagListContainer.style.marginBottom = '15px';
-        modalContainer.appendChild(tagListContainer);
-    
-        // Get all unique tags from posts
-        const uniqueTags = [...new Set(posts.flatMap(post => post.tags))];
-    
-        // Create tag list
-        const tagCheckboxes = {};
-        uniqueTags.forEach(tag => {
-            const label = document.createElement('label');
-            label.style.display = 'block';
-            label.style.marginBottom = '10px';
-    
-            const checkbox = document.createElement('input');
-            checkbox.type = 'checkbox';
-            checkbox.value = tag;
-            label.appendChild(checkbox);
-    
-            label.appendChild(document.createTextNode(` ${tag}`));
-    
-            tagListContainer.appendChild(label);
-            tagCheckboxes[tag] = checkbox;
-        });
-    
-        // Filter tags as user types in search bar
-        searchBar.addEventListener('input', () => {
-            const searchTerm = searchBar.value.toLowerCase();
-            uniqueTags.forEach(tag => {
-                const label = tagCheckboxes[tag].parentElement;
-                if (tag.toLowerCase().includes(searchTerm)) {
-                    label.style.display = 'block';
+
+    // Append both containers to exams container
+    examsContainer.appendChild(tabsContainer);
+    examsContainer.appendChild(contentContainer);
+
+    // Function to update content based on the tab clicked
+    function updateContent(contentId, contentFunction) {
+        const contentElement = document.getElementById(contentId);
+        contentElement.innerHTML = contentFunction();
+        contentElement.style.display = 'block'; // Show content
+            // Update Countdown Timers
+            // Update Countdown Timers
+const timersContainer = document.getElementById('timers-container');
+
+if (timersContainer) {
+    abcData[4].data.timer.forEach(timer => {
+        const countdownElement = document.getElementById(`countdown-${timer.name}`);
+        if (countdownElement) {
+            const startTime = new Date(timer.start).getTime();
+            const endTime = new Date(timer.end).getTime();
+            
+            function updateCountdown() {
+                const now = new Date().getTime();
+                
+                if (now < startTime) {
+                    // Timer is in countdown phase
+                    const distance = startTime - now;
+                    const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    let countdownText = '';
+                    if (days > 0) countdownText += `${days}d `;
+                    if (hours > 0 || days > 0) countdownText += `${hours}h `;
+                    if (minutes > 0 || hours > 0 || days > 0) countdownText += `${minutes}m `;
+                    countdownText += `${seconds}s`;
+
+                    countdownElement.textContent = `Starts in ${countdownText.trim()}`;
+                    countdownElement.style.color = getCountdownColor(days, hours, minutes, seconds);
+                    countdownElement.className = 'countdown not-started';
+                } else if (now >= startTime && now <= endTime) {
+                    // Timer is ongoing
+                    countdownElement.textContent = 'Ongoing';
+                    countdownElement.className = 'countdown ongoing';
                 } else {
-                    label.style.display = 'none';
+                    // Timer has ended
+                    countdownElement.textContent = '';
+                    countdownElement.className = 'countdown hidden';
                 }
-            });
-        });
-    
-        // Create apply button
-        const applyButton = document.createElement('button');
-        applyButton.textContent = 'Apply Filter';
-        applyButton.style.padding = '10px 15px';
-        applyButton.style.border = 'none';
-        applyButton.style.borderRadius = '5px';
-        applyButton.style.backgroundColor = '#1a73e8';
-        applyButton.style.color = '#fff';
-        applyButton.style.cursor = 'pointer';
-        applyButton.style.fontSize = '16px';
-        applyButton.style.width = '100%'; // Make button full width
-        modalContainer.appendChild(applyButton);
-    
-        // Close modal and apply filter
-        applyButton.addEventListener('click', () => {
-            const selectedTags = Object.keys(tagCheckboxes)
-                .filter(tag => tagCheckboxes[tag].checked);
-    
-            // Apply the filter to the feed
-            filterPostsByTags(selectedTags);
-    
-            // Close the modal
-            document.body.removeChild(modalBackground);
-        });
-    
-        // Add close button and modal container to background and display modal
-        modalContainer.appendChild(closeButton);
-        modalBackground.appendChild(modalContainer);
-        document.body.appendChild(modalBackground);
-    }
-    
-    // Function to filter posts based on selected tags
-    function filterPostsByTags(selectedTags) {
-
-        const filteredPosts = posts.filter(post => {
-            // Get tags for the current post
-            const postTags = post.tags; // Assuming `post.tags` is an array of tags
-    
-            // Check if the post has all the selected tags
-            const hasAllTags = selectedTags.every(tag => postTags.includes(tag));
-    
-            return selectedTags.length === 0 || hasAllTags;
-        });
-    
-        // Display the filtered posts
-        displayPosts(filteredPosts);
-    }
-    
-    // Create and style the filter button
-    const filterButton = document.createElement('button');
-    filterButton.textContent = 'Filter by Tag';
-    filterButton.style.padding = '10px 15px';
-    filterButton.style.border = 'none';
-    filterButton.style.borderRadius = '5px';
-    filterButton.style.backgroundColor = '#1a73e8';
-    filterButton.style.color = '#fff';
-    filterButton.style.cursor = 'pointer';
-    filterButton.style.fontSize = '16px';
-    filterButton.addEventListener('click', () => {        
-        showFilterModal();
-    });// Append the search bar and filter button to the container
-    
-    filterContainer.appendChild(searchBar);
-    filterContainer.appendChild(searchButton);
-    filterContainer.appendChild(filterButton);
-
-    // Append the filter container to the feed
-    feedContainer.appendChild(filterContainer);
-    
-    // Create a map to track dates
-    const postsByDate = posts.reduce((acc, post) => {
-        const date = new Date(post.time).toLocaleDateString('en-GB', {
-            day: '2-digit',
-            month: 'long',
-            year: 'numeric'
-        });
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(post);
-        return acc;
-    }, {});
-    // Create and add the note section
-    const noteSection = document.createElement('div');
-    noteSection.textContent = 'Note: All of these announcements are forwarded from various sources to here like WhatsApp, Mail, ERP i.e. they are not officially or originally made here, neither of these announcements are added here by any officials.';
-    noteSection.style.padding = '10px';
-    noteSection.style.marginBottom = '20px';
-    noteSection.style.backgroundColor = '#fffbe6';
-    noteSection.style.color = '#333';
-    noteSection.style.border = '1px solid #f0e6a3';
-    noteSection.style.borderRadius = '5px';
-    noteSection.style.textAlign = 'center';
-    noteSection.style.fontSize = '14px';
-
-    feedContainer.appendChild(noteSection);
-    // Function to create post element
-function createPostElement(post) {
-    const postElement = document.createElement('div');
-    postElement.style.display = 'flex';
-    postElement.style.flexDirection = 'column';
-    postElement.style.backgroundColor = '#ffffff';
-    postElement.style.borderRadius = '8px';
-    postElement.style.border = '1px solid #ddd';
-    postElement.style.padding = '15px';
-    postElement.style.marginBottom = '20px';
-    postElement.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
-    postElement.style.width = '300px'; // Portrait orientation
-    postElement.style.maxWidth = '100%'; // Responsive design
-    postElement.style.boxSizing = 'border-box';
-    postElement.style.position = 'relative';
-    postElement.style.textAlign = 'center'; // Center text and images
-    postElement.style.margin = '0 auto'; // Center post element
-    // Add tags as data attribute for filtering
-    postElement.setAttribute('data-tags', post.tags.join(','));
-
-    // Header with sender name and time
-    const header = document.createElement('div');
-    header.style.marginBottom = '10px';
-    header.style.textAlign = 'left'; // Align sender name to the left
-
-    const senderName = document.createElement('div');
-    senderName.innerHTML = `<strong>${post.sender}</strong>`;
-    senderName.style.fontSize = '14px';
-    senderName.style.color = '#333';
-
-    const postTime = document.createElement('div');
-    postTime.textContent = new Date(post.time).toLocaleTimeString([], {hour: '2-digit', minute: '2-digit'});
-    postTime.style.fontSize = '12px';
-    postTime.style.color = '#777';
-
-    header.appendChild(senderName);
-    header.appendChild(postTime);
-
-    // Post image
-    let img;
-    if (post.image) {
-        img = document.createElement('img');
-        img.src = post.image;
-        img.alt = post.title;
-        img.style.width = '100%';
-        img.style.borderRadius = '8px';
-        img.style.marginBottom = '10px';
-    }
-
-    // Post title
-    let title;
-    if (post.title) {
-        title = document.createElement('div');
-        title.textContent = post.title;
-        title.style.fontSize = '16px';
-        title.style.fontWeight = 'bold';
-        title.style.marginBottom = '10px';
-        title.style.color = '#333';
-    }
-
-    // Post text
-    const textContainer = document.createElement('div');
-    textContainer.style.position = 'relative';
-    textContainer.style.textAlign = 'left'; // Align text to the left
-
-    const text = document.createElement('div');
-    text.style.fontSize = '14px';
-    text.style.position = 'relative';
-    text.style.wordBreak = 'break-word'; // Ensures long words/URLs break and wrap to the next line
-    text.style.overflowWrap = 'break-word'; // Alternative for compatibility
-
-    const MAX_LENGTH = 150; // Max length of text before showing "Read more"
-    const originalText = post.text;
-    
-    function updateTextDisplay() {
-        function makeLinksClickable(text) {
-            // Placeholder markers for URLs
-            const urlStart = '/url';
-            const urlEnd = 'url/';
-            const urlPlaceholder = '__URL_PLACEHOLDER__';
-            let urls = [];
-            
-            // Step 1: Escape URLs with a placeholder
-            text = text.replace(/(https?:\/\/[^\s]+)/g, (match) => {
-                urls.push(match);
-                return `${urlStart}${urls.length - 1}${urlEnd}`;
-            });
-        
-            // Step 2: Replace phone numbers with clickable tel links
-            text = text.replace(/(\+?\d{1,4}[\s.-]?\(?\d{1,3}\)?[\s.-]?\d{1,4}[\s.-]?\d{1,9})/g, '<a href="tel:$1">$1</a>');
-        
-            // Step 3: Restore URLs from placeholders
-            text = text.replace(new RegExp(urlStart + '(\\d+)' + urlEnd, 'g'), (match, index) => {
-                return `<a href="${urls[index]}" target="_blank">${urls[index]}</a>`;
-            });
-        
-            // Step 4: Replace new lines with <br> tags
-            text = text.replace(/\\n/g, '<br>');
-        
-            return text;
-        }
-        
-        
-    
-        if (originalText.length > MAX_LENGTH) {
-            text.innerHTML = makeLinksClickable(originalText.slice(0, MAX_LENGTH)) + '... <a href="#" class="read-more">Read more</a>';
-            const readMoreLink = text.querySelector('.read-more');
-            readMoreLink.style.color = 'black'; // Change color to black
-            readMoreLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                text.innerHTML = makeLinksClickable(originalText) + ' <a href="#" class="read-less">Read less</a>';
-                const readLessLink = text.querySelector('.read-less');
-                readLessLink.style.color = 'black'; // Set "Read less" link color to black
-                readLessLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    // Revert to truncated text
-                    updateTextDisplay();
-                });
-            });
-        } else {
-            text.innerHTML = makeLinksClickable(originalText);
-        }
-    }
-
-    updateTextDisplay();
-
-    textContainer.appendChild(text);
-    function updateDeadlineDisplay(deadlineElement, deadlineDate) {
-        const now = new Date();
-        const timeLeft = deadlineDate - now;
-    
-        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-    
-        let color;
-        let displayText;
-    
-        if (timeLeft < 0) {
-            // If deadline has passed
-            const passedDays = Math.abs(days);
-            displayText = `Due since ${passedDays} days`;
-            color = '#f00'; // Red
-        } else if (days < 1) {
-            // Less than a day left
-            color = '#f80'; // Orange
-            displayText = `Deadline in ${hours} hours, ${minutes} minutes`;
-        } else if (days < 7) {
-            // Less than a week left
-            color = '#0f0'; // Green
-            displayText = `Deadline in ${days} days, ${hours} hours, ${minutes} minutes`;
-        } else {
-            // More than a week left
-            color = '#00f'; // Blue
-            displayText = `Deadline in ${days} days, ${hours} hours, ${minutes} minutes`;
-        }
-    
-        deadlineElement.textContent = displayText;
-        deadlineElement.style.color = color;
-    }
-    
-    if (post.deadline) {
-        const deadlineElement = document.createElement('div');
-        const deadlineDate = new Date(post.deadline);
-        
-        updateDeadlineDisplay(deadlineElement, deadlineDate);
-        // Update the display every minute
-        setInterval(() => {
-            updateDeadlineDisplay(deadlineElement, deadlineDate);
-        }, 1000); // Update every 60 seconds
-        
-        deadlineElement.style.fontSize = '12px';
-        deadlineElement.style.marginTop = '10px';
-        textContainer.appendChild(deadlineElement); // Move below text
-    }
-
-    // Tags
-    if (post.tags) {
-        const tagsContainer = document.createElement('div');
-        tagsContainer.style.marginTop = '10px';
-
-        const viewTagsButton = document.createElement('button');
-        viewTagsButton.textContent = 'View Tags';
-        viewTagsButton.style.padding = '5px 10px';
-        viewTagsButton.style.border = 'none';
-        viewTagsButton.style.borderRadius = '5px';
-        viewTagsButton.style.backgroundColor = '#1a73e8';
-        viewTagsButton.style.color = '#fff';
-        viewTagsButton.style.cursor = 'pointer';
-        viewTagsButton.style.fontSize = '12px';
-        viewTagsButton.addEventListener('click', () => {
-            showAlert(`Tags: <br>${post.tags.join(', ')}`,"https://cdn.iconscout.com/icon/free/png-256/free-hang-tags-icon-download-in-svg-png-gif-file-formats--printing-label-pricing-tag-print-space-services-pack-icons-1556248.png");
-        });
-        const savePostButton = document.createElement('button');
-        savePostButton.textContent = 'Save Post';
-        savePostButton.style.padding = '5px 10px';
-        savePostButton.style.border = 'none';
-        savePostButton.style.borderRadius = '5px';
-        savePostButton.style.color = '#fff';
-        savePostButton.style.cursor = 'pointer';
-        savePostButton.style.fontSize = '12px';
-        savePostButton.style.marginLeft = '10px';
-        savePostButton.addEventListener('click', () => {
-            toggleSave(post, true);
-        });
-        // Function to toggle the save status of a post
-        function toggleSave(post, torun) {
-            let savedPosts = retrievePosts(); // Retrieve current saved posts
-
-            // Check if the post is already saved
-            let exists = savedPosts.some(p => p.time === post.time && p.title === post.title);
-            
-            if (exists && torun || !exists && !torun) {
-                // If post exists, delete it
-                if (torun) {
-                    deletePost(post); // Execute deletion if torun is true
-                } else{
-                    exists != exists;
-                }
-                savePostButton.style.backgroundColor = '#4CAF50'; // Green for unsaved
-                savePostButton.textContent = 'Save Post'; // Update button text
-            } else {
-                // If post does not exist, save it
-                if (torun) {
-                    savePost(post); // Execute saving if torun is true
-                } else{
-                    exists != exists;
-                }
-                savePostButton.style.backgroundColor = '#FF0000'; // Red for saved
-                savePostButton.textContent = 'Remove Post'; // Update button text
             }
+            updateCountdown();
+            setInterval(updateCountdown, 1000); // Update every second
+        } else {
+            console.log(`Countdown element not found for ${timer.name}`); // Debug
         }
-        savePostButton.style.color = '#fff'; // White text color    
-        // Example usage
-        toggleSave(post, false); // Call the function with the desired post and torun flag
-
-        tagsContainer.appendChild(viewTagsButton);
-        tagsContainer.appendChild(savePostButton);
-        textContainer.appendChild(tagsContainer); // Move below text
+    });
+} else {
+    console.log('Timers container not found'); // Debug
+} 
     }
-
-    // Append elements to post
-    postElement.appendChild(header);
-    if (img) postElement.appendChild(img);
-    if (title) postElement.appendChild(title); // Add title here
-    postElement.appendChild(textContainer);
-    
-    return postElement;
+// Utility function to get countdown color based on time left
+function getCountdownColor(days, hours, minutes, seconds) {
+    if (days >= 365) return '#8A2BE2'; // Purple for long countdowns
+    if (days >= 30) return '#4B0082'; // Indigo for long countdowns
+    if (days >= 7) return '#0000FF'; // Blue for weekly countdowns
+    if (days >= 1) return '#008000'; // Green for daily countdowns
+    if (hours >= 1) return '#CCCC00'; // Yellow for hourly countdowns
+    if (minutes >= 1) return '#FFA500'; // Orange for minute countdowns
+    return '#FF0000'; // Red for last seconds
 }
 
-    // Append posts to the feed
-    Object.keys(postsByDate).forEach(date => {
-        const dateContainer = document.createElement('div');
-        dateContainer.style.width = '100%';
-        dateContainer.style.textAlign = 'center'; // Center the date
-        dateContainer.style.marginBottom = '20px';
+    // Set the first tab as active
+    const firstTab = tabsContainer.querySelector('.tab');
+    const firstContent = contentContainer.querySelector('.tab-content');
+    firstTab.style.borderBottom = '2px solid #007bff'; // Highlight the first tab
+    firstTab.style.backgroundColor = '#fff'; // Background color of the active tab
+    firstTab.style.color = '#007bff'; // Text color of the active tab
+    updateContent(firstContent.id, tabsData[0].contentFunction); // Initialize first content
 
-        const dateTitle = document.createElement('h3');
-        dateTitle.textContent = date;
-        dateTitle.style.marginBottom = '15px';
-        dateContainer.appendChild(dateTitle);
+    // Add event listeners
+    tabsContainer.addEventListener('click', (event) => {
+        if (event.target.classList.contains('tab')) {
+            const contentId = event.target.dataset.contentId;
+            const index = Array.from(tabsContainer.children).indexOf(event.target);
+            const contentFunction = tabsData[index].contentFunction;
 
-        postsByDate[date].forEach(post => {
-            dateContainer.appendChild(createPostElement(post));
-        });
-
-        feedContainer.appendChild(dateContainer);
-    });
-    function displayPosts(filteredPosts) {
-        feedContainer.innerHTML = ''; 
-        feedContainer.appendChild(filterContainer);
-
-        const postsByDate = filteredPosts.reduce((acc, post) => {
-            const date = new Date(post.time).toLocaleDateString('en-GB', {
-                day: '2-digit',
-                month: 'long',
-                year: 'numeric'
+            // Deactivate all tabs and hide all content
+            tabsContainer.querySelectorAll('.tab').forEach(tab => {
+                tab.style.borderBottom = '2px solid transparent';
+                tab.style.backgroundColor = '#e0e0e0';
+                tab.style.color = '#333';
             });
-            if (!acc[date]) acc[date] = [];
-            acc[date].push(post);
-            return acc;
-        }, {});
+            contentContainer.querySelectorAll('.tab-content').forEach(content => {
+                content.style.display = 'none';
+            });
 
-        Object.entries(postsByDate).forEach(([date, posts]) => {
-            // Check if there are posts under the date
-            if (posts.length > 0) {
-                // Create and style the date heading
-                const dateHeading = document.createElement('h2');
-                dateHeading.textContent = date;
-                dateHeading.style.fontSize = '18px';
-                dateHeading.style.color = '#555';
-                dateHeading.style.marginBottom = '20px';
-                dateHeading.style.textAlign = 'center';
+            // Activate clicked tab and show corresponding content
+            event.target.style.borderBottom = '2px solid #007bff';
+            event.target.style.backgroundColor = '#fff'; // Background color of the active tab
+            event.target.style.color = '#007bff'; // Text color of the active tab
+            updateContent(contentId, contentFunction); // Update content
+        }
+    });
 
-                // Append the date heading to the feed container
-                feedContainer.appendChild(dateHeading);
+    examsContainer.style.display = "block";
 
-                // Create a container for the posts
-                const postsContainer = document.createElement('div');
-                postsContainer.style.display = 'flex';
-                postsContainer.style.flexWrap = 'wrap';
-                postsContainer.style.justifyContent = 'center';
-                postsContainer.style.gap = '20px';
-
-                // Append each post to the posts container
-                posts.forEach(post => {
-                    const postElement = createPostElement(post);
-                    postsContainer.appendChild(postElement);
-                });
-
-                // Append the posts container to the feed container
-                feedContainer.appendChild(postsContainer);
+    // Add responsive styles
+    const style = document.createElement('style');
+    style.textContent = `
+        @media only screen and (max-width: 600px) {
+            .tab {
+                padding: 10px;
+                flex: 100%; /* Each tab takes full width on small screens */
+                text-align: center;
             }
-        });
-
-        feedContainer.style.display = 'flex'; 
-    }
-
-    displayPosts(posts); 
+        }
+    `;
+    document.head.appendChild(style);
 }
