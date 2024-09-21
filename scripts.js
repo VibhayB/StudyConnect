@@ -476,6 +476,81 @@ function displaySearchResult(input) {
     homeContent.style.display = "block";
 
     if(!document.getElementById('feedback-report-buttons')){
+    // Create and add the buttons
+    const buttonsContainer = document.createElement('div');
+        buttonsContainer.id = 'feedback-report-buttons';
+        buttonsContainer.style.textAlign = 'center';
+        buttonsContainer.style.margin = '30px auto';
+        buttonsContainer.style.padding = '20px';
+        buttonsContainer.style.maxWidth = '90%';
+        buttonsContainer.style.boxSizing = 'border-box';
+        buttonsContainer.style.display = 'flex';
+        buttonsContainer.style.flexWrap = 'wrap';
+        buttonsContainer.style.gap = '10px'; // Space between buttons
+
+        // Define button data
+        const buttonData = [
+            { text: 'Course', tab: 'course' },
+            { text: 'Exams', tab: 'exams' },
+            { text: 'Feed', tab: 'feed' },
+            { text: 'Contacts', tab: 'contacts' },
+            { text: 'Productivity', tab: 'productivity' },
+            { text: 'Others', tab: 'others' }
+        ];
+
+        buttonData.forEach(data => {
+            const button = document.createElement('button');
+            button.textContent = data.text;
+            button.className = 'dynamic-button';
+            button.style.minWidth = '100px';
+            button.style.minHeight = '40px';
+            button.style.display = 'inline-flex';
+            button.style.fontFamily = "'Nunito', sans-serif";
+            button.style.fontSize = '16px';
+            button.style.alignItems = 'center';
+            button.style.justifyContent = 'center';
+            button.style.textTransform = 'uppercase';
+            button.style.textAlign = 'center';
+            button.style.letterSpacing = '1.3px';
+            button.style.fontWeight = '700';
+            button.style.color = '#f0f0f0'; // Light color for text
+            button.style.backgroundColor = '#003366'; // Navy background
+            button.style.border = 'none';
+            button.style.borderRadius = '8px';
+            button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.4)';
+            button.style.transition = 'background-color 0.3s, transform 0.3s, box-shadow 0.3s';
+            button.style.cursor = 'pointer';
+            button.style.outline = 'none';
+            button.style.padding = '10px 15px';
+            button.style.margin = '5px';
+
+            // Hover effect
+            button.addEventListener('mouseover', () => {
+                button.style.backgroundColor = '#002a5b'; // Darker navy
+                button.style.transform = 'scale(1.05)';
+                button.style.boxShadow = '0 6px 12px rgba(0,0,0,0.5)';
+            });
+            button.addEventListener('mouseout', () => {
+                button.style.backgroundColor = '#003366';
+                button.style.transform = 'scale(1)';
+                button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.4)';
+            });
+
+            // Focus effect
+            button.addEventListener('focus', () => {
+                button.style.outline = '2px solid #004080'; // Focus outline color
+                button.style.outlineOffset = '4px';
+            });
+            button.addEventListener('blur', () => {
+                button.style.outline = 'none';
+            });
+
+            button.onclick = () => showTab(event, data.tab);
+            buttonsContainer.appendChild(button);
+        });
+
+    homeContent.appendChild(buttonsContainer);
+
     // Create and add dynamic content
     const infoSection = document.createElement('div');
     infoSection.className = 'info-section';
