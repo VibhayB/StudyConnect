@@ -348,17 +348,18 @@ function showTab(event, tabName, pushToHistory = true) {
     const logo = document.querySelector("#header");
     const currentState = history.state;
     try{
+        if (pushToHistory) {
+            if (!currentState || currentState.tab !== tabName) {
+                history.pushState({ tab: tabName }, null, `#${tabName}`);
+            }
+        } 
         if(tabName == "home"){
             showHome();
             localStorage.setItem("tabcurrentx","home");
             localStorage.setItem("tabcurrenty","AIML StudyConnect");
             return "Home showing";
         } localStorage.setItem("tabcurrentx", tabName);
-        if (pushToHistory) {
-            if (!currentState || currentState.tab !== tabName) {
-                history.pushState({ tab: tabName }, null, `#${tabName}`);
-            }
-        } 
+        
         document.getElementById("home").style.display = 'none';
         try{
             event.preventDefault(); // Prevent default link behavior
