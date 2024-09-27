@@ -344,8 +344,9 @@ function toggleMenu() {
 
 
 // Function to show a specific tab
-function showTab(event, tabName) {  
+function showTab(event, tabName, pushToHistory = true) {  
     const logo = document.querySelector("#header");
+    const currentState = history.state;
     try{
         if(tabName == "home"){
             showHome();
@@ -353,7 +354,11 @@ function showTab(event, tabName) {
             localStorage.setItem("tabcurrenty","AIML StudyConnect");
             return "Home showing";
         } localStorage.setItem("tabcurrentx", tabName);
-        
+        if (pushToHistory) {
+            if (!currentState || currentState.tab !== tabName) {
+                history.pushState({ tab: tabName }, null, `#${tabName}`);
+            }
+        } 
         document.getElementById("home").style.display = 'none';
         try{
             event.preventDefault(); // Prevent default link behavior
@@ -373,7 +378,7 @@ function showTab(event, tabName) {
         }
         else{
             document.getElementById(tabName).style.display = "block";
-        }
+        } 
         try{
             if(event.currentTarget.innerHTML == "View Post"){
                 logo.innerHTML = "Feed";
@@ -389,13 +394,17 @@ function showTab(event, tabName) {
             localStorage.setItem("tabcurrenty", classLists[tabName]);
         } finally{
             return "Showing tab: " + classLists[tabName];
-        }
+        } 
     } catch(error){
         console.error(error);
         return "Error";
-    }    
+    }
 }
-
+window.addEventListener('popstate', function(event) {
+    if (event.state && event.state.tab) {
+       showTab(null,event.state.tab,false);
+    }
+ });
 // Function to handle Home button click
 function handleHomeClick() {
     if(!isSignedIn){
