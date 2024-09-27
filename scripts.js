@@ -213,8 +213,11 @@ async function fetchAndDisplayData() {
         if(!lastlog){
             showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
             showbanner = "show later";
-        } else{
+        } else if(Date.now() - lastlog > 60000){
             showbanner = "show already";
+            if(currenttab){
+                currenttab = "home";
+            }
         }
         console.log("Displaying");
         isSignedIn = true;
