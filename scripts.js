@@ -174,7 +174,7 @@ var examSchedule;
 var applist;
 //python -m http.server 8000
 function delayedFunction() {
-    console.log('This runs after 1 second');
+    console.log('This runs after 2 seconds');
 }
 
 // Call the function after a 1-second delay
@@ -187,12 +187,16 @@ async function fetchAndDisplayData() {
       
     // Check if lastlog exists
     const currentTime = new Date();
-    
-    setTimeout(delayedFunction, 2000);
-      const data = await window.loadCollectionData('categoriesData'); 
+    let abctime = localStorage.getItem("tries") || Date.now();
+    if(Date.now() - abctime > 5000){
+        const data = await window.loadCollectionData('categoriesData'); 
+        maindata = data;
+    } else{
+        setTimeout(delayedFunction, 2000);
+        maindata = null;
+    } localStorage.setItem("tries", Date.now());
       console.log('Website Loaded');
       // You can process or display the data as needed here
-      maindata = data;
       const storedData = JSON.parse(localStorage.getItem("maindataxh"));
       if((!maindata || !maindata.some(item => item.id === 'courseData'))){
         if(storedData){
