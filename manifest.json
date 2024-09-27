@@ -1,0 +1,20 @@
+{
+  "name": "AIML StudyConnect",
+  "short_name": "aimlstudyconnect",
+  "start_url": "/home screen.html", 
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#317EFB",
+  "icons": [
+    {
+      "src": "/load.png",  
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/load.png",  
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
