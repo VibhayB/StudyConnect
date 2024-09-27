@@ -173,9 +173,6 @@ var currentheader = localStorage.getItem("tabcurrenty");
 var examSchedule;
 var applist;
 //python -m http.server 8000
-function delayedFunction() {
-    console.log('This runs after 2 seconds');
-}
 
 // Call the function after a 1-second delay
 
@@ -187,12 +184,11 @@ async function fetchAndDisplayData() {
       
     // Check if lastlog exists
     const currentTime = new Date();
-    let abctime = localStorage.getItem("tries") || Date.now();
+    let abctime = localStorage.getItem("tries") || "2024-09-28T00:00:00";
     if(Date.now() - abctime > 5000){
         const data = await window.loadCollectionData('categoriesData'); 
         maindata = data;
     } else{
-        setTimeout(delayedFunction, 2000);
         maindata = null;
     } localStorage.setItem("tries", Date.now());
       console.log('Website Loaded');
