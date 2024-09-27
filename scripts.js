@@ -11,7 +11,20 @@ var imageMap;
 var courseData;
 var showbanner = "show"; //set to 'dont show' to disable and 'show' to enable
 const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity"};
-
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      console.log('Trying to register the service worker...');
+      navigator.serviceWorker.register('/service-worker.js')
+        .then((registration) => {
+          console.log('Service Worker registered with scope:', registration.scope);
+        })
+        .catch((error) => {
+          console.error('Service Worker registration failed:', error);
+        });
+    });
+  }
+  
+  
 
 // Tab names mapping
 const tabNames = {
@@ -180,17 +193,23 @@ async function fetchAndDisplayData() {
       console.log('Website Loaded');
       // You can process or display the data as needed here
       maindata = data;
-      if(!maindata || !maindata.some(item => item.id === 'courseData')){
-        console.log("Unauthorized");
-        localStorage.removeItem("efusereId");
-        signInWithGoogleDirectly(true);               
-        localStorage.setItem("tabcurrentx","home");
-        localStorage.setItem("tabcurrenty","AIML StudyConnect");        
-        showAlert("You don't have access","https://cdn-icons-png.flaticon.com/512/675/675564.png");
-        readability = false;
-        return;
+      const storedData = JSON.parse(localStorage.getItem("maindataxh"));
+      if((!maindata || !maindata.some(item => item.id === 'courseData'))){
+        if(storedData){
+            maindata = storedData;
+        } else{
+            console.log("Unauthorized");
+            localStorage.removeItem("efusereId");
+            signInWithGoogleDirectly(true);               
+            localStorage.setItem("tabcurrentx","home");
+            localStorage.setItem("tabcurrenty","AIML StudyConnect");        
+            showAlert("You don't have access","https://cdn-icons-png.flaticon.com/512/675/675564.png");
+            readability = false;
+            return;
+        }
       } 
       if(!isSignedIn){
+        localStorage.setItem("maindataxh", JSON.stringify(maindata));
         if(!lastlog){
             showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
             showbanner = "show later";
