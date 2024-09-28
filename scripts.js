@@ -896,6 +896,8 @@ function updateHomeButton() {
             localStorage.removeItem("selectedSemesters");
             localStorage.removeItem("removedSubjects");
             localStorage.removeItem("lastlog");
+            localStorage.removeItem("maindataxh");
+            localStorage.removeItem("tries");
             signInWithGoogleDirectly(true, true);
             window.location.reload(true); // For most modern browsers
         });
