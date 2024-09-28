@@ -255,8 +255,10 @@ async function fetchAndDisplayData() {
                 localStorage.setItem("courseInfo", JSON.stringify(courseInfo));
                 localStorage.setItem("semesters",JSON.stringify(data.semesters));
                 imageMap = data.Images;
+            } else if(data.id="productivity"){
+                populateProductivity(data.data);
             }
-        } populateProductivity();
+        }
         populateApps();
         populateGames();
         injectCSS();
