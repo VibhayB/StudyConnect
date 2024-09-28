@@ -24,11 +24,13 @@ const db = getFirestore(app);
 const storage = getStorage(app); // Initialize Firebase Storage
 
 let isSignInInProgress = false;
-window.signInWithGoogle = async function(val = false) {
+window.signInWithGoogle = async function(val = false, onpurpose = false) {
   if(val){
     await auth.signOut();
     console.log("signed out");
-    showAlert('Your email is not allowed to sign in.',"https://cdn-icons-png.flaticon.com/512/675/675564.png");
+    if(!onpurpose){
+      showAlert('Your email is not allowed to sign in.',"https://cdn-icons-png.flaticon.com/512/675/675564.png");
+    }
     localStorage.setItem("tabcurrentx","home");
     localStorage.setItem("tabcurrenty","AIML StudyConnect");
     return null;
