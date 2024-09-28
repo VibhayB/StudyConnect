@@ -300,7 +300,8 @@
     <script>
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
-            if(!localStorage.getItem('versionxh') || localStorage.getItem('versionxh') < thisversion){
+            const version = localStorage.getItem('versionxh');
+            if(!version || version != thisversion){
                 console.log('Trying to register the service worker...');
                 navigator.serviceWorker.register('/service-worker.js')
                 .then((registration) => {
