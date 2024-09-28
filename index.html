@@ -297,5 +297,23 @@
     <script src="sections/exams.js"></script>
     <script src="sections/feed.js"></script>
     <script src="sections/course.js"></script>
+    <script>
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+            if(!localStorage.getItem('versionxh') || localStorage.getItem('versionxh') < thisversion){
+                console.log('Trying to register the service worker...');
+                navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                console.log('Service Worker registered with scope:', registration.scope);
+                })
+                .catch((error) => {
+                console.error('Service Worker registration failed:', error);
+                });
+                localStorage.setItem('versionxh', thisversion);
+            }
+          
+        });
+      }
+      </script>
 </body>
 </html>
