@@ -185,13 +185,19 @@ async function fetchAndDisplayData() {
     // Check if lastlog exists
     const currentTime = new Date();
     let abctime = localStorage.getItem("tries") || "2024-09-28T00:00:00";
-    if(Date.now() - abctime > 5000){
-        const data = await window.loadCollectionData('categoriesData'); 
-        maindata = data;
-    } else{
+    let abctimeParsed = new Date(abctime).getTime(); // Parse the time correctly
+    if (Date.now() - abctimeParsed > 5000) {
+        try {
+            const data = await window.loadCollectionData('categoriesData'); 
+            maindata = data;
+        } catch (error) {
+            console.error('Error loading data:', error);
+            maindata = null;
+        }
+    } else {
         maindata = null;
-    } localStorage.setItem("tries", Date.now());
-      console.log('Website Loaded');
+    } localStorage.setItem("tries", new Date().toISOString());
+    console.log('Website Loaded');
       // You can process or display the data as needed here
       const storedData = JSON.parse(localStorage.getItem("maindataxh"));
       if((!maindata || !maindata.some(item => item.id === 'courseData'))){
@@ -213,11 +219,9 @@ async function fetchAndDisplayData() {
         if(!lastlog){
             showAlert("Signed in successfully, as "+localStorage.getItem("efusereId"),"https://www.freeiconspng.com/thumbs/success-icon/success-icon-2.png");
             showbanner = "show later";
-        } else if(Date.now() - lastlog > 60000){
+        } else if(Date.now() - lastlog > 600000){
             showbanner = "show already";
-            if(currenttab){
-                currenttab = "home";
-            }
+            currenttab = "home";
         }
         console.log("Displaying");
         isSignedIn = true;
@@ -251,10 +255,7 @@ async function fetchAndDisplayData() {
                 localStorage.setItem("courseInfo", JSON.stringify(courseInfo));
                 localStorage.setItem("semesters",JSON.stringify(data.semesters));
                 imageMap = data.Images;
-            } /*elseif(data.id == "productivity"){
-                
-                populateProductivity(data.data);
-            }*/
+            }
         } populateProductivity();
         populateApps();
         populateGames();
@@ -778,9 +779,9 @@ function addChatbotHoverEffects() {
 }
 
 
-function signInWithGoogleDirectly(val = false) {
+function signInWithGoogleDirectly(val = false, onpurpose = false) {
     if (typeof window.signInWithGoogle === 'function' && readability) {
-      window.signInWithGoogle(val).then(async (user) => {
+      window.signInWithGoogle(val, onpurpose).then(async (user) => {
 
         if (user) {
             showLoadingScreen(); 
@@ -901,7 +902,7 @@ function updateHomeButton() {
             localStorage.removeItem("selectedSemesters");
             localStorage.removeItem("removedSubjects");
             localStorage.removeItem("lastlog");
-            signInWithGoogleDirectly(true);
+            signInWithGoogleDirectly(true, true);
             window.location.reload(true); // For most modern browsers
         });
     } else {
