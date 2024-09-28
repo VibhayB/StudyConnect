@@ -144,8 +144,29 @@ function populateProductivity(data,fxc = false) {
                     let timePerQuestion = 25; // 25 seconds for each question
                     let timeLeft;
                     let interval;
+                    let triedsxchv = localStorage.getItem("musexet") || 60; // Get from localStorage or default to 60
+                    const currentDate = new Date().setHours(0, 0, 0, 0); // Get today's date (midnight) in milliseconds
+
+                    if (!isNaN(triedsxchv)) {
+                        triedsxchv = Number(triedsxchv);
+                        if (triedsxchv === 30) {
+                            console.log("triedsxchv is 30");
+                        } else {
+                            // Handle other number values
+                            console.log("triedsxchv is a number:", triedsxchv);
+                        }
+                    } else if (triedsxchv == currentDate) {
+                        // Reset to 0 if the stored date matches today
+                        triedsxchv = 0;
+                    } else if (triedsxchv < currentDate) {
+                        // If it's a previous date, reset to 60 and update localStorage with today's date
+                        triedsxchv = 60;
+                        localStorage.setItem("musexet", currentDate);
+                    }
+
     
                     function fetchQuestions() {
+                        triedsxchv -= 10;
                         fetch('https://quizapi.io/api/v1/questions?apiKey=${fxc}&limit=10')
                             .then(response => response.json())
                             .then(data => {
@@ -281,15 +302,25 @@ function calculateColor(percentage) {
                     }
     
                     function endQuiz() {
-                        const quizContainer = document.getElementById('quiz-container');
-                        quizContainer.innerHTML = '<h2>Quiz Completed!</h2>';
                         document.getElementById('meter').style.display = 'none'; // Hide progress display
-                        document.getElementById('replay-btn').style.display = 'block'; // Show replay button
                         clearInterval(interval); // Clear interval to stop the timer
-                        document.getElementById('heading').style.display = 'none'; 
+                        const currentDate = new Date().setHours(0, 0, 0, 0);
+                        if(triedsxchv <= 0){
+                            document.getElementById('heading').innerHTML = 'Comeback Tomorrow for more quiz'; 
+                            localStorage.setItem("musexet",currentDate);
+                        } else{
+                            const quizContainer = document.getElementById('quiz-container');
+                            quizContainer.innerHTML = '<h2>Quiz Completed!</h2>';
+                            document.getElementById('heading').style.display = 'none'; 
+                            document.getElementById('replay-btn').style.display = 'block'; // Show replay button
+                            localStorage.setItem("musexet",triedsxchv);
+                        }
                     }
     
                     function replayQuiz() {
+                        if(triedsxchv <= 0){
+                            return;
+                        }
                         currentQuestionIndex = 0;
                         score = 0;
                         document.getElementById('replay-btn').style.display = 'none'; // Hide replay button
