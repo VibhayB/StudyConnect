@@ -5,7 +5,6 @@ function savePost(post) {
     list.push(post); // Add the post to the list
     localStorage.setItem('savedposts', JSON.stringify(list)); // Save the updated list back to localStorage
 }
-
 function deletePost(post) {
     let list = localStorage.getItem('savedposts');
     list = list ? JSON.parse(list) : []; // Parse existing list or initialize as empty array
@@ -203,7 +202,20 @@ function populateFeed(posts,lastlog,inannounce = false) {
             post.sender.toLowerCase().includes(searchTerm)
         );
         displayPosts(filteredPosts);
+    }); 
+    
+    searchBar.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            const searchTerm = searchBar.value.toLowerCase();
+            const filteredPosts = posts.filter(post => 
+                post.title.toLowerCase().includes(searchTerm) || 
+                post.text.toLowerCase().includes(searchTerm) ||
+                post.sender.toLowerCase().includes(searchTerm)
+            );
+            displayPosts(filteredPosts);
+        }
     });
+
     function showFilterModal() {
         // Create modal background
         const modalBackground = document.createElement('div');
