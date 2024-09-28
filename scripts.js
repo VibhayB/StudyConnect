@@ -1,4 +1,5 @@
 // script.js
+let thisversion = "v1.1"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -11,19 +12,7 @@ var imageMap;
 var courseData;
 var showbanner = "show"; //set to 'dont show' to disable and 'show' to enable
 const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity"};
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      console.log('Trying to register the service worker...');
-      navigator.serviceWorker.register('/service-worker.js')
-        .then((registration) => {
-          console.log('Service Worker registered with scope:', registration.scope);
-        })
-        .catch((error) => {
-          console.error('Service Worker registration failed:', error);
-        });
-    });
-  }
-  
+
   
 
 // Tab names mapping
@@ -225,6 +214,7 @@ async function fetchAndDisplayData() {
         }
         console.log("Displaying");
         isSignedIn = true;
+        let fxc = [null,null];
         for(let data of maindata){
             if(data.id == "examData"){
                 createTabs(data.data);
@@ -255,10 +245,12 @@ async function fetchAndDisplayData() {
                 localStorage.setItem("courseInfo", JSON.stringify(courseInfo));
                 localStorage.setItem("semesters",JSON.stringify(data.semesters));
                 imageMap = data.Images;
-            } else if(data.id="productivity"){
-                populateProductivity(data.data);
+                fxc[1] = data.fxd;
+            } else if(data.id =="productivity"){
+                fxc[0] = data.data;
             }
         }
+        populateProductivity(fxc[0],fxc[1]);
         populateApps();
         populateGames();
         injectCSS();
