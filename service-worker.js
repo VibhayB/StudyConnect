@@ -2,7 +2,7 @@
 const CACHE_NAME = 'my-pwa-cache-v1';
 const urlsToCache = [
   '/',
-  '/index.html',
+  '/home screen.html',
   '/manifest.json',
   '/styles.css',
   '/chatbot.js',
@@ -34,6 +34,7 @@ const urlsToCache = [
   '/htmlfiles/snake.html',
   '/htmlfiles/xebia content.html',
   '/scripts.js',
+  '/offline.html', // Ensure this is in your cache
 ];
 
 // Install event
@@ -63,9 +64,24 @@ self.addEventListener('activate', (event) => {
 
 // Fetch event
 self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match('/offline.html'); // Specify your offline page here
-    })
-  );
+  // Cache-first strategy for static assets
+  if (urlsToCache.includes(event.request.url)) {
+    event.respondWith(
+      caches.match(event.request)
+        .then((response) => {
+          return response || fetch(event.request);
+        })
+        .catch(() => {
+          return caches.match('/offline.html'); // Fallback to offline page
+        })
+    );
+  } else {
+    // For other requests, use network-first strategy
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          return caches.match('/offline.html'); // Fallback to offline page
+        })
+    );
+  }
 });
