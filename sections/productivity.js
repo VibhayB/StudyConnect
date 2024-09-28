@@ -144,7 +144,7 @@ function populateProductivity(data,fxc = false) {
                     let timePerQuestion = 25; // 25 seconds for each question
                     let timeLeft;
                     let interval;
-                    let triedsxchv = localStorage.getItem("musexet") || 60; // Get from localStorage or default to 60
+                    let triedsxchv = ${localStorage.getItem("musexet")} || 60; // Get from localStorage or default to 60
                     const currentDate = new Date().setHours(0, 0, 0, 0); // Get today's date (midnight) in milliseconds
 
                     if (!isNaN(triedsxchv)) {
