@@ -1,6 +1,8 @@
 // Example course data
 var displayed = false;
 // Example course data
+
+let prohibitcontent = false;
 let removedSubjects = JSON.parse(localStorage.getItem('removedSubjects')) || [];
 // Function to create and inject CSS
 function injectCSS() {
@@ -403,11 +405,18 @@ function updateSubjectList() {
                         removedSubjects.push(subjectName.name);
                         saveRemovedSubjects();
                         subjectDiv.remove();
+                        removeMode = !removeMode; // Toggle remove mode
+                        updateSubjectList(); // Update the subject list to show/hide remove icons
+                        prohibitcontent = true;
                     });
                     subjectDiv.appendChild(removeButton);
                 }
                 subjectDiv.addEventListener('click', () => {
-                    showSubjectPopup(subjectName);
+                    if(!prohibitcontent){
+                        showSubjectPopup(subjectName);
+                    } else{
+                        prohibitcontent = false;
+                    }
                 });
 
                 subjectList.appendChild(subjectDiv);
@@ -634,13 +643,15 @@ function showSubjectContent(subject) {
         <a href="#" id="course-link">Course</a> > 
         <a href="#" id="subject-link">${subject.name}</a>
     `;
-
     // Add event listeners to breadcrumb links
     breadcrumbNav.querySelector('#course-link').addEventListener('click', (e) => {
         e.preventDefault();
         document.querySelector('#subject-content')?.remove();
         document.querySelector('#breadcrumb-nav')?.remove();
         subjectList.style.display = 'flex';
+        document.getElementById("rmvbutton").style.display = "";
+        document.getElementById("addbutton").style.display = "";
+        document.getElementById("semester-selection").style.display = "";
     });
 
     breadcrumbNav.querySelector('#subject-link').addEventListener('click', (e) => {
