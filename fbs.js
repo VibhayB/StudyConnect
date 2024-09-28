@@ -33,6 +33,10 @@ window.signInWithGoogle = async function(val = false, onpurpose = false) {
     }
     localStorage.setItem("tabcurrentx","home");
     localStorage.setItem("tabcurrenty","AIML StudyConnect");
+    localStorage.removeItem("xebiacontent");
+    localStorage.removeItem('clanlinks');
+    localStorage.removeItem("courseInfo");
+    localStorage.removeItem("semesters");
     return null;
   }
   if (isSignInInProgress) {
