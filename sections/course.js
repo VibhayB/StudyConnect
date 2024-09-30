@@ -747,6 +747,9 @@ function showDetailContent(detailName, detailValues) {
         document.querySelector('#subject-content').remove();
         document.querySelector('#breadcrumb-nav').remove();
         document.querySelector('.subject-list').style.display = 'flex';
+        document.getElementById("rmvbutton").style.display = "";
+        document.getElementById("addbutton").style.display = "";
+        document.getElementById("semester-selection").style.display = "";
     });
 
     breadcrumbNav.querySelector('#subject-link').addEventListener('click', (e) => {
