@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.1"
+let thisversion = "v1.2"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
