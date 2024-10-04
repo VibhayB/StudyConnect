@@ -171,10 +171,14 @@ async function fetchAndDisplayData() {
       const lastlogStr = localStorage.getItem("lastlog");
       const lastlog = lastlogStr ? new Date(parseInt(lastlogStr, 10)) : null;
       
+    console.log(".....")
+      
     // Check if lastlog exists
     const currentTime = new Date();
     let abctime = localStorage.getItem("tries") || "2024-09-28T00:00:00";
     let abctimeParsed = new Date(abctime).getTime(); // Parse the time correctly
+    
+    console.log("......")
     if (Date.now() - abctimeParsed > 5000) {
         try {
             const data = await window.loadCollectionData('categoriesData'); 
@@ -185,7 +189,9 @@ async function fetchAndDisplayData() {
         }
     } else {
         maindata = null;
-    } localStorage.setItem("tries", new Date().toISOString());
+    } 
+    console.log(".......")
+    localStorage.setItem("tries", new Date().toISOString());
     console.log('Website Loaded');
       // You can process or display the data as needed here
       const storedData = JSON.parse(localStorage.getItem("maindataxh"));
@@ -203,6 +209,8 @@ async function fetchAndDisplayData() {
             return;
         }
       } 
+      
+    console.log("........")
       if(!isSignedIn){
         localStorage.setItem("maindataxh", JSON.stringify(maindata));
         if(!lastlog){
@@ -258,6 +266,7 @@ async function fetchAndDisplayData() {
         showHome();
         updateHomeButton();
         
+    console.log(".........")
         if(currenttab){
             document.querySelector("#header").innerHTML = currentheader;
             showTab(event, currenttab);
@@ -267,6 +276,8 @@ async function fetchAndDisplayData() {
       console.error('Error loading', error);
       showAlert("Unable to sync data, please try again","https://cdn-icons-png.flaticon.com/512/675/675564.png");
     } finally{
+        
+    console.log("..........")
         hideLoadingScreen();
     }
 };
@@ -832,10 +843,12 @@ setInterval(nextSlide, 5000);
 // Initial setup when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     showLoadingScreen(); 
+    console.log(".")
     const menuButton = document.getElementById('menu');
     const menu = document.getElementById('hamburger-menu');
     menuButton.style.display = isSignedIn ? 'block' : 'none';
     
+    console.log("..")
     document.addEventListener('click', function(event) {
         if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
             if (!menu.classList.contains('closed')) {
@@ -843,7 +856,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
     });
-
+    
+    console.log("...")
     // Set up Home button
     document.querySelector('.home-button').addEventListener('click', handleHomeClick);
 
@@ -853,6 +867,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if (signInButton) {
         signInButton.addEventListener('click', signInWithGoogleDirectly);
     } 
+    console.log("....")
     const storedUserId = localStorage.getItem("efusereId");
     if (storedUserId && readability) {
         console.log("Initializing");
