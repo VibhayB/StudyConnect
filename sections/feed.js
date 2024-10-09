@@ -400,7 +400,9 @@ function populateFeed(posts,lastlog,inannounce = false) {
     }, {});
     // Create and add the note section
     const noteSection = document.createElement('div');
-    noteSection.textContent = 'Note: All of these announcements are forwarded from various sources to here like WhatsApp, Mail, ERP i.e. they are not officially or originally made here, neither of these announcements are added here by any officials.';
+    noteSection.style.display = 'flex';
+    noteSection.style.flexDirection = 'column';
+    noteSection.textContent = 'Note: All of these announcements are forwarded from various sources like WhatsApp, Mail, ERP. They are not officially made here, and none of these announcements are added here by any officials.';
     noteSection.style.padding = '10px';
     noteSection.style.marginBottom = '20px';
     noteSection.style.backgroundColor = '#fffbe6';
@@ -409,8 +411,9 @@ function populateFeed(posts,lastlog,inannounce = false) {
     noteSection.style.borderRadius = '5px';
     noteSection.style.textAlign = 'center';
     noteSection.style.fontSize = '14px';
+    noteSection.style.position = 'relative';
+    noteSection.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)'; // Adding shadow for visibility
 
-    feedContainer.appendChild(noteSection);
     // Function to create post element
 function createPostElement(post) {
     const postElement = document.createElement('div');
@@ -682,6 +685,7 @@ function createPostElement(post) {
     function displayPosts(filteredPosts) {
         feedContainer.innerHTML = ''; 
         feedContainer.appendChild(filterContainer);
+        feedContainer.appendChild(noteSection);
 
         const postsByDate = filteredPosts.reduce((acc, post) => {
             const date = new Date(post.time).toLocaleDateString('en-GB', {
