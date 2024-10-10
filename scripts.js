@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.2"
+let thisversion = "v1.3"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -25,7 +25,10 @@ const tabNames = {
     "examSchedule": "calendar",
     "onlineSites": "sites",
     "contacts": "contacts",
-    "installers": "installers"
+    "installers": "installers",
+    "games" : "games",
+    "productivity": "productivity",
+    "home": "home"    
 };
 
 // Keywords mapping
@@ -39,7 +42,9 @@ const keywords = {
     "onlineSites": ["onlineSites", "sites", "websites"],
     "contacts": ["contacts", "call", "email"],
     "installers": ["installers", "install", "download"],
-    "games" : ["Games"]
+    "games" : ["games","fun","game"],
+    "productivity": ["productivity","chatpdf","blackbox","quiz","compiler"],
+    "home":["home","AIML StudyConnect"]
 };
 
 
