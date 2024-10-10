@@ -946,10 +946,13 @@ function showDetailContent(detailName, detailValues) {
                         videoContainer.classList.add('video-container');
                         videoContainer.innerHTML = `
                             <iframe src="${value.file}" allowfullscreen></iframe>
-                            <div class="video-info">
-                                <div class="video-title">${title.trim()}</div>
-                                ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
-                            </div>
+                                <div class="video-info">
+                                    <div class="video-title">
+                                        <a href="${value.file}" target="_blank">${title.trim()}</a>
+                                    </div>
+                                    ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
+                                </div>
+
                         `;
                         detailContent.appendChild(videoContainer);
                     } else {
