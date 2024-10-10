@@ -493,12 +493,13 @@ function createPostElement(post) {
             // Placeholder markers for URLs
             const urlStart = '/url';
             const urlEnd = 'url/';
-            const urlPlaceholder = '__URL_PLACEHOLDER__';
             let urls = [];
             
             // Step 1: Escape URLs with a placeholder
             text = text.replace(/(https?:\/\/[^\s]+)/g, (match) => {
-                urls.push(match);
+                // Split the URL at spaces if there are any
+                const cleanUrl = match.split(' ')[0]; // Take the first part of the URL
+                urls.push(cleanUrl);
                 return `${urlStart}${urls.length - 1}${urlEnd}`;
             });
         
@@ -507,7 +508,16 @@ function createPostElement(post) {
         
             // Step 3: Restore URLs from placeholders
             text = text.replace(new RegExp(urlStart + '(\\d+)' + urlEnd, 'g'), (match, index) => {
-                return `<a href="${urls[index]}" target="_blank">${urls[index]}</a>`;
+                // Get the URL
+                let url1 = urls[index];
+                let url = urls[index];
+            
+                // Check for newlines and remove them if present
+                if (url.includes('\\n')) {
+                    url = url.replace(/\\n/g, ''); // Remove newlines from the URL
+                }
+            
+                return `<a href="${url}" target="_blank">${url1}</a>`;
             });
         
             // Step 4: Replace new lines with <br> tags
