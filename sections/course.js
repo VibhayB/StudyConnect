@@ -923,7 +923,9 @@ function showDetailContent(detailName, detailValues) {
                      <div class="video-item">
                             <iframe src="${value}" allowfullscreen></iframe>
                             <div class="video-info">
-                                <div class="video-title">${title.trim()}</div>
+                                <div class="video-title">
+                                <a href="${value.file}" target="_blank">${title.trim()}</a>
+                            </div>
                                 ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
                             </div>
                         </div>
