@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.3"
+let thisversion = "v1.2"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -35,7 +35,7 @@ const tabNames = {
 const keywords = {
     "courseData": ["course", "study material", "course content"],
     "posts": ["posts", "feed"],
-    "forms": ["forms", "sheets"],
+    "forms": ["docs", "sheets","important docs","forms"],
     "examData": ["examData"],
     "apps": ["apps", "others"],
     "examSchedule": ["examSchedule", "timers", "calendar", "date", "dates"],
