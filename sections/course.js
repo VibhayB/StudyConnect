@@ -920,15 +920,17 @@ function showDetailContent(detailName, detailValues) {
                     const videoContainer = document.createElement('div');
                     videoContainer.classList.add('video-container');
                     videoContainer.innerHTML = `
-                     <div class="video-item">
-                            <iframe src="${value}" allowfullscreen></iframe>
-                            <div class="video-info">
-                                <div class="video-title">
-                                <a href="${value.file}" target="_blank">${title.trim()}</a>
+                    <div class="video-item">
+                        <iframe src="${value}" allowfullscreen></iframe>
+                        <div class="video-info">
+                            <div class="video-title">
+                                <a href="${value.replace('/embed/videoseries', '/playlist')}" target="_blank" rel="noopener noreferrer" style="color: #1e90ff; text-decoration: none;">
+                                    ${title.trim()}
+                                </a>
                             </div>
-                                ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
-                            </div>
+                            ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
                         </div>
+                    </div>
                     `;
                     detailContent.appendChild(videoContainer);
                 } else if(typeof value === 'string') {
@@ -948,12 +950,14 @@ function showDetailContent(detailName, detailValues) {
                         videoContainer.classList.add('video-container');
                         videoContainer.innerHTML = `
                             <iframe src="${value.file}" allowfullscreen></iframe>
-                                <div class="video-info">
-                                    <div class="video-title">
-                                        <a href="${value.file}" target="_blank">${title.trim()}</a>
-                                    </div>
-                                    ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
+                            <div class="video-info">
+                                <div class="video-title">
+                                    <a href="${value.replace('/embed/videoseries', '/playlist')}" target="_blank" rel="noopener noreferrer" style="color: #1e90ff; text-decoration: none;">
+                                        ${title.trim()}
+                                    </a>
                                 </div>
+                                ${description ? `<div class="video-description">${description.trim()}</div>` : ''}
+                            </div>
 
                         `;
                         detailContent.appendChild(videoContainer);
@@ -962,7 +966,9 @@ function showDetailContent(detailName, detailValues) {
                         itemContainer.classList.add('item-container');
                         itemContainer.innerHTML = `
                             <h3>${key}</h3>
-                            <a href="${value.file}" target="_blank">Open Link</a>
+                            <a href=${value.file} target="_blank" rel="noopener noreferrer">
+            ${title.trim()}
+        </a>
                         `;
                         itemsContainer.appendChild(itemContainer);
                     }
