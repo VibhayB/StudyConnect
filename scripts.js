@@ -11,7 +11,7 @@ var reporturl;
 var imageMap;
 var courseData;
 var showbanner = "show"; //set to 'dont show' to disable and 'show' to enable
-const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity"};
+const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity","guide":"Guide"};
 
   
 
@@ -28,7 +28,8 @@ const tabNames = {
     "installers": "installers",
     "games" : "games",
     "productivity": "productivity",
-    "home": "home"    
+    "home": "home",
+    "guide": "guide"
 };
 
 // Keywords mapping
@@ -44,7 +45,8 @@ const keywords = {
     "installers": ["installers", "install", "download"],
     "games" : ["games","fun","game"],
     "productivity": ["productivity","chatpdf","blackbox","quiz","compiler"],
-    "home":["home","AIML StudyConnect"]
+    "home":["home","AIML StudyConnect"],
+    "guide": ["guide","demo","help"]
 };
 
 
@@ -259,6 +261,7 @@ async function fetchAndDisplayData() {
                 localStorage.setItem("semesters",JSON.stringify(data.semesters));
                 imageMap = data.Images;
                 fxc[1] = data.fxd;
+                populateGuide(data["guide_video"])
             } else if(data.id =="productivity"){
                 fxc[0] = data.data;
             }
@@ -407,7 +410,7 @@ function showTab(event, tabName, pushToHistory = true) {
         for (let i = 0; i < menuItems.length; i++) {
             menuItems[i].classList.remove("active");
         } 
-        if(tabName == "games" || tabName == "others" || tabName =="installers" || tabName == "sites" || tabName == "contacts" || tabName == "forms" || tabName == "feed" || tabName == "course"){
+        if(tabName == "games" || tabName == "others" || tabName =="installers" || tabName == "sites" || tabName == "contacts" || tabName == "forms" || tabName == "feed" || tabName == "course" || tabName == "guide"){
             document.getElementById(tabName).style.display = "flex";
         }
         else{
@@ -606,6 +609,54 @@ function displaySearchResult(input) {
         </div>
     `;
     homeContent.appendChild(infoSection);
+    
+    // Create a separate guide section
+const guideSection = document.createElement('div');
+guideSection.style.display = 'flex'; // Use flexbox for row layout
+guideSection.style.alignItems = 'center'; // Center align items vertically
+guideSection.style.justifyContent = 'center'; // Center align items horizontally
+guideSection.style.margin = '30px auto'; // Center and add spacing around the section
+guideSection.style.textAlign = 'center'; // Center align the text
+guideSection.style.width = '90%'; // Responsive width
+
+const guideText = document.createElement('p');
+guideText.textContent = 'Tap the guide button to know more';
+guideText.style.marginRight = '15px'; // Space to the right of the text
+guideText.style.fontSize = '18px'; // Larger font size
+guideText.style.fontWeight = '600'; // Bold text
+guideText.style.color = '#333'; // Dark text color
+
+const showGuideButton = document.createElement('button');
+showGuideButton.textContent = 'Show Guide';
+showGuideButton.style.padding = '10px 20px'; // Add padding to the button
+showGuideButton.style.fontSize = '16px'; // Adjust button font size
+showGuideButton.style.cursor = 'pointer'; // Change cursor to pointer
+showGuideButton.style.backgroundColor = '#6f42c1'; // Orange background
+showGuideButton.style.color = '#fff'; // White text color
+showGuideButton.style.border = 'none'; // No border
+showGuideButton.style.borderRadius = '5px'; // Rounded corners
+showGuideButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)'; // Subtle shadow
+showGuideButton.style.transition = 'background 0.3s, transform 0.3s'; // Transition for hover effect
+
+// Hover effect for button
+showGuideButton.addEventListener('mouseover', () => {
+    showGuideButton.style.transform = 'scale(1.05)'; // Slightly grow the button
+});
+showGuideButton.addEventListener('mouseout', () => {
+    showGuideButton.style.transform = 'scale(1)'; // Reset to original size
+});
+
+// Add event listener to the button
+showGuideButton.addEventListener('click', () => {
+    showTab(null, "guide"); // Function to display the guide
+});
+
+// Append elements to the guide section
+guideSection.appendChild(guideText);
+guideSection.appendChild(showGuideButton);
+
+// Append the guide section to homeContent (separate from the timetable section)
+homeContent.appendChild(guideSection);
 
     const timetableSection = document.createElement('div');
 timetableSection.className = 'timetable-section';
@@ -631,6 +682,7 @@ timetableSection.appendChild(heading);
 timetableSection.appendChild(image);
 
 homeContent.appendChild(timetableSection);
+
 
 const footer = document.createElement('footer');
 footer.id = 'footer';
