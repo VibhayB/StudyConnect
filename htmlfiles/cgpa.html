@@ -70,6 +70,7 @@
   <!-- Toggle buttons for selecting year -->
   <button onclick="showYear(1)">1st Year</button>
   <button onclick="showYear(2)">2nd Year</button>
+  <button onclick="showYear('overall')">Overall CGPA</button>
 
   <!-- Single content div -->
   <div id="content"></div>
@@ -77,11 +78,11 @@
   <p id="error-message"></p>
 
   <script>
-    function showYear(year) {
+    function showYear(option) {
       const contentDiv = document.getElementById('content');
       let htmlContent = '';
 
-      if (year === 1) {
+      if (option === 1) {
         htmlContent = `
           <h3>CGPA Calculator (1st Year)</h3>
           <label for="sgpa1_1">SGPA Semester 1:</label>
@@ -91,7 +92,7 @@
           <button onclick="calculateCGPA(1)">Calculate CGPA</button>
           <h3>CGPA: <span id="result_1"></span></h3>
         `;
-      } else if (year === 2) {
+      } else if (option === 2) {
         htmlContent = `
           <h3>CGPA Calculator (2nd Year)</h3>
           <label for="sgpa1_2">SGPA Semester 3:</label>
@@ -100,6 +101,17 @@
           <input type="number" id="sgpa2_2" step="0.01" required><br>
           <button onclick="calculateCGPA(2)">Calculate CGPA</button>
           <h3>CGPA: <span id="result_2"></span></h3>
+        `;
+      } else if (option === 'overall') {
+        htmlContent = `
+          <h3>Overall CGPA Calculator</h3>
+          <label for="cgpa1">CGPA for 1st Year:</label>
+          <input type="number" id="cgpa1" step="0.01" required><br>
+          <label for="cgpa2">CGPA for 2nd Year:</label>
+          <input type="number" id="cgpa2" step="0.01" required><br>
+          <!-- Add more years as needed -->
+          <button onclick="calculateOverallCGPA()">Calculate Overall CGPA</button>
+          <h3>Overall CGPA: <span id="overall_result"></span></h3>
         `;
       }
 
@@ -124,24 +136,37 @@
         resultId = 'result_2';
       }
 
-      // Validate SGPA values
       if (isNaN(sgpa1) || isNaN(sgpa2) || sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
         document.getElementById('error-message').innerText = 'Invalid SGPA values. Please enter valid SGPA values between 0 and 10.';
         return;
       } else {
-        document.getElementById('error-message').innerText = ''; // Clear error message if valid values are entered
+        document.getElementById('error-message').innerText = '';
       }
 
-      // Calculate CGPA
       const totalCredits = credits1 + credits2;
       const weightedSum = (sgpa1 * credits1) + (sgpa2 * credits2);
       const cgpa = weightedSum / totalCredits;
 
-      // Display result
       document.getElementById(resultId).innerText = cgpa.toFixed(2);
     }
 
-    // Show the default year (2nd Year) on page load
+    function calculateOverallCGPA() {
+      const cgpa1 = parseFloat(document.getElementById('cgpa1').value);
+      const cgpa2 = parseFloat(document.getElementById('cgpa2').value);
+      // Add more CGPA variables if there are more years
+
+      if (isNaN(cgpa1) || isNaN(cgpa2) || cgpa1 < 0 || cgpa1 > 10 || cgpa2 < 0 || cgpa2 > 10) {
+        document.getElementById('error-message').innerText = 'Invalid CGPA values. Please enter valid CGPA values between 0 and 10.';
+        return;
+      } else {
+        document.getElementById('error-message').innerText = '';
+      }
+
+      // Average the CGPA values
+      const overallCGPA = (cgpa1 + cgpa2) / 2;
+      document.getElementById('overall_result').innerText = overallCGPA.toFixed(2);
+    }
+
     window.onload = function() {
       showYear(2);
     }
