@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.3"
+let thisversion = "v1.4"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -970,6 +970,7 @@ function updateHomeButton() {
             localStorage.removeItem("lastlog");
             localStorage.removeItem("maindataxh");
             localStorage.removeItem("tries");
+            localStorage.removeItem("sitestate");
             signInWithGoogleDirectly(true, true);
             window.location.reload(true); // For most modern browsers
         });
