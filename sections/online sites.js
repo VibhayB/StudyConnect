@@ -1,4 +1,8 @@
 function populateOnlineSites(onlineSites) {
+    // Load hidden sites from localStorage
+    let hiddenSites = JSON.parse(localStorage.getItem('hiddenSites')) || [];
+    onlineSites = onlineSites.filter(site => !hiddenSites.some(hiddenSite => hiddenSite.name === site.name));
+
     // Sort online sites initially by name in alphabetical order
     onlineSites.sort((a, b) => a.name.localeCompare(b.name));
     const onlineSitesContainer = document.getElementById('sites');
@@ -87,7 +91,6 @@ function populateOnlineSites(onlineSites) {
     onlineSitesContainer.appendChild(onlineSitesContent);
 
     let isRemoveMode = false;
-    let hiddenSites = [];
 
     const renderSites = (filteredSites) => {
         filteredSites.sort((a, b) => a.name.localeCompare(b.name)); // Alphabetical order
@@ -136,7 +139,7 @@ function populateOnlineSites(onlineSites) {
                     e.stopPropagation();
                     hiddenSites.push(site);
                     onlineSites = onlineSites.filter(s => s !== site);
-                    localStorage.setItem('sitestate', JSON.stringify(onlineSites));
+                    localStorage.setItem('hiddenSites', JSON.stringify(hiddenSites));
                     toggleRemoveMode();
                     renderSites(onlineSites);
                 };
@@ -252,24 +255,23 @@ function populateOnlineSites(onlineSites) {
                 }
                 return true;
             });
-            onlineSites.sort((a, b) => a.name.localeCompare(b.name)); // Re-sort after addition
-            localStorage.setItem('sitestate', JSON.stringify(onlineSites));
+            localStorage.setItem('hiddenSites', JSON.stringify(hiddenSites));
             renderSites(onlineSites);
             document.body.removeChild(popup);
         };
 
-        const closeButton = document.createElement('button');
-        closeButton.textContent = 'Close';
-        closeButton.style.backgroundColor = '#e74c3c';
-        closeButton.style.color = '#fff';
-        closeButton.style.border = 'none';
-        closeButton.style.padding = '8px 12px';
-        closeButton.style.borderRadius = '4px';
-        closeButton.style.cursor = 'pointer';
-        closeButton.onclick = () => document.body.removeChild(popup);
+        const cancelButton = document.createElement('button');
+        cancelButton.textContent = 'Cancel';
+        cancelButton.style.backgroundColor = '#f44336';
+        cancelButton.style.color = '#fff';
+        cancelButton.style.border = 'none';
+        cancelButton.style.padding = '8px 12px';
+        cancelButton.style.borderRadius = '4px';
+        cancelButton.style.cursor = 'pointer';
+        cancelButton.onclick = () => document.body.removeChild(popup);
 
         buttonContainer.appendChild(addButton);
-        buttonContainer.appendChild(closeButton);
+        buttonContainer.appendChild(cancelButton);
         popup.appendChild(buttonContainer);
         document.body.appendChild(popup);
     }
