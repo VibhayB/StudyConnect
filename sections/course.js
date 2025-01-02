@@ -87,7 +87,7 @@ function injectCSS() {
 }
 
 .semester-sem5 {
-    background-color: #D0E0FF; /* Light blue */
+    background-color:rgb(196, 205, 223); /* Light blue */
 } .semester-sem6 {
     background-color:hsl(268, 100.00%, 85.50%); /* Light indigo */
 }
