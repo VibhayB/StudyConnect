@@ -87,9 +87,9 @@ function injectCSS() {
 }
 
 .semester-sem5 {
-    background-color:rgb(180, 205, 255); /* Light blue */
+    background-color:rgb(202, 220, 255); /* Light blue */
 } .semester-sem6 {
-    background-color:rgb(209, 168, 255); /* Light indigo */
+    background-color:rgb(221, 192, 255); /* Light indigo */
 }
 /* Popup styling */
 .popup {
