@@ -71,15 +71,15 @@ function injectCSS() {
 }
 /* Semester-based color themes */
 .semester-sem1 {
-    background-color: #FFDDDD; /* Light cyan */
+    background-color: #FFDDDD; /* Light red */
 }
 
 .semester-sem2 {
-    background-color: #FFE0B5; /* Light green */
+    background-color: #FFE0B5; /* Light orange */
 }
 
 .semester-sem3 {
-    background-color: #FFFFB5; /* Light pink */
+    background-color: #FFFFB5; /* Light yellow */
 }
 
 .semester-sem4 {
@@ -87,7 +87,9 @@ function injectCSS() {
 }
 
 .semester-sem5 {
-    background-color: #D0E0FF; /* Light red */
+    background-color: #D0E0FF; /* Light blue */
+} .semester-sem6 {
+    background-color:rgb(238, 208, 255); /* Light indigo */
 }
 /* Popup styling */
 .popup {
