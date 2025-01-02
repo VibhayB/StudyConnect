@@ -89,7 +89,7 @@ function injectCSS() {
 .semester-sem5 {
     background-color: #D0E0FF; /* Light blue */
 } .semester-sem6 {
-    background-color:rgb(238, 208, 255); /* Light indigo */
+    background-color:rgb(210, 137, 252); /* Light indigo */
 }
 /* Popup styling */
 .popup {
@@ -357,7 +357,7 @@ function isSemesterSelected(semesterId) {
 
 function getSelectedSemesters() {
     const storedSemesters = localStorage.getItem('selectedSemesters');
-    return storedSemesters ? JSON.parse(storedSemesters) : ['sem5']; // Default to Semester 5
+    return storedSemesters ? JSON.parse(storedSemesters) : ['sem6']; // Default to Semester 5
 }
 
 // Function to save selected semesters to local storage
@@ -386,7 +386,7 @@ function updateSubjectList() {
         .map(checkbox => checkbox.id);
 
     if (selectedSemesters.length === 0) {
-        selectedSemesters.push('sem5'); // Default to Semester 5 if none selected
+        selectedSemesters.push('sem6'); // Default to Semester 5 if none selected
     }
 
     // Populate subjects
