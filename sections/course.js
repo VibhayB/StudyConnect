@@ -89,7 +89,7 @@ function injectCSS() {
 .semester-sem5 {
     background-color: #D0E0FF; /* Light blue */
 } .semester-sem6 {
-    background-color:rgb(217, 183, 255); /* Light indigo */
+    background-color:hsl(268, 100.00%, 85.50%); /* Light indigo */
 }
 /* Popup styling */
 .popup {
