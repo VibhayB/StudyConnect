@@ -202,6 +202,8 @@ function populateFeed(posts,lastlog,inannounce = false) {
             post.sender.toLowerCase().includes(searchTerm)
         );
         displayPosts(filteredPosts);
+        
+        document.getElementById('savedpostsfilter').textContent = 'Saved Posts';
     }); 
     
     searchBar.addEventListener('keydown', (event) => {
@@ -213,6 +215,8 @@ function populateFeed(posts,lastlog,inannounce = false) {
                 post.sender.toLowerCase().includes(searchTerm)
             );
             displayPosts(filteredPosts);
+            
+            document.getElementById('savedpostsfilter').textContent = 'Saved Posts';
         }
     });
 
@@ -364,6 +368,8 @@ function populateFeed(posts,lastlog,inannounce = false) {
     
         // Display the filtered posts
         displayPosts(filteredPosts);
+        
+        document.getElementById('savedpostsfilter').textContent = 'Saved Posts';
     }
     
     // Create and style the filter button
@@ -379,10 +385,27 @@ function populateFeed(posts,lastlog,inannounce = false) {
     filterButton.addEventListener('click', () => {        
         showFilterModal();
     });// Append the search bar and filter button to the container
+
+    const saveButton = document.createElement('button');
+    saveButton.id= 'savedpostsfilter';
+    saveButton.textContent = 'Saved Posts';
+    saveButton.style.padding = '10px 15px';
+    saveButton.style.border = 'none';
+    saveButton.style.borderRadius = '5px';
+    saveButton.style.backgroundColor = '#1a73e8';
+    saveButton.style.color = '#fff';
+    saveButton.style.cursor = 'pointer';
+    saveButton.style.fontSize = '16px';
+    saveButton.addEventListener('click', () => {        
+        const savedPosts = retrievePosts();
+        displayPosts(savedPosts);
+        saveButton.textContent = 'All Posts';
+    });
     
     filterContainer.appendChild(searchBar);
     filterContainer.appendChild(searchButton);
     filterContainer.appendChild(filterButton);
+    filterContainer.appendChild(saveButton);
 
     // Append the filter container to the feed
     feedContainer.appendChild(filterContainer);
