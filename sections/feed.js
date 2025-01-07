@@ -397,9 +397,15 @@ function populateFeed(posts,lastlog,inannounce = false) {
     saveButton.style.cursor = 'pointer';
     saveButton.style.fontSize = '16px';
     saveButton.addEventListener('click', () => {        
-        const savedPosts = retrievePosts();
-        displayPosts(savedPosts);
-        saveButton.textContent = 'All Posts';
+        if(saveButton.textContent == 'All Posts'){
+            saveButton.textContent == 'Saved Posts';            
+            displayPosts(posts);
+        }
+        else{
+            const savedPosts = retrievePosts();
+            displayPosts(savedPosts);
+            saveButton.textContent == 'All Posts';
+        }
     });
     
     filterContainer.appendChild(searchBar);
