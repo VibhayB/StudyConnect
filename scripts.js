@@ -667,7 +667,7 @@ timetableSection.style.maxWidth = '90%'; // Limit the width for responsiveness
 timetableSection.style.boxSizing = 'border-box'; // Ensure padding is included in width
 
 const heading = document.createElement('h3');
-heading.textContent = 'Timetable (AIML5A)';
+heading.textContent = 'Timetable (AIML6A)';
 heading.style.fontSize = '24px'; // Adjust font size for the heading
 heading.style.marginBottom = '20px'; // Add space below the heading
 
