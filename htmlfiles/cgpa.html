@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -70,6 +70,8 @@
   <!-- Toggle buttons for selecting year -->
   <button onclick="showYear(1)">1st Year</button>
   <button onclick="showYear(2)">2nd Year</button>
+  <button onclick="showYear(3)">3rd Year</button>
+  <button onclick="showYear(4)">4th Year</button>
   <button onclick="showYear('overall')">Overall CGPA</button>
 
   <!-- Single content div -->
@@ -102,6 +104,26 @@
           <button onclick="calculateCGPA(2)">Calculate CGPA</button>
           <h3>CGPA: <span id="result_2"></span></h3>
         `;
+      } else if (option === 3) {
+        htmlContent = `
+          <h3>CGPA Calculator (3rd Year)</h3>
+          <label for="sgpa1_3">SGPA Semester 5:</label>
+          <input type="number" id="sgpa1_3" step="0.01" required><br>
+          <label for="sgpa2_3">SGPA Semester 6:</label>
+          <input type="number" id="sgpa2_3" step="0.01" required><br>
+          <button onclick="calculateCGPA(3)">Calculate CGPA</button>
+          <h3>CGPA: <span id="result_3"></span></h3>
+        `;
+      } else if (option === 4) {
+        htmlContent = `
+          <h3>CGPA Calculator (4th Year)</h3>
+          <label for="sgpa1_4">SGPA Semester 7:</label>
+          <input type="number" id="sgpa1_4" step="0.01" required><br>
+          <label for="sgpa2_4">SGPA Semester 8:</label>
+          <input type="number" id="sgpa2_4" step="0.01" required><br>
+          <button onclick="calculateCGPA(4)">Calculate CGPA</button>
+          <h3>CGPA: <span id="result_4"></span></h3>
+        `;
       } else if (option === 'overall') {
         htmlContent = `
           <h3>Overall CGPA Calculator</h3>
@@ -109,7 +131,10 @@
           <input type="number" id="cgpa1" step="0.01" required><br>
           <label for="cgpa2">CGPA for 2nd Year:</label>
           <input type="number" id="cgpa2" step="0.01" required><br>
-          <!-- Add more years as needed -->
+          <label for="cgpa3">CGPA for 3rd Year:</label>
+          <input type="number" id="cgpa3" step="0.01" required><br>
+          <label for="cgpa4">CGPA for 4th Year:</label>
+          <input type="number" id="cgpa4" step="0.01" required><br>
           <button onclick="calculateOverallCGPA()">Calculate Overall CGPA</button>
           <h3>Overall CGPA: <span id="overall_result"></span></h3>
         `;
@@ -134,6 +159,18 @@
         credits1 = 20;
         credits2 = 27;
         resultId = 'result_2';
+      } else if (year === 3) {
+        sgpa1 = parseFloat(document.getElementById('sgpa1_3').value);
+        sgpa2 = parseFloat(document.getElementById('sgpa2_3').value);
+        credits1 = 25;
+        credits2 = 23;
+        resultId = 'result_3';
+      } else if (year === 4) {
+        sgpa1 = parseFloat(document.getElementById('sgpa1_4').value);
+        sgpa2 = parseFloat(document.getElementById('sgpa2_4').value);
+        credits1 = 25; //it can change but shall be in range of 25 to 27
+        credits2 = 8;
+        resultId = 'result_4';
       }
 
       if (isNaN(sgpa1) || isNaN(sgpa2) || sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
@@ -153,22 +190,30 @@
     function calculateOverallCGPA() {
       const cgpa1 = parseFloat(document.getElementById('cgpa1').value);
       const cgpa2 = parseFloat(document.getElementById('cgpa2').value);
-      // Add more CGPA variables if there are more years
+      const cgpa3 = parseFloat(document.getElementById('cgpa3').value);
+      const cgpa4 = parseFloat(document.getElementById('cgpa4').value);
 
-      if (isNaN(cgpa1) || isNaN(cgpa2) || cgpa1 < 0 || cgpa1 > 10 || cgpa2 < 0 || cgpa2 > 10) {
+      const credits1 = 46;
+      const credits2 = 47;
+      const credits3 = 48;
+      const credits4 = 33;
+
+      if (isNaN(cgpa1) || isNaN(cgpa2) || isNaN(cgpa3) || isNaN(cgpa4) || cgpa1 < 0 || cgpa1 > 10 || cgpa2 < 0 || cgpa2 > 10 || cgpa3 < 0 || cgpa3 > 10 || cgpa4 < 0 || cgpa4 > 10) {
         document.getElementById('error-message').innerText = 'Invalid CGPA values. Please enter valid CGPA values between 0 and 10.';
         return;
       } else {
         document.getElementById('error-message').innerText = '';
       }
 
-      // Average the CGPA values
-      const overallCGPA = (cgpa1 + cgpa2) / 2;
+      const weightedSum = (cgpa1 * credits1) + (cgpa2 * credits2) + (cgpa3 * credits3) + (cgpa4 * credits4);
+      const totalCredits = credits1 + credits2 + credits3 + credits4;
+      const overallCGPA = weightedSum / totalCredits;
+
       document.getElementById('overall_result').innerText = overallCGPA.toFixed(2);
     }
 
     window.onload = function() {
-      showYear(2);
+      showYear(1);
     }
   </script>
 
