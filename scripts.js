@@ -4,6 +4,8 @@ let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
 let readability = true;
+var assignmentclick = false;
+var tagfilterapplier = null;
 let fadeTimeout;
 var otheritems = [];
 var feedbackurl;
@@ -381,6 +383,10 @@ function toggleMenu() {
 
 // Function to show a specific tab
 function showTab(event, tabName, pushToHistory = true) {  
+    if(tabName == "assignments"){
+        tabName = 'feed';
+        console.log(tagfilterapplier);
+    }
     const logo = document.querySelector("#header");
     const currentState = history.state;
     try{
@@ -417,7 +423,8 @@ function showTab(event, tabName, pushToHistory = true) {
             document.getElementById(tabName).style.display = "block";
         } 
         try{
-            if(event.currentTarget.innerHTML == "View Post"){
+            
+            if(event.currentTarget.innerHTML == "View Post" || tabName == "feed"){
                 logo.innerHTML = "Feed";
                 localStorage.setItem("tabcurrenty", "Feed");
             }
@@ -425,6 +432,12 @@ function showTab(event, tabName, pushToHistory = true) {
                 event.currentTarget.classList.add("active");
                 logo.innerHTML = event.currentTarget.innerHTML;
                 localStorage.setItem("tabcurrenty", event.currentTarget.innerHTML);
+            } if(event.currentTarget.innerHTML == "Assignments"){
+                assignmentclick = true;
+                
+                if(tagfilterapplier) tagfilterapplier.click(); 
+                else assignmentclick = false;
+                
             }
         } catch(error){
             logo.innerHTML = classLists[tabName];
@@ -435,7 +448,7 @@ function showTab(event, tabName, pushToHistory = true) {
     } catch(error){
         console.error(error);
         return "Error";
-    }
+    } 
 }
 window.addEventListener('popstate', function(event) {
     if (event.state && event.state.tab) {
@@ -521,13 +534,15 @@ function displaySearchResult(input) {
     const homeContent = document.getElementById('home');
     homeContent.style.display = "block";
 
+    
     if(!document.getElementById('feedback-report-buttons')){
-    // Create and add the buttons
-    const buttonsContainer = document.createElement('div');
+        // Create and add the buttons
+        const buttonsContainer = document.createElement('div');
         buttonsContainer.id = 'feedback-report-buttons';
         buttonsContainer.style.textAlign = 'center';
-        buttonsContainer.style.margin = '30px auto';
+        buttonsContainer.style.margin = '30px auto'; // This already centers the container horizontally
         buttonsContainer.style.padding = '20px';
+        buttonsContainer.style.justifyContent = 'center'; // Ensures buttons inside the container are centered
         buttonsContainer.style.maxWidth = '90%';
         buttonsContainer.style.boxSizing = 'border-box';
         buttonsContainer.style.display = 'flex';
@@ -537,10 +552,9 @@ function displaySearchResult(input) {
         // Define button data
         const buttonData = [
             { text: 'Course', tab: 'course' },
+            { text: 'Assignments', tab: 'assignments' },
             { text: 'Exams', tab: 'exams' },
             { text: 'Feed', tab: 'feed' },
-            { text: 'Contacts', tab: 'contacts' },
-            { text: 'Productivity', tab: 'productivity' },
             { text: 'Others', tab: 'others' }
         ];
 
