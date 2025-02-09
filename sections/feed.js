@@ -195,16 +195,24 @@ function populateFeed(posts,lastlog,inannounce = false) {
     searchButton.innerHTML = `<i class="fa fa-search" aria-hidden="true" style="font-size: 16px;"></i>`;
     
     searchButton.addEventListener('click', () => {
-        const searchTerm = searchBar.value.toLowerCase();
+        let searchTerm;
+        if(assignmentclick){
+            assignmentclick = false;
+            searchTerm = "assignment";
+        }
+        else searchTerm = searchBar.value.toLowerCase();
+
         const filteredPosts = posts.filter(post => 
             post.title.toLowerCase().includes(searchTerm) || 
             post.text.toLowerCase().includes(searchTerm) ||
-            post.sender.toLowerCase().includes(searchTerm)
+            post.sender.toLowerCase().includes(searchTerm) ||
+            post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
         );
         displayPosts(filteredPosts);
         
         document.getElementById('savedpostsfilter').textContent = 'Saved Posts';
-    }); 
+    });  
+    tagfilterapplier = searchButton;//
     
     searchBar.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
@@ -212,7 +220,8 @@ function populateFeed(posts,lastlog,inannounce = false) {
             const filteredPosts = posts.filter(post => 
                 post.title.toLowerCase().includes(searchTerm) || 
                 post.text.toLowerCase().includes(searchTerm) ||
-                post.sender.toLowerCase().includes(searchTerm)
+                post.sender.toLowerCase().includes(searchTerm) ||
+                post.tags.some(tag => tag.toLowerCase().includes(searchTerm))
             );
             displayPosts(filteredPosts);
             
@@ -324,6 +333,7 @@ function populateFeed(posts,lastlog,inannounce = false) {
     
         // Create apply button
         const applyButton = document.createElement('button');
+        applyButton.id = 'tagfilterapplier';
         applyButton.textContent = 'Apply Filter';
         applyButton.style.padding = '10px 15px';
         applyButton.style.border = 'none';
@@ -337,7 +347,7 @@ function populateFeed(posts,lastlog,inannounce = false) {
     
         // Close modal and apply filter
         applyButton.addEventListener('click', () => {
-            const selectedTags = Object.keys(tagCheckboxes)
+        const selectedTags = Object.keys(tagCheckboxes)
                 .filter(tag => tagCheckboxes[tag].checked);
     
             // Apply the filter to the feed
@@ -370,7 +380,9 @@ function populateFeed(posts,lastlog,inannounce = false) {
         displayPosts(filteredPosts);
         
         document.getElementById('savedpostsfilter').textContent = 'Saved Posts';
-    }
+    } 
+
+
     
     // Create and style the filter button
     const filterButton = document.createElement('button');
