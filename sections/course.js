@@ -40,8 +40,17 @@ function injectCSS() {
 }
 
 /* Checkbox styling */
-.semester-checkbox {
-    margin-right: 10px;
+.semester-button {
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+}.semester-button.active {
+    background-color: #007bff;
+    color: white;
+    border-color: #007bff;
 }
 
 /* Container for the subject list */
@@ -154,38 +163,38 @@ function injectCSS() {
 .remove-subject-button:hover {
     background: linear-gradient(135deg, #c82333, #dc3545);
 }
-            .remove-icon {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 24px;
-            height: 24px;
-            background: #dc3545;
-            color: #fff;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-            font-size: 16px;
-            font-weight: bold;
-            transition: background-color 0.3s, transform 0.3s;
-        }
+.remove-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 24px;
+    height: 24px;
+    background: #dc3545;
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.3s;
+}
 
-        .remove-icon:hover {
-            background: #c82333;
-            transform: scale(1.1);
-        }
+.remove-icon:hover {
+    background: #c82333;
+    transform: scale(1.1);
+}
 
-        .remove-icon:active {
-            background: #bd2130;
-            transform: scale(1);
-        }
-        .subject {
-            position: relative;
-        }
-            .popup {
+.remove-icon:active {
+    background: #bd2130;
+    transform: scale(1);
+}
+.subject {
+    position: relative;
+}
+.popup {
     position: fixed;
     top: 0;
     left: 0;
@@ -226,7 +235,7 @@ function injectCSS() {
 }
 
 
-    .popup2 {
+.popup2 {
     position: fixed;
     top: 0;
     left: 0;
@@ -257,6 +266,7 @@ function injectCSS() {
     font-size: 24px;
     cursor: pointer;
 } /* Title for the popup */
+
 .popup2-content h2 {
     margin: 0;
     font-size: 18px;
@@ -301,29 +311,29 @@ function initializeSemesterSelection() {
     const semesterSelection = document.createElement('div');
     semesterSelection.id = 'semester-selection';
 
-    // Create checkboxes for each semester
     courseData.semesters.forEach(semester => {
-        const checkbox = document.createElement('input');
-        checkbox.type = 'checkbox';
-        checkbox.id = semester.id;
-        checkbox.classList.add('semester-checkbox');
-        checkbox.checked = isSemesterSelected(semester.id);
-        checkbox.addEventListener('change', () => {
-            updateSubjectList();
+        const button = document.createElement('button');
+        button.textContent = semester.name;
+        button.classList.add('semester-button');
+        button.dataset.id = semester.id;
+    
+        // Activate button if semester is selected
+        if (isSemesterSelected(semester.id)) {
+            button.classList.add('active');
+        }
+    
+        button.addEventListener('click', () => {
+            button.classList.toggle('active');
             saveSelectedSemesters();
+            updateSubjectList();
         });
-
-        const label = document.createElement('label');
-        label.htmlFor = semester.id;
-        label.textContent = semester.name;
-
-        semesterSelection.appendChild(checkbox);
-        semesterSelection.appendChild(label);
+    
+        semesterSelection.appendChild(button);
     });
 
     // Add buttons for adding and removing subjects
     const addButton = document.createElement('button');
-    addButton.id = 'addbutton';
+    addButton.id = 'addbutton'; 
     addButton.textContent = 'Add Subject';
     addButton.classList.add('styled-button', 'add-subject-button');
     addButton.addEventListener('click', openAddSubjectPopup); // Open popup on click
@@ -362,9 +372,8 @@ function getSelectedSemesters() {
 
 // Function to save selected semesters to local storage
 function saveSelectedSemesters() {
-    const selectedSemesters = Array.from(document.querySelectorAll('.semester-checkbox'))
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.id);
+    const selectedSemesters = Array.from(document.querySelectorAll('.semester-button.active'))
+        .map(button => button.dataset.id);
 
     localStorage.setItem('selectedSemesters', JSON.stringify(selectedSemesters));
 }
@@ -377,29 +386,23 @@ function updateSubjectList() {
     const subjectList = document.querySelector('.subject-list');
     if (!subjectList) return;
 
-    // Clear existing subjects
     subjectList.innerHTML = '';
 
-    // Get selected semesters
-    const selectedSemesters = Array.from(document.querySelectorAll('.semester-checkbox'))
-        .filter(checkbox => checkbox.checked)
-        .map(checkbox => checkbox.id);
-
+    const selectedSemesters = getSelectedSemesters();
     if (selectedSemesters.length === 0) {
-        selectedSemesters.push('sem6'); // Default to Semester 5 if none selected
+        selectedSemesters.push('sem6'); // Default to Semester 6 if none selected
     }
 
-    // Populate subjects
     selectedSemesters.forEach(semesterId => {
         const semester = courseData.semesters.find(sem => sem.id === semesterId);
-
         if (semester) {
             semester.subjects.forEach(subjectName => {
                 if (removedSubjects.includes(subjectName.name)) return;
+
                 const subjectDiv = document.createElement('div');
                 subjectDiv.textContent = subjectName.name;
-                subjectDiv.classList.add('subject');
-                subjectDiv.classList.add(`semester-${semesterId}`); // Add semester-based class
+                subjectDiv.classList.add('subject', `semester-${semesterId}`);
+
                 if (removeMode) {
                     const removeButton = document.createElement('div');
                     removeButton.classList.add('remove-icon');
@@ -407,16 +410,17 @@ function updateSubjectList() {
                         removedSubjects.push(subjectName.name);
                         saveRemovedSubjects();
                         subjectDiv.remove();
-                        removeMode = !removeMode; // Toggle remove mode
-                        updateSubjectList(); // Update the subject list to show/hide remove icons
+                        removeMode = !removeMode;
+                        updateSubjectList();
                         prohibitcontent = true;
                     });
                     subjectDiv.appendChild(removeButton);
                 }
+
                 subjectDiv.addEventListener('click', () => {
-                    if(!prohibitcontent){
+                    if (!prohibitcontent) {
                         showSubjectPopup(subjectName);
-                    } else{
+                    } else {
                         prohibitcontent = false;
                     }
                 });
@@ -425,7 +429,9 @@ function updateSubjectList() {
             });
         }
     });
-}function openAddSubjectPopup() {
+}
+
+function openAddSubjectPopup() {
     // Create a popup container
     const popup = document.createElement('div');
     popup.id = 'add-subject-popup2';
