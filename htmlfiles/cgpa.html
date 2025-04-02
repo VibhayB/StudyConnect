@@ -64,158 +64,87 @@
   </style>
 </head>
 <body>
-
   <h2>CGPA Calculator</h2>
-
-  <!-- Toggle buttons for selecting year -->
   <button onclick="showYear(1)">1st Year</button>
   <button onclick="showYear(2)">2nd Year</button>
   <button onclick="showYear(3)">3rd Year</button>
   <button onclick="showYear(4)">4th Year</button>
   <button onclick="showYear('overall')">Overall CGPA</button>
-
-  <!-- Single content div -->
   <div id="content"></div>
-
   <p id="error-message"></p>
 
   <script>
+    function saveData(id, value) {
+      localStorage.setItem(id, value);
+    }
+
+    function loadData(id) {
+      return localStorage.getItem(id) || '';
+    }
+
     function showYear(option) {
       const contentDiv = document.getElementById('content');
       let htmlContent = '';
+      
+      const generateYearContent = (year, sem1, sem2) => `
+        <h3>CGPA Calculator (${year} Year)</h3>
+        <label for="${sem1}">SGPA Semester ${year * 2 - 1}:</label>
+        <input type="number" id="${sem1}" step="0.01" value="${loadData(sem1)}" oninput="saveData('${sem1}', this.value)"><br>
+        <label for="${sem2}">SGPA Semester ${year * 2}:</label>
+        <input type="number" id="${sem2}" step="0.01" value="${loadData(sem2)}" oninput="saveData('${sem2}', this.value)"><br>
+        <button onclick="calculateCGPA(${year})">Calculate CGPA</button>
+        <h3>CGPA: <span id="result_${year}"></span></h3>
+      `;
 
-      if (option === 1) {
-        htmlContent = `
-          <h3>CGPA Calculator (1st Year)</h3>
-          <label for="sgpa1_1">SGPA Semester 1:</label>
-          <input type="number" id="sgpa1_1" step="0.01" required><br>
-          <label for="sgpa2_1">SGPA Semester 2:</label>
-          <input type="number" id="sgpa2_1" step="0.01" required><br>
-          <button onclick="calculateCGPA(1)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_1"></span></h3>
-        `;
-      } else if (option === 2) {
-        htmlContent = `
-          <h3>CGPA Calculator (2nd Year)</h3>
-          <label for="sgpa1_2">SGPA Semester 3:</label>
-          <input type="number" id="sgpa1_2" step="0.01" required><br>
-          <label for="sgpa2_2">SGPA Semester 4:</label>
-          <input type="number" id="sgpa2_2" step="0.01" required><br>
-          <button onclick="calculateCGPA(2)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_2"></span></h3>
-        `;
-      } else if (option === 3) {
-        htmlContent = `
-          <h3>CGPA Calculator (3rd Year)</h3>
-          <label for="sgpa1_3">SGPA Semester 5:</label>
-          <input type="number" id="sgpa1_3" step="0.01" required><br>
-          <label for="sgpa2_3">SGPA Semester 6:</label>
-          <input type="number" id="sgpa2_3" step="0.01" required><br>
-          <button onclick="calculateCGPA(3)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_3"></span></h3>
-        `;
-      } else if (option === 4) {
-        htmlContent = `
-          <h3>CGPA Calculator (4th Year)</h3>
-          <label for="sgpa1_4">SGPA Semester 7:</label>
-          <input type="number" id="sgpa1_4" step="0.01" required><br>
-          <label for="sgpa2_4">SGPA Semester 8:</label>
-          <input type="number" id="sgpa2_4" step="0.01" required><br>
-          <button onclick="calculateCGPA(4)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_4"></span></h3>
-        `;
-      } else if (option === 'overall') {
+      if (option === 1) htmlContent = generateYearContent(1, 'sgpa1_1', 'sgpa2_1');
+      else if (option === 2) htmlContent = generateYearContent(2, 'sgpa1_2', 'sgpa2_2');
+      else if (option === 3) htmlContent = generateYearContent(3, 'sgpa1_3', 'sgpa2_3');
+      else if (option === 4) htmlContent = generateYearContent(4, 'sgpa1_4', 'sgpa2_4');
+      else if (option === 'overall') {
         htmlContent = `
           <h3>Overall CGPA Calculator</h3>
-          <label for="cgpa1">CGPA for 1st Year:</label>
-          <input type="number" id="cgpa1" step="0.01" required><br>
-          <label for="cgpa2">CGPA for 2nd Year:</label>
-          <input type="number" id="cgpa2" step="0.01" required><br>
-          <label for="cgpa3">CGPA for 3rd Year:</label>
-          <input type="number" id="cgpa3" step="0.01" required><br>
-          <label for="cgpa4">CGPA for 4th Year:</label>
-          <input type="number" id="cgpa4" step="0.01" required><br>
+          ${[1, 2, 3, 4].map(y => `
+            <label for="cgpa${y}">CGPA for ${y} Year:</label>
+            <input type="number" id="cgpa${y}" step="0.01" value="${loadData('cgpa' + y)}" oninput="saveData('cgpa' + y, this.value)"><br>
+          `).join('')}
           <button onclick="calculateOverallCGPA()">Calculate Overall CGPA</button>
           <h3>Overall CGPA: <span id="overall_result"></span></h3>
         `;
       }
-
+      
       contentDiv.innerHTML = htmlContent;
       document.getElementById('error-message').innerText = '';
     }
 
     function calculateCGPA(year) {
-      let sgpa1, sgpa2, credits1, credits2, resultId;
-
-      if (year === 1) {
-        sgpa1 = parseFloat(document.getElementById('sgpa1_1').value);
-        sgpa2 = parseFloat(document.getElementById('sgpa2_1').value);
-        credits1 = 22;
-        credits2 = 24;
-        resultId = 'result_1';
-      } else if (year === 2) {
-        sgpa1 = parseFloat(document.getElementById('sgpa1_2').value);
-        sgpa2 = parseFloat(document.getElementById('sgpa2_2').value);
-        credits1 = 20;
-        credits2 = 27;
-        resultId = 'result_2';
-      } else if (year === 3) {
-        sgpa1 = parseFloat(document.getElementById('sgpa1_3').value);
-        sgpa2 = parseFloat(document.getElementById('sgpa2_3').value);
-        credits1 = 25;
-        credits2 = 23;
-        resultId = 'result_3';
-      } else if (year === 4) {
-        sgpa1 = parseFloat(document.getElementById('sgpa1_4').value);
-        sgpa2 = parseFloat(document.getElementById('sgpa2_4').value);
-        credits1 = 25; //it can change but shall be in range of 25 to 27
-        credits2 = 8;
-        resultId = 'result_4';
-      }
-
+      let sgpa1 = parseFloat(document.getElementById(`sgpa1_${year}`).value);
+      let sgpa2 = parseFloat(document.getElementById(`sgpa2_${year}`).value);
+      const credits = [[22, 24], [20, 27], [25, 23], [25, 8]];
+      
       if (isNaN(sgpa1) || isNaN(sgpa2) || sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
-        document.getElementById('error-message').innerText = 'Invalid SGPA values. Please enter valid SGPA values between 0 and 10.';
+        document.getElementById('error-message').innerText = 'Invalid SGPA values. Please enter values between 0 and 10.';
         return;
-      } else {
-        document.getElementById('error-message').innerText = '';
       }
-
-      const totalCredits = credits1 + credits2;
-      const weightedSum = (sgpa1 * credits1) + (sgpa2 * credits2);
-      const cgpa = weightedSum / totalCredits;
-
-      document.getElementById(resultId).innerText = cgpa.toFixed(2);
+      
+      const [credits1, credits2] = credits[year - 1];
+      const cgpa = ((sgpa1 * credits1) + (sgpa2 * credits2)) / (credits1 + credits2);
+      document.getElementById(`result_${year}`).innerText = cgpa.toFixed(2);
     }
 
     function calculateOverallCGPA() {
-      const cgpa1 = parseFloat(document.getElementById('cgpa1').value);
-      const cgpa2 = parseFloat(document.getElementById('cgpa2').value);
-      const cgpa3 = parseFloat(document.getElementById('cgpa3').value);
-      const cgpa4 = parseFloat(document.getElementById('cgpa4').value);
-
-      const credits1 = 46;
-      const credits2 = 47;
-      const credits3 = 48;
-      const credits4 = 33;
-
-      if (isNaN(cgpa1) || isNaN(cgpa2) || isNaN(cgpa3) || isNaN(cgpa4) || cgpa1 < 0 || cgpa1 > 10 || cgpa2 < 0 || cgpa2 > 10 || cgpa3 < 0 || cgpa3 > 10 || cgpa4 < 0 || cgpa4 > 10) {
-        document.getElementById('error-message').innerText = 'Invalid CGPA values. Please enter valid CGPA values between 0 and 10.';
+      let cgpas = [1, 2, 3, 4].map(y => parseFloat(document.getElementById(`cgpa${y}`).value));
+      if (cgpas.some(c => isNaN(c) || c < 0 || c > 10)) {
+        document.getElementById('error-message').innerText = 'Invalid CGPA values. Please enter values between 0 and 10.';
         return;
-      } else {
-        document.getElementById('error-message').innerText = '';
       }
-
-      const weightedSum = (cgpa1 * credits1) + (cgpa2 * credits2) + (cgpa3 * credits3) + (cgpa4 * credits4);
-      const totalCredits = credits1 + credits2 + credits3 + credits4;
-      const overallCGPA = weightedSum / totalCredits;
-
+      
+      const credits = [46, 47, 48, 33];
+      const overallCGPA = cgpas.reduce((sum, c, i) => sum + c * credits[i], 0) / credits.reduce((a, b) => a + b);
       document.getElementById('overall_result').innerText = overallCGPA.toFixed(2);
     }
-
-    window.onload = function() {
-      showYear(1);
-    }
+    
+    window.onload = () => showYear(1);
   </script>
-
 </body>
+
 </html>
