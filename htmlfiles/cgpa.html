@@ -64,86 +64,133 @@
   </style>
 </head>
 <body>
+
   <h2>CGPA Calculator</h2>
+
+  <!-- Toggle buttons for selecting year -->
   <button onclick="showYear(1)">1st Year</button>
   <button onclick="showYear(2)">2nd Year</button>
   <button onclick="showYear(3)">3rd Year</button>
   <button onclick="showYear(4)">4th Year</button>
   <button onclick="showYear('overall')">Overall CGPA</button>
+
+  <!-- Single content div -->
   <div id="content"></div>
+
   <p id="error-message"></p>
 
   <script>
-    function saveData(id, value) {
-      localStorage.setItem(id, value);
-    }
+    let storedValues = JSON.parse(localStorage.getItem('cgpaData')) || {};
 
-    function loadData(id) {
-      return localStorage.getItem(id) || '';
+    function saveValues() {
+      localStorage.setItem('cgpaData', JSON.stringify(storedValues));
     }
 
     function showYear(option) {
       const contentDiv = document.getElementById('content');
       let htmlContent = '';
-      
-      const generateYearContent = (year, sem1, sem2) => `
-        <h3>CGPA Calculator (${year} Year)</h3>
-        <label for="${sem1}">SGPA Semester ${year * 2 - 1}:</label>
-        <input type="number" id="${sem1}" step="0.01" value="${loadData(sem1)}" oninput="saveData('${sem1}', this.value)"><br>
-        <label for="${sem2}">SGPA Semester ${year * 2}:</label>
-        <input type="number" id="${sem2}" step="0.01" value="${loadData(sem2)}" oninput="saveData('${sem2}', this.value)"><br>
-        <button onclick="calculateCGPA(${year})">Calculate CGPA</button>
-        <h3>CGPA: <span id="result_${year}"></span></h3>
-      `;
 
-      if (option === 1) htmlContent = generateYearContent(1, 'sgpa1_1', 'sgpa2_1');
-      else if (option === 2) htmlContent = generateYearContent(2, 'sgpa1_2', 'sgpa2_2');
-      else if (option === 3) htmlContent = generateYearContent(3, 'sgpa1_3', 'sgpa2_3');
-      else if (option === 4) htmlContent = generateYearContent(4, 'sgpa1_4', 'sgpa2_4');
-      else if (option === 'overall') {
+      function getValue(id) {
+        return storedValues[id] || '';
+      }
+
+      function inputField(id, label) {
+        return `<label for="${id}">${label}:</label>
+                <input type="number" id="${id}" step="0.01" value="${getValue(id)}" oninput="updateValue('${id}', this.value)"><br>`;
+      }
+
+      if (option === 1) {
+        htmlContent = `
+          <h3>CGPA Calculator (1st Year)</h3>
+          ${inputField('sgpa1_1', 'SGPA Semester 1')}
+          ${inputField('sgpa2_1', 'SGPA Semester 2')}
+          <button onclick="calculateCGPA(1)">Calculate CGPA</button>
+          <h3>CGPA: <span id="result_1">${getValue('result_1')}</span></h3>
+        `;
+      } else if (option === 2) {
+        htmlContent = `
+          <h3>CGPA Calculator (2nd Year)</h3>
+          ${inputField('sgpa1_2', 'SGPA Semester 3')}
+          ${inputField('sgpa2_2', 'SGPA Semester 4')}
+          <button onclick="calculateCGPA(2)">Calculate CGPA</button>
+          <h3>CGPA: <span id="result_2">${getValue('result_2')}</span></h3>
+        `;
+      } else if (option === 3) {
+        htmlContent = `
+          <h3>CGPA Calculator (3rd Year)</h3>
+          ${inputField('sgpa1_3', 'SGPA Semester 5')}
+          ${inputField('sgpa2_3', 'SGPA Semester 6')}
+          <button onclick="calculateCGPA(3)">Calculate CGPA</button>
+          <h3>CGPA: <span id="result_3">${getValue('result_3')}</span></h3>
+        `;
+      } else if (option === 4) {
+        htmlContent = `
+          <h3>CGPA Calculator (4th Year)</h3>
+          ${inputField('sgpa1_4', 'SGPA Semester 7')}
+          ${inputField('sgpa2_4', 'SGPA Semester 8')}
+          <button onclick="calculateCGPA(4)">Calculate CGPA</button>
+          <h3>CGPA: <span id="result_4">${getValue('result_4')}</span></h3>
+        `;
+      } else if (option === 'overall') {
         htmlContent = `
           <h3>Overall CGPA Calculator</h3>
-          ${[1, 2, 3, 4].map(y => `
-            <label for="cgpa${y}">CGPA for ${y} Year:</label>
-            <input type="number" id="cgpa${y}" step="0.01" value="${loadData('cgpa' + y)}" oninput="saveData('cgpa' + y, this.value)"><br>
-          `).join('')}
+          ${inputField('cgpa1', 'CGPA for 1st Year')}
+          ${inputField('cgpa2', 'CGPA for 2nd Year')}
+          ${inputField('cgpa3', 'CGPA for 3rd Year')}
+          ${inputField('cgpa4', 'CGPA for 4th Year')}
           <button onclick="calculateOverallCGPA()">Calculate Overall CGPA</button>
-          <h3>Overall CGPA: <span id="overall_result"></span></h3>
+          <h3>Overall CGPA: <span id="overall_result">${getValue('overall_result')}</span></h3>
         `;
       }
-      
+
       contentDiv.innerHTML = htmlContent;
-      document.getElementById('error-message').innerText = '';
+    }
+
+    function updateValue(id, value) {
+      storedValues[id] = value;
+      saveValues();
     }
 
     function calculateCGPA(year) {
-      let sgpa1 = parseFloat(document.getElementById(`sgpa1_${year}`).value);
-      let sgpa2 = parseFloat(document.getElementById(`sgpa2_${year}`).value);
-      const credits = [[22, 24], [20, 27], [25, 23], [25, 8]];
-      
-      if (isNaN(sgpa1) || isNaN(sgpa2) || sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
-        document.getElementById('error-message').innerText = 'Invalid SGPA values. Please enter values between 0 and 10.';
+      let sgpa1 = parseFloat(storedValues[`sgpa1_${year}`] || 0);
+      let sgpa2 = parseFloat(storedValues[`sgpa2_${year}`] || 0);
+      let credits1 = [22, 20, 25, 25][year - 1];
+      let credits2 = [24, 27, 23, 8][year - 1];
+
+      if (sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
+        document.getElementById('error-message').innerText = 'Invalid SGPA values.';
         return;
       }
-      
-      const [credits1, credits2] = credits[year - 1];
-      const cgpa = ((sgpa1 * credits1) + (sgpa2 * credits2)) / (credits1 + credits2);
-      document.getElementById(`result_${year}`).innerText = cgpa.toFixed(2);
+
+      let totalCredits = credits1 + credits2;
+      let cgpa = ((sgpa1 * credits1) + (sgpa2 * credits2)) / totalCredits;
+      storedValues[`result_${year}`] = cgpa.toFixed(2);
+      saveValues();
+      showYear(year);
     }
 
     function calculateOverallCGPA() {
-      let cgpas = [1, 2, 3, 4].map(y => parseFloat(document.getElementById(`cgpa${y}`).value));
-      if (cgpas.some(c => isNaN(c) || c < 0 || c > 10)) {
-        document.getElementById('error-message').innerText = 'Invalid CGPA values. Please enter values between 0 and 10.';
+      let cgpa1 = parseFloat(storedValues['cgpa1'] || 0);
+      let cgpa2 = parseFloat(storedValues['cgpa2'] || 0);
+      let cgpa3 = parseFloat(storedValues['cgpa3'] || 0);
+      let cgpa4 = parseFloat(storedValues['cgpa4'] || 0);
+      let credits = [46, 47, 48, 33];
+
+      if ([cgpa1, cgpa2, cgpa3, cgpa4].some(cgpa => cgpa < 0 || cgpa > 10)) {
+        document.getElementById('error-message').innerText = 'Invalid CGPA values.';
         return;
       }
-      
-      const credits = [46, 47, 48, 33];
-      const overallCGPA = cgpas.reduce((sum, c, i) => sum + c * credits[i], 0) / credits.reduce((a, b) => a + b);
-      document.getElementById('overall_result').innerText = overallCGPA.toFixed(2);
+
+      let weightedSum = (cgpa1 * credits[0]) + (cgpa2 * credits[1]) + (cgpa3 * credits[2]) + (cgpa4 * credits[3]);
+      let overallCGPA = weightedSum / credits.reduce((a, b) => a + b, 0);
+      storedValues['overall_result'] = overallCGPA.toFixed(2);
+      saveValues();
+      showYear('overall');
     }
-    
-    window.onload = () => showYear(1);
+
+    window.onload = function() {
+      showYear(1);
+    }
   </script>
 </body>
 
