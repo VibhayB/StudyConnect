@@ -4,8 +4,8 @@ const games = [
     { name: "Snake", url: "", thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMJHVz4Ytq3Uxj1AATP9I0jLizBzZHZX-1tg&s", openInNewWindow: false, htmlContent: "htmlfiles/snake.html" },
     { name: "2048", url: "", thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/800px-2048_logo.svg.png", openInNewWindow: false, htmlContent: "htmlfiles/2048.html" },
     { name: "MineSweeper", url: "", thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZTutjb5iTEx5ePulQ7Z0dXLyZZKvEVO2jTQ&s", openInNewWindow: false, htmlContent: "htmlfiles/minesweeper.html" },
-    { name: "Plane Defense", url: "https://vibhayb.github.io/Plane-Defense/", thumbnail: "https://th.bing.com/th/id/OIG2.TU754WuobyvyHpwCC.qb?w=270&h=270&c=6&r=0&o=5&dpr=1.4&pid=ImgGn", openInNewWindow: true, htmlContent: null },
-    { name: "OverNight Assignment", url: "https://drive.google.com/file/d/1_0dEQ-lSbm4D9qsdz87wyTxYMqnCR76n/view?usp=sharing", thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FPicture1.png?alt=media&token=0bf2766a-54d1-4fcd-835b-a71cd2468c79", openInNewWindow: true, htmlContent: null }
+    { name: "Plane Defense", url: "https://vibhayb.github.io/Plane-Defense/", thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FOIG2.TU754WuobyvyHpwCC%20(1).png?alt=media&token=4be3c85a-2127-4045-8a32-dd326dcd50c6", openInNewWindow: true, htmlContent: null },
+    { name: "OverNight Assignment", url: "https://drive.google.com/file/d/1SCK7GQ0eaj9ecpNnLMRo_2qxkn9sgYK5/view?usp=sharing", thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FPicture1.png?alt=media&token=0bf2766a-54d1-4fcd-835b-a71cd2468c79", openInNewWindow: true, htmlContent: null }
 ]; 
 
 // Function to create app items and add them to the div
