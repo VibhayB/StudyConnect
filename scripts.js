@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.4"
+let thisversion = "v1.5"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -553,6 +553,7 @@ function displaySearchResult(input) {
         const buttonData = [
             { text: 'Course', tab: 'course' },
             { text: 'Assignments', tab: 'assignments' },
+            { text: 'Docs', tab: 'forms' },
             { text: 'Exams', tab: 'exams' },
             { text: 'Feed', tab: 'feed' },
             { text: 'Others', tab: 'others' }
