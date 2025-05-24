@@ -105,7 +105,7 @@ function injectCSS() {
 }
 
 .semester-sem7 {
-    background-color:rgb(248, 163, 228); /* Light indigo */
+    background-color:rgb(248, 163, 228); /* Light violet */
 }
 /* Popup styling */
 .popup {
