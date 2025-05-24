@@ -78,6 +78,7 @@ function injectCSS() {
 .subject:hover {
     background-color: #e0e0e0;
 }
+
 /* Semester-based color themes */
 .semester-sem1 {
     background-color: #FFDDDD; /* Light red */
@@ -97,8 +98,14 @@ function injectCSS() {
 
 .semester-sem5 {
     background-color:rgb(202, 220, 255); /* Light blue */
-} .semester-sem6 {
+} 
+
+.semester-sem6 {
     background-color:rgb(221, 192, 255); /* Light indigo */
+}
+
+.semester-sem7 {
+    background-color:rgb(255, 137, 228); /* Light indigo */
 }
 /* Popup styling */
 .popup {
@@ -367,7 +374,7 @@ function isSemesterSelected(semesterId) {
 
 function getSelectedSemesters() {
     const storedSemesters = localStorage.getItem('selectedSemesters');
-    return storedSemesters ? JSON.parse(storedSemesters) : ['sem6']; // Default to Semester 5
+    return storedSemesters ? JSON.parse(storedSemesters) : ['sem7']; // Default to Semester 7
 }
 
 // Function to save selected semesters to local storage
@@ -390,7 +397,7 @@ function updateSubjectList() {
 
     const selectedSemesters = getSelectedSemesters();
     if (selectedSemesters.length === 0) {
-        selectedSemesters.push('sem6'); // Default to Semester 6 if none selected
+        selectedSemesters.push('sem7'); // Default to Semester 7 if none selected
     }
 
     selectedSemesters.forEach(semesterId => {
