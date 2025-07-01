@@ -1,197 +1,102 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CGPA Calculator</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CGPA Updater</title>
+
+  <!-- Same look‑and‑feel but much simpler -->
   <style>
     body {
-      font-family: 'Arial', sans-serif;
+      font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #ff7e5f, #feb47b);
       color: #fff;
       text-align: center;
       margin: 0;
       padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    h2 {
-      font-size: 2.5em;
-      margin: 30px 0;
+    #calculator {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 25px 30px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 480px;
+      margin: 0 auto;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.35);
+    }
+    h2 { margin-bottom: 20px; }
+    label {
+      display: block;
+      margin: 12px 0 6px;
+      font-size: 1.1em;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-sizing: border-box;
     }
     button {
-      font-size: 1.2em;
-      padding: 10px 20px;
-      margin: 10px;
+      margin-top: 18px;
+      padding: 10px 24px;
+      font-size: 1.1em;
       border: none;
-      border-radius: 5px;
+      border-radius: 6px;
       background: #fff;
       color: #333;
       cursor: pointer;
       transition: background 0.3s, transform 0.2s;
     }
-    button:hover {
-      background: #f0f0f0;
-      transform: scale(1.05);
-    }
-    button:focus {
-      outline: none;
-    }
-    #content {
-      background: rgba(0, 0, 0, 0.7);
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px auto;
-      width: 80%;
-      max-width: 600px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    }
-    label {
-      display: block;
-      font-size: 1.1em;
-      margin: 10px 0 5px;
-    }
-    input {
-      font-size: 1em;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 5px;
-      width: calc(100% - 22px);
-      box-sizing: border-box;
-    }
-    #error-message {
-      color: red;
-      margin: 20px 0;
-    }
+    button:hover { background: #f0f0f0; transform: scale(1.04); }
+    #result { font-weight: bold; }
+    #error { color: #ff6b6b; margin-top: 10px; }
   </style>
 </head>
 <body>
+  <div id="calculator">
+    <h2>CGPA Updater</h2>
 
-  <h2>CGPA Calculator</h2>
+    <label for="cgpa5">CGPA up to Semester 5:</label>
+    <input id="cgpa5" type="number" step="0.01" min="0" max="10" />
 
-  <!-- Toggle buttons for selecting year -->
-  <button onclick="showYear(1)">1st Year</button>
-  <button onclick="showYear(2)">2nd Year</button>
-  <button onclick="showYear(3)">3rd Year</button>
-  <button onclick="showYear(4)">4th Year</button>
-  <button onclick="showYear('overall')">Overall CGPA</button>
+    <label for="sgpa6">SGPA for Semester 6:</label>
+    <input id="sgpa6" type="number" step="0.01" min="0" max="10" />
 
-  <!-- Single content div -->
-  <div id="content"></div>
+    <button onclick="calculate()">Calculate</button>
 
-  <p id="error-message"></p>
+    <h3>Updated CGPA: <span id="result">—</span></h3>
+    <p id="error"></p>
+  </div>
 
   <script>
-    let storedValues = JSON.parse(localStorage.getItem('cgpaData')) || {};
+    function calculate() {
+      const cgpa5 = parseFloat(document.getElementById('cgpa5').value);
+      const sgpa6 = parseFloat(document.getElementById('sgpa6').value);
+      const errorEl = document.getElementById('error');
+      const resultEl = document.getElementById('result');
 
-    function saveValues() {
-      localStorage.setItem('cgpaData', JSON.stringify(storedValues));
-    }
-
-    function showYear(option) {
-      const contentDiv = document.getElementById('content');
-      let htmlContent = '';
-
-      function getValue(id) {
-        return storedValues[id] || '';
-      }
-
-      function inputField(id, label) {
-        return `<label for="${id}">${label}:</label>
-                <input type="number" id="${id}" step="0.01" value="${getValue(id)}" oninput="updateValue('${id}', this.value)"><br>`;
-      }
-
-      if (option === 1) {
-        htmlContent = `
-          <h3>CGPA Calculator (1st Year)</h3>
-          ${inputField('sgpa1_1', 'SGPA Semester 1')}
-          ${inputField('sgpa2_1', 'SGPA Semester 2')}
-          <button onclick="calculateCGPA(1)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_1">${getValue('result_1')}</span></h3>
-        `;
-      } else if (option === 2) {
-        htmlContent = `
-          <h3>CGPA Calculator (2nd Year)</h3>
-          ${inputField('sgpa1_2', 'SGPA Semester 3')}
-          ${inputField('sgpa2_2', 'SGPA Semester 4')}
-          <button onclick="calculateCGPA(2)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_2">${getValue('result_2')}</span></h3>
-        `;
-      } else if (option === 3) {
-        htmlContent = `
-          <h3>CGPA Calculator (3rd Year)</h3>
-          ${inputField('sgpa1_3', 'SGPA Semester 5')}
-          ${inputField('sgpa2_3', 'SGPA Semester 6')}
-          <button onclick="calculateCGPA(3)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_3">${getValue('result_3')}</span></h3>
-        `;
-      } else if (option === 4) {
-        htmlContent = `
-          <h3>CGPA Calculator (4th Year)</h3>
-          ${inputField('sgpa1_4', 'SGPA Semester 7')}
-          ${inputField('sgpa2_4', 'SGPA Semester 8')}
-          <button onclick="calculateCGPA(4)">Calculate CGPA</button>
-          <h3>CGPA: <span id="result_4">${getValue('result_4')}</span></h3>
-        `;
-      } else if (option === 'overall') {
-        htmlContent = `
-          <h3>Overall CGPA Calculator</h3>
-          ${inputField('cgpa1', 'CGPA for 1st Year')}
-          ${inputField('cgpa2', 'CGPA for 2nd Year')}
-          ${inputField('cgpa3', 'CGPA for 3rd Year')}
-          ${inputField('cgpa4', 'CGPA for 4th Year')}
-          <button onclick="calculateOverallCGPA()">Calculate Overall CGPA</button>
-          <h3>Overall CGPA: <span id="overall_result">${getValue('overall_result')}</span></h3>
-        `;
-      }
-
-      contentDiv.innerHTML = htmlContent;
-    }
-
-    function updateValue(id, value) {
-      storedValues[id] = value;
-      saveValues();
-    }
-
-    function calculateCGPA(year) {
-      let sgpa1 = parseFloat(storedValues[`sgpa1_${year}`] || 0);
-      let sgpa2 = parseFloat(storedValues[`sgpa2_${year}`] || 0);
-      let credits1 = [22, 20, 25, 25][year - 1];
-      let credits2 = [24, 27, 23, 8][year - 1];
-
-      if (sgpa1 < 0 || sgpa1 > 10 || sgpa2 < 0 || sgpa2 > 10) {
-        document.getElementById('error-message').innerText = 'Invalid SGPA values.';
+      // Basic validation (0 to 10)
+      if (
+        isNaN(cgpa5) || isNaN(sgpa6) ||
+        cgpa5 < 0 || cgpa5 > 10 ||
+        sgpa6 < 0 || sgpa6 > 10
+      ) {
+        errorEl.textContent = 'Please enter valid values between 0 and 10.';
+        resultEl.textContent = '—';
         return;
       }
 
-      let totalCredits = credits1 + credits2;
-      let cgpa = ((sgpa1 * credits1) + (sgpa2 * credits2)) / totalCredits;
-      storedValues[`result_${year}`] = cgpa.toFixed(2);
-      saveValues();
-      showYear(year);
-    }
+      errorEl.textContent = '';
 
-    function calculateOverallCGPA() {
-      let cgpa1 = parseFloat(storedValues['cgpa1'] || 0);
-      let cgpa2 = parseFloat(storedValues['cgpa2'] || 0);
-      let cgpa3 = parseFloat(storedValues['cgpa3'] || 0);
-      let cgpa4 = parseFloat(storedValues['cgpa4'] || 0);
-      let credits = [46, 47, 48, 33];
-
-      if ([cgpa1, cgpa2, cgpa3, cgpa4].some(cgpa => cgpa < 0 || cgpa > 10)) {
-        document.getElementById('error-message').innerText = 'Invalid CGPA values.';
-        return;
-      }
-
-      let weightedSum = (cgpa1 * credits[0]) + (cgpa2 * credits[1]) + (cgpa3 * credits[2]) + (cgpa4 * credits[3]);
-      let overallCGPA = weightedSum / credits.reduce((a, b) => a + b, 0);
-      storedValues['overall_result'] = overallCGPA.toFixed(2);
-      saveValues();
-      showYear('overall');
-    }
-
-    window.onload = function() {
-      showYear(1);
+      const updatedCgpa = ((cgpa5 * 123) + (sgpa6 * 23)) / 146;
+      resultEl.textContent = updatedCgpa.toFixed(2);
     }
   </script>
 </body>
-
 </html>
