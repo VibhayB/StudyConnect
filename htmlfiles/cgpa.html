@@ -42,27 +42,50 @@
       border-radius: 6px;
       box-sizing: border-box;
     } 
-    #excel-icon {
+    #excel-fab {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  font-size: 24px;
-  background: #fff;
-  color: #333;
-  border-radius: 30px;
-  padding: 10px 16px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  text-decoration: none;
-  font-weight: bold;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 8px;
-  transition: transform 0.2s, background 0.3s;
   z-index: 999;
+  font-size: 16px;
 }
+
+#excel-icon {
+  font-size: 32px;
+  background: #fff;
+  color: #333;
+  border-radius: 50%;
+  padding: 10px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s, background 0.3s;
+}
+
 #excel-icon:hover {
   background: #eee;
-  transform: scale(1.05);
+  transform: scale(1.1);
+}
+
+#excel-fab .excel-label {
+  background: rgba(0,0,0,0.7);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+/* Optional: hide label on very small screens to reduce clutter */
+@media (max-width: 420px) {
+  #excel-fab .excel-label {
+    display: none;
+  }
 }
 
 
@@ -97,9 +120,16 @@
     <h3>Updated CGPA: <span id="result">—</span></h3>
     <p id="error"></p>
   </div>
-  <a href="https://docs.google.com/spreadsheets/d/11qgVDqVmdrMVrBAOrVtgc7WD6aiPBy71/edit?usp=sharing&ouid=102305582136662791803&rtpof=true&sd=true" target="_blank" id="excel-icon" title="View CGPA Excel">
-  📄 <span>Check CGPA upto 5th Sem</span>
-</a>
+  <div id="excel-fab">
+  <a
+    href="https://docs.google.com/spreadsheets/d/11qgVDqVmdrMVrBAOrVtgc7WD6aiPBy71/edit?usp=sharing&ouid=102305582136662791803&rtpof=true&sd=true"
+    target="_blank"
+    id="excel-icon"
+    aria-label="Open Semester 5 CGPA Excel"
+    title="Open Semester 5 CGPA Excel"
+  >📄</a>
+  <span class="excel-label">CGPA upto Sem5</span>
+</div>
 
 
 
