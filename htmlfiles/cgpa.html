@@ -41,7 +41,25 @@
       border: 1px solid #ddd;
       border-radius: 6px;
       box-sizing: border-box;
-    }
+    } #excel-icon {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  font-size: 32px;
+  background: #fff;
+  color: #333;
+  border-radius: 50%;
+  padding: 10px 14px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  text-decoration: none;
+  transition: transform 0.2s, background 0.3s;
+  z-index: 999;
+}
+#excel-icon:hover {
+  background: #eee;
+  transform: scale(1.1);
+}
+
     button {
       margin-top: 18px;
       padding: 10px 24px;
@@ -73,6 +91,10 @@
     <h3>Updated CGPA: <span id="result">—</span></h3>
     <p id="error"></p>
   </div>
+  <a href="https://docs.google.com/spreadsheets/d/11qgVDqVmdrMVrBAOrVtgc7WD6aiPBy71/edit?usp=sharing&ouid=102305582136662791803&rtpof=true&sd=true" target="_blank" id="excel-icon" title="View CGPA Excel">
+  📄
+</a>
+
 
   <script>
     function calculate() {
