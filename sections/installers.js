@@ -109,16 +109,4 @@ function populateInstallers(installers) {
         installersContainer.appendChild(installerItem);
     });
     
-    // Add resize listener to adjust layout on window resize
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            // Force reflow to fix layout issues
-            installersContainer.style.display = 'none';
-            // eslint-disable-next-line no-unused-expressions
-            installersContainer.offsetHeight;
-            installersContainer.style.display = 'flex';
-        }, 250);
-    });
 }
