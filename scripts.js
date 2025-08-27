@@ -304,7 +304,7 @@ signInMessage.style.position = 'fixed';
 signInMessage.style.bottom = '0';
 signInMessage.style.left = '0'; 
 signInMessage.style.width = '100%'; // Make it span the full width
-signInMessage.style.height = '3%'; // Make it span the full width
+signInMessage.style.height = 'auto';
 signInMessage.style.backgroundColor = 'black';
 signInMessage.style.color = 'white';
 signInMessage.style.borderTop = '1px solid #f5c6cb'; // Add a border at the top
@@ -682,7 +682,7 @@ timetableSection.style.maxWidth = '90%'; // Limit the width for responsiveness
 timetableSection.style.boxSizing = 'border-box'; // Ensure padding is included in width
 
 const heading = document.createElement('h3');
-heading.textContent = 'Timetable (AIML7A)';
+heading.textContent = 'Timetable (AIML6A)';
 heading.style.fontSize = '24px'; // Adjust font size for the heading
 heading.style.marginBottom = '20px'; // Add space below the heading
 
@@ -954,7 +954,6 @@ function updateHomeButton() {
     const homeButton = document.querySelector('.home-button');
     const menuButton = document.getElementById('menu');
     const feedbackReportButtons = document.getElementById('feedback-report-buttons');
-    const dropdownMenu = document.getElementById('dropdown-menu');
     const signOutLink = document.getElementById('sign-out');
     if (isSignedIn) {
         homeButton.innerHTML = '<i class="fas fa-user" alt="Profile"></i> <span class="arrow">&#9662;</span>';
