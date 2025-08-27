@@ -24,10 +24,9 @@ function injectCSS() {
     gap: 2rem;
 }
 
-/* Container for the semester selection */
 #semester-selection-container {
     width: 100%;
-    padding: 2rem;
+    padding: 1.5rem;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -102,19 +101,18 @@ function injectCSS() {
 /* Action buttons container - IMPROVED */
 .action-buttons {
     display: flex;
-    gap: 1.5rem; /* Increased gap between buttons */
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: 1.5rem;
-    width: 100%;
+    gap: 1rem;
+    margin-left: auto; /* This pushes the container to the far right */
+    flex-shrink: 0; /* Prevents the buttons from shrinking */
 }
+
 
 /* Enhanced styled buttons */
 .styled-button {
-    padding: 1rem 2rem;
+    padding: 0.875rem 1.5rem;
     border: none;
     border-radius: var(--radius-lg);
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     cursor: pointer;
     transition: var(--transition-normal);
@@ -122,11 +120,12 @@ function injectCSS() {
     color: white;
     position: relative;
     overflow: hidden;
-    min-width: 150px;
-    flex: 1;
-    max-width: 250px; /* Limit button width */
+    min-width: 140px;
+    text-align: center;
+    flex-shrink: 0;
 }
 
+/* Rest of the CSS remains unchanged */
 .styled-button::before {
     content: '';
     position: absolute;
@@ -137,6 +136,7 @@ function injectCSS() {
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
     transition: var(--transition-fast);
 }
+
 
 .styled-button:hover::before {
     left: 100%;
@@ -662,6 +662,7 @@ function injectCSS() {
         padding: 1.5rem;
     }
 
+    
 
 #semester-selection {
     flex-direction: column;
@@ -728,6 +729,51 @@ function injectCSS() {
         grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     }
 }
+/* Header container adjustments */
+#semester-selection-container > div {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    width: 100%;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Selection area styling */
+#semester-selection-area {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 250px;
+    max-width: 400px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .action-buttons {
+        margin-left: 0;
+        width: 100%;
+        justify-content: center;
+    }
+    
+    #semester-selection-container > div {
+        flex-direction: column;
+    }
+}
+
+@media (max-width: 480px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .styled-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
 
 @media (max-width: 480px) {
     .subject {
@@ -761,6 +807,8 @@ function injectCSS() {
     document.head.appendChild(style);
 }
 let removeMode = false; // Track whether remove mode is active
+
+// Function to initialize the semester selection UI
 // Function to initialize the semester selection UI
 function initializeSemesterSelection() {
     if(displayed){
@@ -774,53 +822,87 @@ function initializeSemesterSelection() {
     const selectionContainer = document.createElement('div');
     selectionContainer.id = 'semester-selection-container';
 
-    const semesterSelection = document.createElement('div');
-    semesterSelection.id = 'semester-selection';
+    // Create a flex container for the selection area and action buttons
+    const headerContainer = document.createElement('div');
+    headerContainer.style.display = 'flex';
+    headerContainer.style.justifyContent = 'space-between';
+    headerContainer.style.alignItems = 'flex-start';
+    headerContainer.style.width = '100%';
+    headerContainer.style.marginBottom = '1.5rem';
+    headerContainer.style.flexWrap = 'wrap';
+    headerContainer.style.gap = '1rem';
 
-    courseData.semesters.forEach(semester => {
-        const button = document.createElement('button');
-        button.textContent = semester.name;
-        button.classList.add('semester-button');
-        button.dataset.id = semester.id;
+    // Create the semester selection area
+    const selectionArea = document.createElement('div');
+    selectionArea.id = 'semester-selection-area';
+
+    // Create the label
+    const label = document.createElement('div');
+    label.textContent = 'Select Semesters';
+    label.style.fontWeight = '600';
+    label.style.color = 'var(--text-primary)';
+    label.style.marginBottom = '0.5rem';
+
+    // Create the selection box
+    const selectionBox = document.createElement('div');
+    selectionBox.id = 'semester-selection-box';
+    selectionBox.style.display = 'flex';
+    selectionBox.style.flexWrap = 'wrap';
+    selectionBox.style.gap = '0.5rem';
+    selectionBox.style.padding = '0.75rem';
+    selectionBox.style.border = '2px solid var(--border-color)';
+    selectionBox.style.borderRadius = 'var(--radius-lg)';
+    selectionBox.style.backgroundColor = 'var(--bg-primary)';
+    selectionBox.style.cursor = 'pointer';
+    selectionBox.style.minHeight = '50px';
+    selectionBox.addEventListener('click', openSemesterPopup);
+
+    // Add hover effects
+    selectionBox.addEventListener('mouseenter', () => {
+        selectionBox.style.borderColor = 'var(--primary-color)';
+        selectionBox.style.boxShadow = 'var(--shadow-sm)';
+    });
     
-        // Activate button if semester is selected
-        if (isSemesterSelected(semester.id)) {
-            button.classList.add('active');
-        }
-    
-        button.addEventListener('click', () => {
-            button.classList.toggle('active');
-            saveSelectedSemesters();
-            updateSubjectList();
-        });
-    
-        semesterSelection.appendChild(button);
+    selectionBox.addEventListener('mouseleave', () => {
+        selectionBox.style.borderColor = 'var(--border-color)';
+        selectionBox.style.boxShadow = 'none';
     });
 
+    // Create container for action buttons - positioned at far right
+    const actionButtonsContainer = document.createElement('div');
+    actionButtonsContainer.classList.add('action-buttons');
+    actionButtonsContainer.style.marginLeft = 'auto'; // Push to far right
+    actionButtonsContainer.style.alignSelf = 'center'; // Vertically center
+
     // Add buttons for adding and removing subjects
-const addButton = document.createElement('button');
-addButton.id = 'addbutton'; 
-addButton.textContent = 'Add Subject';
-addButton.classList.add('styled-button', 'add-subject-button');
-addButton.addEventListener('click', openAddSubjectPopup);
+    const addButton = document.createElement('button');
+    addButton.id = 'addbutton'; 
+    addButton.textContent = 'Add Subject';
+    addButton.classList.add('styled-button', 'add-subject-button');
+    addButton.addEventListener('click', openAddSubjectPopup);
 
-const removeButton = document.createElement('button');
-removeButton.id = 'rmvbutton';
-removeButton.textContent = 'Remove Subject';
-removeButton.classList.add('styled-button', 'remove-subject-button');
-removeButton.addEventListener('click', () => {
-    removeMode = !removeMode;
-    updateSubjectList();
-});
+    const removeButton = document.createElement('button');
+    removeButton.id = 'rmvbutton';
+    removeButton.textContent = 'Remove Subject';
+    removeButton.classList.add('styled-button', 'remove-subject-button');
+    removeButton.addEventListener('click', () => {
+        removeMode = !removeMode;
+        updateSubjectList();
+    });
 
-// ✅ new wrapper for action buttons
-const actionButtons = document.createElement('div');
-actionButtons.classList.add('action-buttons');
-actionButtons.appendChild(addButton);
-actionButtons.appendChild(removeButton);
-
-    selectionContainer.appendChild(semesterSelection);
-    selectionContainer.appendChild(actionButtons);
+    // Append buttons to their respective containers
+    actionButtonsContainer.appendChild(addButton);
+    actionButtonsContainer.appendChild(removeButton);
+    
+    // Build the selection area
+    selectionArea.appendChild(label);
+    selectionArea.appendChild(selectionBox);
+    
+    // Build the header container
+    headerContainer.appendChild(selectionArea);
+    headerContainer.appendChild(actionButtonsContainer);
+    
+    selectionContainer.appendChild(headerContainer);
     courseContainer.appendChild(selectionContainer);
 
     // Create a container for subjects
@@ -828,8 +910,293 @@ actionButtons.appendChild(removeButton);
     subjectList.classList.add('subject-list');
     courseContainer.appendChild(subjectList);
 
+    // Update the selection box with current selection
+    updateSemesterSelectionBox();
     updateSubjectList(); // Initial update of the subject list
 }
+
+// Update the updateSemesterSelectionBox function to fix duplicate names
+function updateSemesterSelectionBox() {
+    const selectionBox = document.getElementById('semester-selection-box');
+    if (!selectionBox) return;
+    
+    // Clear previous content
+    selectionBox.innerHTML = '';
+    
+    const selectedSemesters = getSelectedSemesters();
+    
+    if (selectedSemesters.length === 0) {
+        // Show placeholder text when no semesters are selected
+        const placeholder = document.createElement('div');
+        placeholder.textContent = 'Tap to select semesters';
+        placeholder.style.color = 'var(--text-muted)';
+        placeholder.style.fontStyle = 'italic';
+        selectionBox.appendChild(placeholder);
+    } else {
+        // Create a badge for each selected semester
+        selectedSemesters.forEach(semesterId => {
+            const semester = courseData.semesters.find(sem => sem.id === semesterId);
+            if (semester) {
+                const badge = document.createElement('div');
+                badge.classList.add('semester-badge');
+                badge.style.padding = '0.4rem 0.8rem';
+                badge.style.borderRadius = 'var(--radius-full)';
+                badge.style.fontSize = '0.85rem';
+                badge.style.fontWeight = '600';
+                badge.style.display = 'flex';
+                badge.style.alignItems = 'center';
+                badge.style.gap = '0.4rem';
+                
+                // Add a small indicator dot with semester-specific color
+                const dot = document.createElement('span');
+                dot.style.width = '10px';
+                dot.style.height = '10px';
+                dot.style.borderRadius = '50%';
+                dot.style.display = 'inline-block';
+                
+                // Set colors based on semester
+                switch(semesterId) {
+                    case 'sem1':
+                        badge.style.backgroundColor = 'rgba(239, 68, 68, 0.15)';
+                        badge.style.color = '#dc2626';
+                        dot.style.backgroundColor = '#dc2626';
+                        break;
+                    case 'sem2':
+                        badge.style.backgroundColor = 'rgba(249, 115, 22, 0.15)';
+                        badge.style.color = '#ea580c';
+                        dot.style.backgroundColor = '#ea580c';
+                        break;
+                    case 'sem3':
+                        badge.style.backgroundColor = 'rgba(234, 179, 8, 0.15)';
+                        badge.style.color = '#ca8a04';
+                        dot.style.backgroundColor = '#ca8a04';
+                        break;
+                    case 'sem4':
+                        badge.style.backgroundColor = 'rgba(34, 197, 94, 0.15)';
+                        badge.style.color = '#16a34a';
+                        dot.style.backgroundColor = '#16a34a';
+                        break;
+                    case 'sem5':
+                        badge.style.backgroundColor = 'rgba(59, 130, 246, 0.15)';
+                        badge.style.color = '#2563eb';
+                        dot.style.backgroundColor = '#2563eb';
+                        break;
+                    case 'sem6':
+                        badge.style.backgroundColor = 'rgba(139, 92, 246, 0.15)';
+                        badge.style.color = '#7c3aed';
+                        dot.style.backgroundColor = '#7c3aed';
+                        break;
+                    case 'sem7':
+                        badge.style.backgroundColor = 'rgba(236, 72, 153, 0.15)';
+                        badge.style.color = '#db2777';
+                        dot.style.backgroundColor = '#db2777';
+                        break;
+                    default:
+                        badge.style.backgroundColor = 'rgba(156, 163, 175, 0.15)';
+                        badge.style.color = '#6b7280';
+                        dot.style.backgroundColor = '#6b7280';
+                }
+                
+                // Add a remove button to each badge
+                const removeBtn = document.createElement('span');
+                removeBtn.innerHTML = '&times;';
+                removeBtn.style.cursor = 'pointer';
+                removeBtn.style.marginLeft = '0.3rem';
+                removeBtn.style.fontSize = '1.1rem';
+                removeBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); // Prevent opening the popup
+                    
+                    // Remove this semester from selection
+                    const updatedSelection = selectedSemesters.filter(id => id !== semesterId);
+                    localStorage.setItem('selectedSemesters', JSON.stringify(updatedSelection));
+                    
+                    // Update the UI
+                    updateSemesterSelectionBox();
+                    updateSubjectList();
+                });
+                
+                // Create text node for semester name (only once)
+                const semesterText = document.createTextNode(
+                    semester.name.replace('Semester', 'Sem').replace(' ', '')
+                );
+                
+                badge.appendChild(dot);
+                badge.appendChild(semesterText);
+                badge.appendChild(removeBtn);
+                selectionBox.appendChild(badge);
+            }
+        });
+    }
+}
+
+// Function to update the semester badge
+function updateSemesterBadge(badgeElement) {
+    const selectedSemesters = getSelectedSemesters();
+    
+    if (selectedSemesters.length === 0) {
+        badgeElement.textContent = 'None';
+        badgeElement.style.backgroundColor = 'rgba(239, 68, 68, 0.2)';
+    } else if (selectedSemesters.length === courseData.semesters.length) {
+        badgeElement.textContent = 'All';
+        badgeElement.style.backgroundColor = 'rgba(34, 197, 94, 0.2)';
+    } else {
+        badgeElement.textContent = `${selectedSemesters.length} selected`;
+        badgeElement.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
+    }
+}
+
+// Update the saveSemesterSelection function to refresh the badge
+function saveSemesterSelection() {
+    const checkboxes = document.querySelectorAll('#semester-popup input[type="checkbox"]');
+    const selectedSemesters = [];
+    
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedSemesters.push(checkbox.value);
+        }
+    });
+    
+    // If no semesters selected, default to sem7
+    if (selectedSemesters.length === 0) {
+        selectedSemesters.push('sem7');
+    }
+    
+    localStorage.setItem('selectedSemesters', JSON.stringify(selectedSemesters));
+    
+    // Update the selection box
+    updateSemesterSelectionBox();
+}
+
+// Add this CSS to your existing styles
+const additionalStyles = `
+/* Semester selection box styling */
+#semester-selection-box {
+    transition: all 0.3s ease;
+}
+
+.semester-badge {
+    transition: all 0.2s ease;
+}
+
+.semester-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #semester-selection-container > div {
+        flex-direction: column;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        justify-content: center;
+        margin-top: 1rem;
+    }
+    
+    #semester-selection-box {
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .styled-button {
+        width: 100%;
+        margin-bottom: 0.5rem;
+    }
+}
+`;
+
+// Inject the additional CSS
+const styleElement = document.createElement('style');
+styleElement.textContent = additionalStyles;
+document.head.appendChild(styleElement);
+
+function openSemesterPopup() {
+    // Create a popup container
+    const popup = document.createElement('div');
+    popup.id = 'semester-popup';
+    popup.classList.add('popup2');
+
+    // Create a popup content container
+    const popupContent = document.createElement('div');
+    popupContent.classList.add('popup2-content');
+
+    // Create a close button for the popup
+    const closeButton = document.createElement('span');
+    closeButton.classList.add('popup2-close');
+    closeButton.textContent = '×';
+    closeButton.addEventListener('click', () => {
+        // If no semesters are selected, default to sem7
+        const selectedCheckboxes = document.querySelectorAll('#semester-popup input[type="checkbox"]:checked');
+        if (selectedCheckboxes.length === 0) {
+            localStorage.setItem('selectedSemesters', JSON.stringify(['sem7']));
+        }
+        popup.remove();
+        updateSubjectList();
+    });
+
+    // Add close button to popup content
+    popupContent.appendChild(closeButton);
+
+    // Create a title for the popup
+    const title = document.createElement('h2');
+    title.textContent = 'Select Semesters';
+    popupContent.appendChild(title);
+
+    // Create a scrollable container for the semester list
+    const semesterListContainer = document.createElement('div');
+    semesterListContainer.classList.add('scrollable-container');
+    
+    // Get currently selected semesters
+    const selectedSemesters = getSelectedSemesters();
+    
+    // Create checkboxes for each semester
+    courseData.semesters.forEach(semester => {
+        const semesterItem = document.createElement('div');
+        semesterItem.classList.add('removed-subject-item');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.id = `semester-${semester.id}`;
+        checkbox.value = semester.id;
+        checkbox.checked = selectedSemesters.includes(semester.id);
+
+        const label = document.createElement('label');
+        label.htmlFor = checkbox.id;
+        label.textContent = semester.name;
+
+        semesterItem.appendChild(checkbox);
+        semesterItem.appendChild(label);
+        semesterListContainer.appendChild(semesterItem);
+    });
+
+    popupContent.appendChild(semesterListContainer);
+
+    // Create a Save button
+    const saveButton = document.createElement('button');
+    saveButton.textContent = 'Save Selection';
+    saveButton.classList.add('styled-button');
+    saveButton.addEventListener('click', () => {
+        saveSemesterSelection();
+        popup.remove();
+        updateSubjectList();
+    });
+
+    popupContent.appendChild(saveButton);
+
+    // Append the popup content to the popup container
+    popup.appendChild(popupContent);
+
+    // Append the popup to the body
+    document.body.appendChild(popup);
+} 
 
 function isSemesterSelected(semesterId) {
     const selectedSemesters = getSelectedSemesters();
