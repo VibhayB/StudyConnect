@@ -43,7 +43,7 @@ function injectCSS() {
     transform: translateY(-2px);
 }
 
-/* Semester selection area */
+    /* Semester selection area */
 #semester-selection {
     display: flex;
     flex-wrap: wrap;
@@ -661,11 +661,19 @@ function injectCSS() {
     #semester-selection-container {
         padding: 1.5rem;
     }
-    
-    #semester-selection {
-        flex-direction: column;
-        align-items: center;
+
+
+#semester-selection {
+    flex-direction: column;
+    align-items: center;
+}
+    .action-buttons {
+        display: flex;
+        gap: 1rem;                /* space between buttons */
+        justify-content: center;  /* center buttons under semesters */
+        margin-top: 1rem;
     }
+
     
     .semester-button {
         width: 100%;
@@ -790,24 +798,29 @@ function initializeSemesterSelection() {
     });
 
     // Add buttons for adding and removing subjects
-    const addButton = document.createElement('button');
-    addButton.id = 'addbutton'; 
-    addButton.textContent = 'Add Subject';
-    addButton.classList.add('styled-button', 'add-subject-button');
-    addButton.addEventListener('click', openAddSubjectPopup); // Open popup on click
+const addButton = document.createElement('button');
+addButton.id = 'addbutton'; 
+addButton.textContent = 'Add Subject';
+addButton.classList.add('styled-button', 'add-subject-button');
+addButton.addEventListener('click', openAddSubjectPopup);
 
-    const removeButton = document.createElement('button');
-    removeButton.id = 'rmvbutton';
-    removeButton.textContent = 'Remove Subject';
-    removeButton.classList.add('styled-button', 'remove-subject-button');
-    removeButton.addEventListener('click', () => {
-        removeMode = !removeMode; // Toggle remove mode
-        updateSubjectList(); // Update the subject list to show/hide remove icons
-    });
+const removeButton = document.createElement('button');
+removeButton.id = 'rmvbutton';
+removeButton.textContent = 'Remove Subject';
+removeButton.classList.add('styled-button', 'remove-subject-button');
+removeButton.addEventListener('click', () => {
+    removeMode = !removeMode;
+    updateSubjectList();
+});
+
+// ✅ new wrapper for action buttons
+const actionButtons = document.createElement('div');
+actionButtons.classList.add('action-buttons');
+actionButtons.appendChild(addButton);
+actionButtons.appendChild(removeButton);
 
     selectionContainer.appendChild(semesterSelection);
-    selectionContainer.appendChild(addButton);
-    selectionContainer.appendChild(removeButton);
+    selectionContainer.appendChild(actionButtons);
     courseContainer.appendChild(selectionContainer);
 
     // Create a container for subjects
