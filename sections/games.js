@@ -16,15 +16,15 @@ function populateGames() {
     // Set styles for the container
     appsContainer.style.display = 'flex';
     appsContainer.style.flexWrap = 'wrap';
-    appsContainer.style.justifyContent = 'center'; // Center items horizontally
-    appsContainer.style.alignItems = 'center';     // Center items vertically
-    appsContainer.style.gap = '20px';
-    appsContainer.style.padding = '20px';
-    appsContainer.style.maxWidth = '100%';
+    appsContainer.style.justifyContent = 'flex-start';
+    appsContainer.style.alignItems = 'flex-start';
+    appsContainer.style.gap = '25px';
+    appsContainer.style.padding = '25px';
+    appsContainer.style.width = '100%';
     appsContainer.style.boxSizing = 'border-box';
-    appsContainer.style.backgroundColor = '#f9f9f9';
-    appsContainer.style.borderRadius = '8px';
-    appsContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.1)';
+    appsContainer.style.backgroundColor = '#f8fafc';
+    appsContainer.style.borderRadius = '12px';
+    appsContainer.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.05)';
     
     // Clear existing content
     appsContainer.innerHTML = '';
@@ -33,27 +33,32 @@ function populateGames() {
     games.forEach(game => {
         const appItem = document.createElement('div');
         appItem.style.display = 'flex';
-        appItem.style.flexDirection = 'column'; // Stack image and name vertically
-        appItem.style.alignItems = 'center';    // Center contents horizontally
-        appItem.style.justifyContent = 'center'; // Center contents vertically
-        appItem.style.position = 'relative';
-        appItem.style.width = '150px';
-        appItem.style.height = '150px';
-        appItem.style.background = '#ffffff';
-        appItem.style.borderRadius = '8px';
+        appItem.style.flexDirection = 'column';
+        appItem.style.alignItems = 'center';
+        appItem.style.flex = '1 1 calc(20% - 25px)';
+        appItem.style.minWidth = '180px';
+        appItem.style.maxWidth = '220px';
+        appItem.style.height = '220px';
+        appItem.style.background = 'linear-gradient(135deg, #ffffff 0%, #f9fafb 100%)';
+        appItem.style.borderRadius = '16px';
         appItem.style.overflow = 'hidden';
-        appItem.style.border = '1px solid #ddd';
+        appItem.style.border = '1px solid #e5e7eb';
         appItem.style.cursor = 'pointer';
-        appItem.style.transition = 'transform 0.3s, box-shadow 0.3s';
+        appItem.style.transition = 'all 0.3s ease';
         appItem.style.boxSizing = 'border-box';
+        appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
+        appItem.style.position = 'relative';
+        
+        // Add a subtle top accent
+        appItem.style.borderTop = '4px solid #3b82f6';
 
         appItem.onmouseover = () => {
-            appItem.style.transform = 'scale(1.05)';
-            appItem.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.2)';
+            appItem.style.transform = 'translateY(-8px) scale(1.02)';
+            appItem.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)';
         };
         appItem.onmouseout = () => {
-            appItem.style.transform = 'scale(1)';
-            appItem.style.boxShadow = 'none';
+            appItem.style.transform = 'translateY(0) scale(1)';
+            appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
         };
 
         appItem.onclick = () => {
@@ -81,6 +86,16 @@ function populateGames() {
             }
         };
 
+        // Image container with fixed aspect ratio
+        const imgContainer = document.createElement('div');
+        imgContainer.style.width = '100%';
+        imgContainer.style.height = '140px';
+        imgContainer.style.overflow = 'hidden';
+        imgContainer.style.display = 'flex';
+        imgContainer.style.alignItems = 'center';
+        imgContainer.style.justifyContent = 'center';
+        imgContainer.style.background = '#f3f4f6';
+
         const img = document.createElement('img');
         img.src = game.thumbnail;
         img.alt = game.name;
@@ -88,23 +103,37 @@ function populateGames() {
         img.style.height = '100%';
         img.style.objectFit = 'cover';
         img.style.boxSizing = 'border-box';
+        img.style.transition = 'transform 0.3s ease';
 
-        const name = document.createElement('p');
+        appItem.onmouseover = () => {
+            appItem.style.transform = 'translateY(-8px) scale(1.02)';
+            appItem.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)';
+            img.style.transform = 'scale(1.1)';
+        };
+        appItem.onmouseout = () => {
+            appItem.style.transform = 'translateY(0) scale(1)';
+            appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
+            img.style.transform = 'scale(1)';
+        };
+
+        imgContainer.appendChild(img);
+
+        const name = document.createElement('div');
         name.textContent = game.name;
-        name.style.position = 'absolute';
-        name.style.bottom = '0';
-        name.style.left = '0';
-        name.style.right = '0';
-        name.style.background = 'rgba(0, 0, 0, 0.7)';
-        name.style.color = '#fff';
-        name.style.padding = '6px 8px';
+        name.style.width = '100%';
+        name.style.padding = '15px 10px';
+        name.style.background = '#ffffff';
+        name.style.color = '#1f2937';
         name.style.textAlign = 'center';
         name.style.margin = '0';
-        name.style.fontSize = '14px';
-        name.style.fontWeight = 'bold';
+        name.style.fontSize = '16px';
+        name.style.fontWeight = '600';
         name.style.boxSizing = 'border-box';
+        name.style.overflow = 'hidden';
+        name.style.textOverflow = 'ellipsis';
+        name.style.whiteSpace = 'nowrap';
 
-        appItem.appendChild(img);
+        appItem.appendChild(imgContainer);
         appItem.appendChild(name);
 
         appsContainer.appendChild(appItem);
