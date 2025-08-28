@@ -11,6 +11,7 @@ function populateForms(forms) {
     formsContainer.style.backgroundColor = '#ffffff';
     formsContainer.style.borderRadius = '8px';
     formsContainer.style.border = '1px solid #e5e5e5';
+    formsContainer.style.justifyContent = 'center';
 
     // Clear existing content
     formsContainer.innerHTML = '';
