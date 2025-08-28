@@ -12,7 +12,7 @@ function populateInstallers(installers) {
     installersContainer.style.backgroundColor = '#ffffff';
     installersContainer.style.borderRadius = '8px';
     installersContainer.style.border = '1px solid #e5e5e5';
-    installersContainer.style.justifyContent = 'flex-start';
+    installersContainer.style.justifyContent = 'center';
 
     // Clear existing content
     installersContainer.innerHTML = '';
