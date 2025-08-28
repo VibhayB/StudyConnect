@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.8"
+let thisversion = "v1.5"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -791,8 +791,8 @@ const image = document.createElement('img');
 }
 function getIconForIndex(index) {
     const icons = [
-        'fas fa-globe',
         'fas fa-users',
+        'fas fa-globe',
         'fas fa-rocket',
         'fas fa-cog',
         'fas fa-chart-line',
@@ -1304,4 +1304,3 @@ function closeDropdown(event) {
         document.removeEventListener('click', closeDropdown);
     }
 }
-
