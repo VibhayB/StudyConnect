@@ -7,13 +7,13 @@ import { getStorage, ref, listAll, getDownloadURL } from "https://www.gstatic.co
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "apiKey",
+  apiKey: "AIzaSyBG8yLFh6Nk6tc5VoR2HEVF-fHUOkLBIq8",
   authDomain: "aiml-studyconnect.firebaseapp.com",
   projectId: "aiml-studyconnect",
   storageBucket: "aiml-studyconnect.appspot.com",
-  messagingSenderId: "messagingSenderId",
-  appId: "appId",
-  measurementId: "measurementId"
+  messagingSenderId: "321987757540",
+  appId: "1:321987757540:web:0de99f3f3bebe719bf73f1",
+  measurementId: "G-C7ZRZR37K2"
 };
 
 // Initialize Firebase
@@ -102,4 +102,5 @@ window.loadCollectionData = async function(collectionName) {
     return [];
   }
 }; 
+
 
