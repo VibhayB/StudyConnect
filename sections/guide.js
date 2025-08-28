@@ -1,50 +1,101 @@
 let player;
 
-// This function will be called by the YouTube Iframe API when it's ready
 function onYouTubeIframeAPIReady() {
-    // This is where you can initialize the player after the API is ready
+    // Player initialization
 }
 
-// Modify the populateGuide function
 function populateGuide(videoId) {
-    // Create guide container
     const guideContainer = document.getElementById('guide');
-    guideContainer.style.display = 'flex'; // Display the guide
-    guideContainer.style.flexDirection = 'column';
-    guideContainer.style.alignItems = 'center';
-    guideContainer.style.marginTop = '20px';
-    guideContainer.style.paddingTop = '20px'; // Add padding at the top for space
-
-    // Create iframe for the video
-    const video = document.createElement('iframe');
-    video.id = 'youtube-player'; // Set an ID for the iframe
-    video.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`; // Enable the API
-    video.allowFullscreen = true;
-    video.style.width = '560px';
-    video.style.height = '315px';
-    video.style.marginBottom = '20px';
-    video.style.border = 'none';
-
-    // Clear existing content and append the new iframe
     guideContainer.innerHTML = '';
-    guideContainer.appendChild(video);
 
-    // Initialize the player
+    // REPLACE this line:
+guideContainer.style.background = 'transparent';
+
+// WITH this:
+guideContainer.style.background = 'linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d)';
+guideContainer.style.borderRadius = '12px';
+guideContainer.style.padding = '25px';
+guideContainer.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.3)';
+
+    guideContainer.style.width = '100%';
+    guideContainer.style.maxWidth = '1200px';
+    guideContainer.style.margin = '0 auto';
+
+    // Create content container for video and chapters
+    const contentContainer = document.createElement('div');
+    contentContainer.style.display = 'flex';
+    contentContainer.style.flexWrap = 'wrap';
+    contentContainer.style.justifyContent = 'center';
+    contentContainer.style.gap = '40px';
+    contentContainer.style.width = '100%';
+    contentContainer.style.alignItems = 'flex-wrap';
+    guideContainer.appendChild(contentContainer);
+
+    // Create video container
+    const videoContainer = document.createElement('div');
+    videoContainer.style.flex = '1';
+    videoContainer.style.minWidth = '560px';
+    videoContainer.style.maxWidth = '800px';
+    videoContainer.style.display = 'flex';
+    videoContainer.style.flexDirection = 'column';
+    videoContainer.style.alignItems = 'center'; // Center content horizontally
+    contentContainer.appendChild(videoContainer);
+
+    // Create title specifically for the video (centered above video)
+    const title = document.createElement('h2');
+    title.textContent = 'AIML StudyConnect Guide';
+    // Change the title color to white:
+title.style.color = '#fff';
+    title.style.fontSize = '32px';
+    title.style.fontWeight = '600';
+    title.style.textAlign = 'center';
+    title.style.textShadow = '0 2px 4px rgba(255, 255, 255, 0.3)';
+    title.style.width = '100%';
+    // For spacing BEFORE the title (above it):
+title.style.marginTop = '5vh'; // 5% of viewport height
+
+// For spacing AFTER the title (below it):
+title.style.marginBottom = '5vh'; // 5% of viewport height
+    videoContainer.appendChild(title);
+
+    // YouTube iframe with proper dimensions
+    const video = document.createElement('iframe');
+    video.id = 'youtube-player';
+    video.src = `https://www.youtube.com/embed/${videoId}?enablejsapi=1`;
+    video.allowFullscreen = true;
+    video.style.width = '100%';
+    video.style.aspectRatio = '16/9';
+    video.style.border = 'none';
+    video.style.borderRadius = '8px';
+    video.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.5)';
+    video.style.maxWidth = '640px';
+    videoContainer.appendChild(video);
+
+    // Initialize player
     player = new YT.Player('youtube-player', {
         events: {
             'onReady': onPlayerReady
         }
     });
 
-    // Create a list for durations
+    // Create timestamps container
+    const timestampsContainer = document.createElement('div');
+    timestampsContainer.style.flex = '0 0 auto';
+    timestampsContainer.style.width = '400px';
+    contentContainer.appendChild(timestampsContainer);
+
+    // Create list for timestamps
     const durationList = document.createElement('ul');
     durationList.style.listStyleType = 'none';
     durationList.style.padding = '0';
-    durationList.style.width = '100%'; // Make it full width
-    durationList.style.maxWidth = '600px'; // Set a max width for better appearance
-    durationList.style.borderTop = '1px solid #ccc'; // Add a top border for separation
+    durationList.style.margin = '0';
+    durationList.style.width = '100%';
+    durationList.style.background = 'rgba(0, 0, 0, 0.2)';
+    durationList.style.borderRadius = '8px';
+    durationList.style.overflow = 'hidden';
+    timestampsContainer.appendChild(durationList);
 
-    // Sample titles and durations (in seconds)
+    // Sample video sections
     const videoSections = [
         { title: 'Opening the website', duration: 0 },
         { title: 'Home page', duration: 30 },
@@ -62,59 +113,94 @@ function populateGuide(videoId) {
         { title: 'Chatbot StudyBuddy', duration: 418 }
     ];
 
-    // Populate duration list
-    videoSections.forEach(section => {
+    // Populate the list with shorter items
+    videoSections.forEach((section, index) => {
         const listItem = document.createElement('li');
-        listItem.style.display = 'flex'; // Use flex for horizontal layout
-        listItem.style.justifyContent = 'space-between'; // Space between title and duration
-        listItem.style.padding = '10px'; // Add padding for better spacing
-        listItem.style.borderBottom = '1px solid #eee'; // Light border between items
+        listItem.style.display = 'flex';
+        listItem.style.justifyContent = 'space-between';
+        listItem.style.alignItems = 'center';
+        listItem.style.padding = '10px 15px';
+        listItem.style.borderBottom = '1px solid rgba(255, 255, 255, 0.1)';
+        listItem.style.transition = 'all 0.3s ease';
+        
+        // Alternating background colors
+        if (index % 2 === 0) {
+            listItem.style.background = 'rgba(255, 255, 255, 0.05)';
+        } else {
+            listItem.style.background = 'rgba(0, 0, 0, 0.1)';
+        }
+        
+        // Hover effects
+        listItem.onmouseover = () => {
+            listItem.style.background = 'rgba(255, 255, 255, 0.15)';
+        };
+        listItem.onmouseout = () => {
+            if (index % 2 === 0) {
+                listItem.style.background = 'rgba(255, 255, 255, 0.05)';
+            } else {
+                listItem.style.background = 'rgba(0, 0, 0, 0.1)';
+            }
+        };
 
+        // Title element
         const title = document.createElement('span');
         title.textContent = section.title;
-        title.style.flexGrow = '1'; // Allow the title to take up space
-        title.style.color = '#333'; // Dark text for title
+        title.style.flex = '1';
+        title.style.color = '#fff';
+        title.style.fontSize = '14px';
+        title.style.marginRight = '10px';
+        title.style.overflow = 'hidden';
+        title.style.textOverflow = 'ellipsis';
+        title.style.whiteSpace = 'nowrap';
 
+        // Timestamp element
         const duration = document.createElement('span');
-        const minutes = Math.floor(section.duration / 60); // Convert seconds to minutes
-        const seconds = section.duration % 60; // Remaining seconds
-        duration.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`; // Format to aa:bb
-        duration.style.cursor = 'pointer'; // Make the duration clickable
-        duration.style.color = '#007bff'; // Color for duration
-        duration.style.textDecoration = 'underline'; // Underline for duration
+        const minutes = Math.floor(section.duration / 60);
+        const seconds = section.duration % 60;
+        duration.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        duration.style.cursor = 'pointer';
+        duration.style.color = '#4fc3f7';
+        duration.style.fontWeight = '600';
+        duration.style.padding = '5px 10px';
+        duration.style.background = 'rgba(0, 0, 0, 0.3)';
+        duration.style.borderRadius = '12px';
+        duration.style.transition = 'all 0.2s ease';
+        duration.style.fontSize = '12px';
+        duration.style.flexShrink = '0';
 
-        // Add hover effect for duration
+        // Hover effects for timestamp
         duration.onmouseover = () => {
-            duration.style.color = '#0056b3';
+            duration.style.background = 'rgba(79, 195, 247, 0.2)';
         };
         duration.onmouseout = () => {
-            duration.style.color = '#007bff';
+            duration.style.background = 'rgba(0, 0, 0, 0.3)';
         };
 
-        // Seek to specific time when duration is clicked
-        duration.onclick = () => seekTo(section.duration);
+        // Click handler for timestamp
+        duration.onclick = () => {
+            seekTo(section.duration);
+            duration.style.background = '#4fc3f7';
+            duration.style.color = '#01579b';
+            setTimeout(() => {
+                duration.style.background = 'rgba(0, 0, 0, 0.3)';
+                duration.style.color = '#4fc3f7';
+            }, 300);
+        };
 
-        // Append title and duration to the list item
+        // Append elements
         listItem.appendChild(title);
         listItem.appendChild(duration);
-
-        // Append the list item to the duration list
         durationList.appendChild(listItem);
     });
-
-    // Append the duration list
-    guideContainer.appendChild(durationList);
 }
 
-// Function to seek to a specific time in the video
 function seekTo(seconds) {
     if (player) {
-        player.seekTo(seconds, true); // Seek to the specific time
-        player.playVideo(); // Play the video after seeking
+        player.seekTo(seconds, true);
+        player.playVideo();
     }
 }
 
-// Optional: This function runs when the player is ready
 function onPlayerReady(event) {
-    // You can perform additional setup here if needed
+    console.log("Player is ready");
 }
