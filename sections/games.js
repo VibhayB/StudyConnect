@@ -16,7 +16,7 @@ function populateGames() {
     // Set styles for the container
     appsContainer.style.display = 'flex';
     appsContainer.style.flexWrap = 'wrap';
-    appsContainer.style.justifyContent = 'flex-start';
+    appsContainer.style.justifyContent = 'center';
     appsContainer.style.alignItems = 'flex-start';
     appsContainer.style.gap = '25px';
     appsContainer.style.padding = '25px';
