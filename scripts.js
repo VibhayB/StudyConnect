@@ -1,5 +1,5 @@
 // script.js
-let thisversion = "v1.5"
+let thisversion = "v1.8"
 let isSignedIn = false;
 let currentDate = new Date();
 var maindata = null;
@@ -1304,3 +1304,4 @@ function closeDropdown(event) {
         document.removeEventListener('click', closeDropdown);
     }
 }
+
