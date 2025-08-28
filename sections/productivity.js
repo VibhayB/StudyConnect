@@ -388,7 +388,7 @@ function populateProductivity(data, fxc = false) {
     const productivityContainer = document.getElementById('productivity');
     productivityContainer.innerHTML = '';
 
-    // Create main container with proper aspect ratio
+    // Create main container with increased default height
     const mainContainer = document.createElement('div');
     Object.assign(mainContainer.style, {
         width: '100%',
@@ -397,12 +397,12 @@ function populateProductivity(data, fxc = false) {
         borderRadius: '15px',
         overflow: 'hidden',
         boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
-        height: '70vh', // Default height with good aspect ratio
-        minHeight: '500px',
-        maxHeight: '800px',
+        height: '80vh', // Default height
+        minHeight: '900px', // Set to previous maxHeight
+        maxHeight: '1200px', // Adjusted to maintain 300px stretchable range
         display: 'flex',
         flexDirection: 'column',
-        resize: 'vertical', // Enable vertical resizing
+        resize: 'vertical',
         overflow: 'hidden'
     });
 
