@@ -1,170 +1,220 @@
 // Function to hide the spinner and show the iframe after loading
 function hideSpinner(iframe) {
     const spinner = iframe.previousElementSibling;
-    spinner.style.display = 'none';  // Hide spinner
-    iframe.style.display = 'block';  // Show iframe
+    spinner.style.display = 'none';
+    iframe.style.display = 'block';
 }
 
 function showSpinner(iframe) {
     const spinner = iframe.previousElementSibling;
-    spinner.style.display = 'block';  // Show spinner
-    iframe.style.display = 'none';    // Hide iframe
+    spinner.style.display = 'block';
+    iframe.style.display = 'none';
 }
 
-function populateProductivity(data,fxc = false) {
+function populateProductivity(data, fxc = false) {
     let quizContent = { 
         id: "quiz",
         title: "Quiz",
-        description: "Test your skills with this quiz",
+        description: "Test your knowledge with our interactive quiz",
         icon: "https://cdn-icons-png.flaticon.com/512/10292/10292284.png",
         src: 'data:text/html;charset=utf-8,' + encodeURIComponent(`
             <!DOCTYPE html>
             <html>
             <head>
-                <title>Quiz</title>
+                <title>Interactive Quiz</title>
                 <style>
-                    body {
-                        font-family: Arial, sans-serif;
-                        margin: 20px;
-                        background: linear-gradient(to bottom right, #2c3e50, #34495e);
-                        color: #ecf0f1; /* Light color for text */
+                    * {
+                        box-sizing: border-box;
+                        margin: 0;
+                        padding: 0;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
                     }
+                    
+                    body {
+                        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                        min-height: 100vh;
+                        padding: 20px;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: center;
+                        justify-content: center;
+                        color: #fff;
+                    }
+                    
+                    .quiz-container {
+                        background: rgba(255, 255, 255, 0.1);
+                        backdrop-filter: blur(10px);
+                        border-radius: 20px;
+                        padding: 30px;
+                        width: 90%;
+                        max-width: 800px;
+                        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+                        border: 1px solid rgba(255, 255, 255, 0.2);
+                    }
+                    
                     h1 {
                         text-align: center;
-                        color: #ecf0f1;
-                    }
-                    .question {
-                        margin: 20px 0;
-                        font-size: 1.5em;
-                        font-weight: bold;
-                    }
-                    .options {
-                        margin: 10px 0;
-                    }
-                    .option-btn {
-                        width: calc(100% - 10px); /* Set width to fill the container minus margins */
-                        margin: 5px 0;
-                        padding: 10px 15px;
-                        border: none;
-                        border-radius: 5px;
-                        background-color: #3498db;
-                        color: white;
-                        font-size: 1em;
-                        cursor: pointer;
-                        transition: background-color 0.3s, transform 0.2s;
-                        box-sizing: border-box; /* Ensure padding is included in width */
-                    }
-                    .option-btn:hover {
-                        background-color: #2980b9;
-                        transform: scale(1.05);
-                    }
-                    .option-btn.correct {
-                        background-color: #2ecc71; /* Green for correct answers */
-                    }
-                    .option-btn.wrong {
-                        background-color: #e74c3c; /* Red for wrong answers */
-                    }
-                    #score {
-                        font-size: 1.2em;
-                        text-align: center;
-                    }
-                    #play-btn {
-                        padding: 10px 20px;
-                        background-color: #2ecc71;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        font-size: 1.2em;
-                        cursor: pointer;
-                        transition: background-color 0.3s;
+                        font-size: 2.5rem;
                         margin-bottom: 20px;
-                        display: block;
-                        margin-left: auto;
-                        margin-right: auto;
+                        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+                        color: #fff;
                     }
-                    #play-btn:hover {
-                        background-color: #27ae60;
-                    }
-                    #replay-btn {
-                        padding: 10px 20px;
-                        background-color: #3498db;
-                        color: white;
-                        border: none;
-                        border-radius: 5px;
-                        font-size: 1.2em;
-                        cursor: pointer;
-                        transition: background-color 0.3s;
-                        display: none;
-                        margin: 20px auto;
+                    
+                    .question {
+                        font-size: 1.4rem;
+                        font-weight: 600;
+                        margin: 25px 0;
                         text-align: center;
+                        line-height: 1.5;
                     }
-                    #replay-btn:hover {
-                        background-color: #2980b9;
+                    
+                    .options {
+                        display: grid;
+                        gap: 15px;
+                        margin: 20px 0;
                     }
+                    
+                    .option-btn {
+                        padding: 15px 20px;
+                        border: none;
+                        border-radius: 12px;
+                        background: rgba(255, 255, 255, 0.15);
+                        color: white;
+                        font-size: 1.1rem;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        text-align: left;
+                        backdrop-filter: blur(5px);
+                        border: 1px solid rgba(255, 255, 255, 0.1);
+                    }
+                    
+                    .option-btn:hover {
+                        background: rgba(255, 255, 255, 0.25);
+                        transform: translateY(-2px);
+                        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+                    }
+                    
+                    .option-btn.correct {
+                        background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+                        box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+                    }
+                    
+                    .option-btn.wrong {
+                        background: linear-gradient(135deg, #F44336 0%, #C62828 100%);
+                        box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+                    }
+                    
+                    #score {
+                        font-size: 1.3rem;
+                        text-align: center;
+                        margin: 20px 0;
+                        font-weight: 600;
+                    }
+                    
+                    #play-btn, #replay-btn {
+                        padding: 15px 30px;
+                        border: none;
+                        border-radius: 50px;
+                        font-size: 1.2rem;
+                        font-weight: 600;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        margin: 20px auto;
+                        display: block;
+                        background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+                        color: white;
+                        box-shadow: 0 10px 20px rgba(255, 107, 107, 0.3);
+                    }
+                    
+                    #play-btn:hover, #replay-btn:hover {
+                        transform: translateY(-3px);
+                        box-shadow: 0 15px 25px rgba(255, 107, 107, 0.4);
+                    }
+                    
                     #meter {
-    position: relative; /* Positioning context */
-    height: 20px;
-    width: 100%; /* Ensures the meter spans across the full width */
-    border-radius: 10px;
-    overflow: hidden;
-    font-size: 1.2em;
-    text-align: center;
-    background-color: #1a1a1a; /* Dark gray background (not pure black) */
-    margin: 10px 0;
-    padding: 10px;
-    color: white; /* For better contrast */
-    box-sizing: border-box; /* Ensures padding doesn't affect width */
-}
-
-#time-left {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgb(0, 255, 0); /* Starting color (green) */
-    z-index: 1; /* Ensure it's on top */
-}
-
+                        position: relative;
+                        height: 25px;
+                        width: 100%;
+                        border-radius: 12px;
+                        overflow: hidden;
+                        margin: 25px 0;
+                        background: rgba(0, 0, 0, 0.2);
+                        box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.2);
+                    }
+                    
+                    #time-left {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        height: 100%;
+                        width: 100%;
+                        border-radius: 12px;
+                        transition: width 0.1s linear, background-color 0.1s linear;
+                    }
+                    
+                    .result-screen {
+                        text-align: center;
+                        padding: 30px;
+                    }
+                    
+                    .result-screen h2 {
+                        font-size: 2.2rem;
+                        margin-bottom: 20px;
+                        background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
+                    
+                    .final-score {
+                        font-size: 3rem;
+                        font-weight: bold;
+                        margin: 20px 0;
+                        background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+                        -webkit-background-clip: text;
+                        -webkit-text-fill-color: transparent;
+                    }
+                    
+                    @keyframes pulse {
+                        0% { transform: scale(1); }
+                        50% { transform: scale(1.05); }
+                        100% { transform: scale(1); }
+                    }
+                    
+                    .pulse {
+                        animation: pulse 0.5s ease-in-out;
+                    }
                 </style>
             </head>
             <body>
-                <h1 id="heading">Welcome to the Quiz!</h1>
-                <button id="play-btn">Play Quiz</button>
-                <div id="score" style="display: none;">Score: 0</div>
-                <div id="meter" style="display: none;">
-                    <div id="time-left"></div>
+                <div class="quiz-container">
+                    <h1 id="heading">Welcome to the Quiz!</h1>
+                    <button id="play-btn">Start Quiz</button>
+                    <div id="score" style="display: none;">Score: <span class="score-value">0</span></div>
+                    <div id="meter" style="display: none;">
+                        <div id="time-left"></div>
+                    </div>
+                    <div id="quiz-container" style="display: none;"></div>
+                    <button id="replay-btn" onclick="replayQuiz()" style="display: none;">Play Again</button>
                 </div>
-                <div id="quiz-container" style="display: none;"></div>
-                <button id="replay-btn" onclick="replayQuiz()">Replay Quiz</button>
                 <script>
                     let currentQuestionIndex = 0;
                     let questions = [];
                     let score = 0;
-                    let timePerQuestion = 25; // 25 seconds for each question
+                    let timePerQuestion = 25;
                     let timeLeft;
                     let interval;
-                    let triedsxchv = ${localStorage.getItem("musexet")} || 60; // Get from localStorage or default to 60
-                    const currentDate = new Date().setHours(0, 0, 0, 0); // Get today's date (midnight) in milliseconds
+                    let triedsxchv = ${localStorage.getItem("musexet")} || 60;
+                    const currentDate = new Date().setHours(0, 0, 0, 0);
 
                     if (!isNaN(triedsxchv)) {
                         triedsxchv = Number(triedsxchv);
-                        if (triedsxchv === 30) {
-                            console.log("triedsxchv is 30");
-                        } else {
-                            // Handle other number values
-                            console.log("triedsxchv is a number:", triedsxchv);
-                        }
                     } else if (triedsxchv == currentDate) {
-                        // Reset to 0 if the stored date matches today
                         triedsxchv = 0;
                     } else if (triedsxchv < currentDate) {
-                        // If it's a previous date, reset to 60 and update localStorage with today's date
                         triedsxchv = 60;
                         localStorage.setItem("musexet", currentDate);
                     }
 
-    
                     function fetchQuestions() {
                         triedsxchv -= 10;
                         fetch('https://quizapi.io/api/v1/questions?apiKey=${fxc}&limit=10')
@@ -174,21 +224,23 @@ function populateProductivity(data,fxc = false) {
                                     question: question.question,
                                     options: Object.values(question.answers).filter(answer => answer !== null),
                                     correctAnswerIndex: Object.values(question.correct_answers).indexOf("true")
-                                })).filter(q => q.options.length >= 2); // Ensure at least 2 options exist
+                                })).filter(q => q.options.length >= 2);
                                 
                                 displayQuestion();
                             })
-                            .catch(error => console.error('Error fetching questions:', error));
+                            .catch(error => {
+                                console.error('Error fetching questions:', error);
+                                document.getElementById('heading').innerHTML = 'Error loading questions. Please try again.';
+                            });
                     }
-    
+
                     function displayQuestion() {
                         const quizContainer = document.getElementById('quiz-container');
                         const scoreDisplay = document.getElementById('score');
                         const meterDisplay = document.getElementById('meter');
-                        const timeLeftDisplay = document.getElementById('time-left');
-    
-                        scoreDisplay.innerHTML = 'Score: ' + score;
-    
+
+                        scoreDisplay.querySelector('.score-value').textContent = score;
+
                         if (currentQuestionIndex < questions.length) {
                             const question = questions[currentQuestionIndex];
                             quizContainer.innerHTML = \`
@@ -200,7 +252,6 @@ function populateProductivity(data,fxc = false) {
                                 </div>
                             \`;
                             timeLeft = timePerQuestion;
-                            timeLeftDisplay.style.width = '100%';
                             meterDisplay.style.display = 'block';
                             scoreDisplay.style.display = 'block';
                             quizContainer.style.display = 'block';
@@ -209,132 +260,123 @@ function populateProductivity(data,fxc = false) {
                             endQuiz();
                         }
                     }
-                    // This function calculates the color based on the percentage value
-function calculateColor(percentage) {
-    let color;
-    // Ensure percentage is clamped between 0 and 100
-    percentage = Math.max(0, Math.min(100, percentage));
 
-    if (percentage >= 66) {
-        // From green (0, 255, 0) to yellow (255, 255, 0)
-        const fraction = (100 - percentage) / 34; // Normalized value (0 to 1)
-        const yellowValue = Math.round(255 * fraction); // yellow increases to 255red 255green
-        color = \`rgb(\${yellowValue}, 255, 0)\`; // Transition to Yellow
-    } else if (percentage >= 33) {
-        // From yellow (255, 255, 0) to orange (255, 165, 0)
-        const fraction = (66 - percentage) / 33; // Normalized value (0 to 1)
-        const greenValue = 165 + Math.round(90 * (1 - fraction)); // Green decreases to 165
-        color = \`rgb(255, \${greenValue}, 0)\`; // Transition to Orange
-    } else {
-        // From orange (255, 165, 0) to red (255, 0, 0)
-        const fraction = (33 - percentage) / 33; // Normalized value (0 to 1)
-        const greenValue = Math.round(165 * (1 - fraction)); // Green decreases to 0
-        color = \`rgb(255, \${greenValue}, 0)\`; // Transition to Red
-    }
-    console.log(percentage,color);
-    return color;
-}
+                    function calculateColor(percentage) {
+                        percentage = Math.max(0, Math.min(100, percentage));
+                        let color;
 
+                        if (percentage >= 66) {
+                            const fraction = (100 - percentage) / 34;
+                            const yellowValue = Math.round(255 * fraction);
+                            color = \`rgb(\${yellowValue}, 255, 0)\`;
+                        } else if (percentage >= 33) {
+                            const fraction = (66 - percentage) / 33;
+                            const greenValue = 165 + Math.round(90 * (1 - fraction));
+                            color = \`rgb(255, \${greenValue}, 0)\`;
+                        } else {
+                            const fraction = (33 - percentage) / 33;
+                            const greenValue = Math.round(165 * (1 - fraction));
+                            color = \`rgb(255, \${greenValue}, 0)\`;
+                        }
+                        return color;
+                    }
 
                     function startColorTransition() {
-                    let qno = currentQuestionIndex + 1;
-                    document.getElementById('heading').innerHTML = 'Question ' + qno + ' of 10';
-    const timeLeftDisplay = document.getElementById('time-left');
-    timeLeft = timePerQuestion; // Reset time left for each question
-    timeLeftDisplay.style.width = '100%'; // Set initial width to 100%
-    timeLeftDisplay.style.backgroundColor = calculateColor(100); // Start color as green
+                        let qno = currentQuestionIndex + 1;
+                        document.getElementById('heading').innerHTML = 'Question ' + qno + ' of 10';
+                        const timeLeftDisplay = document.getElementById('time-left');
+                        timeLeft = timePerQuestion;
+                        timeLeftDisplay.style.width = '100%';
+                        timeLeftDisplay.style.backgroundColor = calculateColor(100);
 
-    clearInterval(interval); // Clear any existing interval
-    const endTime = Date.now() + (timePerQuestion * 1000);
-    interval = setInterval(() => {
-        if (timeLeft > 0) {
-            timeLeft = 0.001*(endTime - Date.now());
-            const percentage = (timeLeft / timePerQuestion) * 100;
+                        clearInterval(interval);
+                        const endTime = Date.now() + (timePerQuestion * 1000);
+                        interval = setInterval(() => {
+                            timeLeft = Math.max(0, (endTime - Date.now()) / 1000);
+                            const percentage = (timeLeft / timePerQuestion) * 100;
 
-            // Set the width based on the percentage
-            timeLeftDisplay.style.width = \`\${percentage}%\`;
+                            timeLeftDisplay.style.width = \`\${percentage}%\`;
+                            timeLeftDisplay.style.backgroundColor = calculateColor(percentage);
 
-            // Smooth color transition
-            const color = calculateColor(percentage);
-            timeLeftDisplay.style.backgroundColor = color;
-
-        } else {
-            clearInterval(interval); // Stop the timer when it reaches 0
-            timeLeftDisplay.style.width = '0%'; // Ensure width reflects completion
-        }
-    }, 50); // Update every 50ms
-}
-    
+                            if (timeLeft <= 0) {
+                                clearInterval(interval);
+                                checkAnswer(-1);
+                            }
+                        }, 50);
+                    }
+                    
                     function checkAnswer(selectedIndex) {
+                        clearInterval(interval);
                         const question = questions[currentQuestionIndex];
-                        const buttons = document.querySelectorAll('.options button');
-    
-                        // Check if the answer is correct and style buttons accordingly
+                        const buttons = document.querySelectorAll('.option-btn');
+
                         buttons.forEach((button, index) => {
                             if (index === question.correctAnswerIndex) {
                                 button.classList.add('correct');
                             } else if (index === selectedIndex) {
                                 button.classList.add('wrong');
                             }
+                            button.disabled = true;
                         });
-    
-                        // Scoring logic based on time left
+
                         let timeScore = 0;
                         const percentageLeft = (timeLeft / timePerQuestion);
-                        if (percentageLeft > 0.75) {
-                            timeScore = 5; // 100-75%
-                        } else if (percentageLeft > 0.5) {
-                            timeScore = 4; // 75-50%
-                        } else if (percentageLeft > 0.25) {
-                            timeScore = 3; // 50-25%
-                        } else if (percentageLeft > 0) {
-                            timeScore = 2; // 25-0%
-                        } else {
-                            timeScore = 1; // Answering after time passage
-                        }
-    
+                        if (percentageLeft > 0.75) timeScore = 5;
+                        else if (percentageLeft > 0.5) timeScore = 4;
+                        else if (percentageLeft > 0.25) timeScore = 3;
+                        else if (percentageLeft > 0) timeScore = 2;
+                        else timeScore = 1;
+
                         if (selectedIndex === question.correctAnswerIndex) {
-                            score += timeScore; // Add calculated score based on time left
+                            score += timeScore;
+                            document.querySelector('.score-value').classList.add('pulse');
+                            setTimeout(() => {
+                                document.querySelector('.score-value').classList.remove('pulse');
+                            }, 500);
                         }
-    
+
                         currentQuestionIndex++;
-                        setTimeout(displayQuestion, 1000); // Wait 1 second before showing the next question
+                        setTimeout(displayQuestion, 1500);
                     }
-    
+
                     function endQuiz() {
-                        document.getElementById('meter').style.display = 'none'; // Hide progress display
-                        clearInterval(interval); // Clear interval to stop the timer
+                        document.getElementById('meter').style.display = 'none';
+                        clearInterval(interval);
                         const currentDate = new Date().setHours(0, 0, 0, 0);
+                        
                         if(triedsxchv <= 0){
-                            document.getElementById('heading').innerHTML = 'Comeback Tomorrow for more quiz'; 
-                            localStorage.setItem("musexet",currentDate);
-                        } else{
-                            const quizContainer = document.getElementById('quiz-container');
-                            quizContainer.innerHTML = '<h2>Quiz Completed!</h2>';
-                            document.getElementById('heading').style.display = 'none'; 
-                            document.getElementById('replay-btn').style.display = 'block'; // Show replay button
-                            localStorage.setItem("musexet",triedsxchv);
+                            document.getElementById('heading').innerHTML = 'Daily Limit Reached - Come Back Tomorrow!';
+                            document.getElementById('quiz-container').innerHTML = '';
+                            localStorage.setItem("musexet", currentDate);
+                        } else {
+                            document.getElementById('quiz-container').innerHTML = \`
+                                <div class="result-screen">
+                                    <h2>Quiz Completed!</h2>
+                                    <div class="final-score">\${score}/50</div>
+                                    <p>Great job! You've completed the quiz.</p>
+                                </div>
+                            \`;
+                            document.getElementById('replay-btn').style.display = 'block';
+                            localStorage.setItem("musexet", triedsxchv);
                         }
                     }
-    
+
                     function replayQuiz() {
-                        if(triedsxchv <= 0){
-                            return;
-                        }
+                        if(triedsxchv <= 0) return;
+                        
                         currentQuestionIndex = 0;
                         score = 0;
-                        document.getElementById('replay-btn').style.display = 'none'; // Hide replay button
-                        document.getElementById('quiz-container').style.display = 'none'; // Hide quiz container
-                        document.getElementById('score').style.display = 'none'; // Hide score display
-                        document.getElementById('meter').style.display = 'none'; // Hide progress display
-                        fetchQuestions(); // Fetch questions again
-                        
-                        document.getElementById('heading').style.display = 'flex'; 
+                        document.getElementById('replay-btn').style.display = 'none';
+                        document.getElementById('quiz-container').style.display = 'none';
+                        document.getElementById('score').style.display = 'none';
+                        document.getElementById('meter').style.display = 'none';
+                        document.getElementById('heading').style.display = 'block';
+                        fetchQuestions();
                     }
-    
+
                     document.getElementById('play-btn').onclick = function() {
-                        document.getElementById('play-btn').style.display = 'none';
-                        fetchQuestions(); // Start fetching questions when play button is clicked
+                        this.style.display = 'none';
+                        fetchQuestions();
                     };
                 </script>
             </body>
@@ -344,107 +386,187 @@ function calculateColor(percentage) {
     
     data.push(quizContent);
     const productivityContainer = document.getElementById('productivity');
-
     productivityContainer.innerHTML = '';
 
+    // Create main container with proper aspect ratio
+    const mainContainer = document.createElement('div');
+    Object.assign(mainContainer.style, {
+        width: '100%',
+        maxWidth: '1200px',
+        margin: '0 auto',
+        borderRadius: '15px',
+        overflow: 'hidden',
+        boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)',
+        height: '70vh', // Default height with good aspect ratio
+        minHeight: '500px',
+        maxHeight: '800px',
+        display: 'flex',
+        flexDirection: 'column',
+        resize: 'vertical', // Enable vertical resizing
+        overflow: 'hidden'
+    });
+
+    // Create stunning tabs container
     const tabsContainer = document.createElement('div');
     Object.assign(tabsContainer.style, {
         display: 'flex',
-        borderBottom: '2px solid #ddd',
-        paddingBottom: '10px',
-        marginBottom: '20px'
+        justifyContent: 'center',
+        gap: '15px',
+        padding: '20px',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        flexShrink: '0'
     });
 
+    // Create beautiful content container
     const contentContainer = document.createElement('div');
     Object.assign(contentContainer.style, {
-        padding: '20px',
-        backgroundColor: '#f9f9f9',
-        borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-        flexGrow: 1,
-        minHeight: '70vh',
+        padding: '30px',
+        background: 'linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)',
+        flexGrow: '1',
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center',
+        overflow: 'auto',
+        minHeight: '400px'
     });
 
     function updateContent(item, clickedButton) {
         contentContainer.innerHTML = '';
 
+        // Create beautiful title
         const contentTitle = document.createElement('h2');
         contentTitle.textContent = item.title;
+        Object.assign(contentTitle.style, {
+            fontSize: '2.2rem',
+            fontWeight: '700',
+            marginBottom: '15px',
+            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            textAlign: 'center'
+        });
         contentContainer.appendChild(contentTitle);
 
+        // Create description
         const contentDescription = document.createElement('p');
         contentDescription.textContent = item.description;
+        Object.assign(contentDescription.style, {
+            fontSize: '1.1rem',
+            color: '#666',
+            marginBottom: '30px',
+            textAlign: 'center'
+        });
         contentContainer.appendChild(contentDescription);
 
+        // Create stylish spinner
         const spinner = document.createElement('div');
-        spinner.className = 'spinner';
         Object.assign(spinner.style, {
-            border: '4px solid #f3f3f3',
-            borderTop: '4px solid #3498db',
+            border: '4px solid rgba(102, 126, 234, 0.2)',
+            borderTop: '4px solid #667eea',
             borderRadius: '50%',
-            width: '40px',
-            height: '40px',
-            animation: 'spin 2s linear infinite',
-            margin: '20px auto',
+            width: '50px',
+            height: '50px',
+            animation: 'spin 1.5s linear infinite',
+            margin: '30px auto',
             display: 'block'
         });
-
         contentContainer.appendChild(spinner);
 
+        // Create iframe
         const iframe = document.createElement('iframe');
-        iframe.style.width = '100%';
-        iframe.style.height = 'calc(70vh - 100px)';
-        iframe.style.display = 'none';
-
+        Object.assign(iframe.style, {
+            width: '100%',
+            height: '100%',
+            display: 'none',
+            border: 'none',
+            borderRadius: '12px',
+            boxShadow: '0 10px 30px rgba(0, 0, 0, 0.1)',
+            flexGrow: '1'
+        });
         iframe.src = item.src;
         contentContainer.appendChild(iframe);
 
         showSpinner(iframe);
         iframe.onload = () => hideSpinner(iframe);
 
+        // Update tab buttons styling
         const allTabButtons = tabsContainer.querySelectorAll('button');
         allTabButtons.forEach(btn => {
-            btn.style.backgroundColor = '#fff';
+            btn.style.background = 'rgba(255, 255, 255, 0.2)';
+            btn.style.color = '#fff';
+            btn.style.boxShadow = 'none';
         });
 
-        clickedButton.style.backgroundColor = '#ddd';
+        clickedButton.style.background = 'rgba(255, 255, 255, 0.4)';
+        clickedButton.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.2)';
     }
 
+    // Create beautiful tab buttons
     data.forEach(item => {
         const tabButton = document.createElement('button');
         tabButton.textContent = item.title;
         Object.assign(tabButton.style, {
-            padding: '10px 20px',
-            marginRight: '10px',
+            padding: '12px 25px',
             cursor: 'pointer',
-            backgroundColor: '#fff',
-            border: '1px solid #ddd',
-            borderRadius: '5px',
-            transition: 'background-color 0.3s'
+            background: 'rgba(255, 255, 255, 0.2)',
+            border: 'none',
+            borderRadius: '25px',
+            color: '#fff',
+            fontWeight: '600',
+            fontSize: '1rem',
+            transition: 'all 0.3s ease',
+            backdropFilter: 'blur(10px)'
+        });
+
+        tabButton.addEventListener('mouseenter', () => {
+            tabButton.style.background = 'rgba(255, 255, 255, 0.3)';
+            tabButton.style.transform = 'translateY(-2px)';
+        });
+
+        tabButton.addEventListener('mouseleave', () => {
+            if (!tabButton.classList.contains('active')) {
+                tabButton.style.background = 'rgba(255, 255, 255, 0.2)';
+                tabButton.style.transform = 'translateY(0)';
+            }
         });
 
         tabButton.addEventListener('click', () => {
             updateContent(item, tabButton);
+            tabButton.classList.add('active');
         });
 
         tabsContainer.appendChild(tabButton);
     });
 
-    productivityContainer.appendChild(tabsContainer);
-    productivityContainer.appendChild(contentContainer);
+    // Assemble the main container
+    mainContainer.appendChild(tabsContainer);
+    mainContainer.appendChild(contentContainer);
+    productivityContainer.appendChild(mainContainer);
 
+    // Add CSS animation for spinner
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        #productivity > div {
+            resize: vertical;
+            overflow: auto;
+        }
+        
+        #productivity > div::-webkit-resizer {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+        }
+    `;
+    document.head.appendChild(style);
+
+    // Initialize with first tab
     updateContent(data[0], tabsContainer.querySelector('button'));
+    tabsContainer.querySelector('button').classList.add('active');
 }
-
-// CSS for the spinner animation
-const style = document.createElement('style');
-style.textContent = `
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-`;
-document.head.appendChild(style);
