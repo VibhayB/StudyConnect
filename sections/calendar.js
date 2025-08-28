@@ -8,18 +8,34 @@ function generateCalendar() {
     nav.style.display = 'flex';
     nav.style.justifyContent = 'space-between';
     nav.style.alignItems = 'center';
-    nav.style.marginBottom = '20px';
-    nav.style.maxWidth = '800px'; // Ensures navigation doesn't stretch too wide
-    nav.style.margin = '0 auto'; // Centers navigation within its parent
+    nav.style.marginBottom = '16px';
+    nav.style.width = '100%';
+    nav.style.maxWidth = 'min(900px, 90vw)'; // Dynamic width: 90% of viewport, max 900px
+    nav.style.margin = '0 auto';
+    nav.style.padding = '12px';
+    nav.style.background = 'linear-gradient(135deg, #3b82f6, #1e3a8a)';
+    nav.style.borderRadius = '10px';
+    nav.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
 
     const prevButton = document.createElement('button');
     prevButton.textContent = 'Previous';
-    prevButton.style.padding = '10px 20px';
+    prevButton.style.padding = '8px 16px';
     prevButton.style.border = 'none';
-    prevButton.style.backgroundColor = '#007bff';
+    prevButton.style.background = 'linear-gradient(45deg, #f97316, #ef4444)';
     prevButton.style.color = 'white';
     prevButton.style.cursor = 'pointer';
-    prevButton.style.borderRadius = '4px';
+    prevButton.style.borderRadius = '6px';
+    prevButton.style.fontWeight = '600';
+    prevButton.style.fontSize = '0.9rem';
+    prevButton.style.transition = 'transform 0.2s, box-shadow 0.2s';
+    prevButton.addEventListener('mouseover', () => {
+        prevButton.style.transform = 'translateY(-2px)';
+        prevButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    });
+    prevButton.addEventListener('mouseout', () => {
+        prevButton.style.transform = 'translateY(0)';
+        prevButton.style.boxShadow = 'none';
+    });
     prevButton.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() - 1);
         generateCalendar();
@@ -27,12 +43,23 @@ function generateCalendar() {
 
     const nextButton = document.createElement('button');
     nextButton.textContent = 'Next';
-    nextButton.style.padding = '10px 20px';
+    nextButton.style.padding = '8px 16px';
     nextButton.style.border = 'none';
-    nextButton.style.backgroundColor = '#007bff';
+    nextButton.style.background = 'linear-gradient(45deg, #f97316, #ef4444)';
     nextButton.style.color = 'white';
     nextButton.style.cursor = 'pointer';
-    nextButton.style.borderRadius = '4px';
+    nextButton.style.borderRadius = '6px';
+    nextButton.style.fontWeight = '600';
+    nextButton.style.fontSize = '0.9rem';
+    nextButton.style.transition = 'transform 0.2s, box-shadow 0.2s';
+    nextButton.addEventListener('mouseover', () => {
+        nextButton.style.transform = 'translateY(-2px)';
+        nextButton.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    });
+    nextButton.addEventListener('mouseout', () => {
+        nextButton.style.transform = 'translateY(0)';
+        nextButton.style.boxShadow = 'none';
+    });
     nextButton.addEventListener('click', () => {
         currentDate.setMonth(currentDate.getMonth() + 1);
         generateCalendar();
@@ -41,8 +68,11 @@ function generateCalendar() {
     const monthYearDisplay = document.createElement('div');
     monthYearDisplay.id = 'month-year';
     monthYearDisplay.style.textAlign = 'center';
-    monthYearDisplay.style.fontWeight = 'bold';
-    monthYearDisplay.style.flex = '1'; // Allows it to grow and center itself
+    monthYearDisplay.style.fontWeight = '700';
+    monthYearDisplay.style.color = 'white';
+    monthYearDisplay.style.fontSize = '1.2rem';
+    monthYearDisplay.style.flex = '1';
+    monthYearDisplay.style.textShadow = '0 2px 4px rgba(0, 0, 0, 0.3)';
 
     nav.appendChild(prevButton);
     nav.appendChild(monthYearDisplay);
@@ -57,49 +87,125 @@ function generateCalendar() {
             display: flex;
             justify-content: center;
             padding: 20px;
+            background: linear-gradient(to bottom right, #e0f2fe, #bfdbfe);
+            min-height: 100vh;
         }
 
         #calendar {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 10px;
-            max-width: 800px;
-            margin: 0 auto; /* Center the calendar grid */
+            gap: 8px;
+            width: 100%;
+            max-width: min(900px, 90vw); /* Dynamic width */
+            margin: 0 auto;
+            background: white;
+            padding: 16px;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
         }
 
         .day-header {
-            font-weight: bold;
+            font-weight: 600;
             text-align: center;
-            margin-bottom: 5px;
+            color: #1f2937;
+            font-size: 0.9rem;
+            margin-bottom: 6px;
+            text-transform: uppercase;
         }
 
         .day {
             display: flex;
             flex-direction: column;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 10px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 8px;
             box-sizing: border-box;
-            min-height: 100px; /* Adjust height as needed */
-            cursor: pointer; /* Ensure the cursor changes to indicate clickability */
+            min-height: 100px;
+            cursor: pointer;
+            background: #f9fafb;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .day:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
         }
 
         .event {
-            background-color: #f0f8ff;
+            background: linear-gradient(90deg, #60a5fa, #93c5fd);
             border-radius: 4px;
-            padding: 5px;
-            margin-top: 5px;
-            font-size: 12px;
-            color: #333;
+            padding: 4px;
+            margin-top: 4px;
+            font-size: 0.8rem;
+            color: #1e3a8a;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .event:hover {
+            background: linear-gradient(90deg, #3b82f6, #60a5fa);
+            color: white;
         }
 
         .current-day {
-            border: 2px solid orange;
-            background-color: #fff4e0;
+            border: 2px solid #f59e0b;
+            background: linear-gradient(135deg, #fef3c7, #fde68a);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        button {
-            font-size: 14px;
+        @media (max-width: 600px) {
+            #calendar {
+                gap: 6px;
+                padding: 12px;
+            }
+
+            .day {
+                min-height: 80px;
+                padding: 6px;
+            }
+
+            .day-header {
+                font-size: 0.8rem;
+            }
+
+            .event {
+                font-size: 0.7rem;
+                padding: 3px;
+            }
+
+            #calendar-nav {
+                padding: 10px;
+            }
+
+            #month-year {
+                font-size: 1rem;
+            }
+
+            button {
+                padding: 6px 12px;
+                font-size: 0.8rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            #calendar {
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .day {
+                min-height: 60px;
+                padding: 4px;
+            }
+
+            .day-header {
+                font-size: 0.7rem;
+            }
+
+            .event {
+                font-size: 0.6rem;
+                padding: 2px;
+            }
         }
     `;
     document.head.appendChild(style);
@@ -110,7 +216,7 @@ function generateCalendar() {
     calendar.id = 'calendar';
     calendar.style.display = 'grid';
     calendar.style.gridTemplateColumns = 'repeat(7, 1fr)';
-    calendar.style.gap = '10px';
+    calendar.style.gap = '8px';
 
     daysOfWeek.forEach(day => {
         const header = document.createElement('div');
@@ -124,6 +230,7 @@ function generateCalendar() {
     for (let i = 0; i < firstDayOfMonth.getDay(); i++) {
         const emptyDay = document.createElement('div');
         emptyDay.className = 'day';
+        emptyDay.style.background = '#e5e7eb';
         calendar.appendChild(emptyDay);
     }
 
@@ -139,6 +246,8 @@ function generateCalendar() {
         const dateHeader = document.createElement('div');
         dateHeader.className = 'day-header';
         dateHeader.textContent = i;
+        dateHeader.style.color = '#111827';
+        dateHeader.style.fontWeight = '600';
         day.appendChild(dateHeader);
 
         // Highlight the current day
@@ -169,7 +278,7 @@ function generateCalendar() {
         if (hasEvent) {
             // Add click event to show alert with event details
             day.addEventListener('click', () => {
-                showAlert(eventDetails,"https://cdn-icons-png.flaticon.com/512/1869/1869397.png");
+                showAlert(eventDetails, "https://cdn-icons-png.flaticon.com/512/1869/1869397.png");
             });
         }
 
