@@ -102,7 +102,9 @@ header {
 /* Home button and dropdown */
 .home-button-container {
     position: relative;
-    display: inline-block;
+    display: flex; /* use flex so children are laid out in a row */
+    gap: 0.5rem; /* spacing between buttons */
+    align-items: center;
 }
 
 .home-button {
@@ -136,6 +138,32 @@ header {
 .home-button:hover .arrow {
     transform: rotate(180deg);
 }
+
+/* Home button and dropdown */
+.guide-button-container {
+    display: none; /* JS toggles this */
+    position: relative;
+    min-width: 100px; /* ensure visible width */
+    text-align: center;
+}
+
+.guide-button {
+    display: none;
+    border: none;
+    background: none;
+    padding: 0;
+    margin-right: 8px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s;
+}
+
+.guide-button:hover {
+    transform: scale(1.2);
+}
+
+
 
 .dropdown {
     display: none;
@@ -369,7 +397,7 @@ nav ul li.active::after {
     height: 500px;
     overflow: hidden;
     border-radius: var(--radius-xl);
-    margin: 1rem;
+    justify-content: 'center';
     box-shadow: var(--shadow-lg);
 }
 
@@ -478,12 +506,13 @@ nav ul li.active::after {
 }
 
 /* Button styles */
+/* Button styles - UNCHANGED */
 .dynamic-button {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     color: white;
     border: none;
     border-radius: var(--radius-lg);
-    padding: 1rem 1.5rem;
+    padding: 0.6rem 1.5rem;
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
@@ -492,7 +521,8 @@ nav ul li.active::after {
     text-transform: none;
     letter-spacing: normal;
     min-width: 120px;
-    min-height: 50px;
+    min-height: 40px;
+    flex: 0 0 auto;
 }
 
 .dynamic-button:hover {
@@ -505,6 +535,53 @@ nav ul li.active::after {
     transform: translateY(-1px);
 }
 
+/* Container and responsive styles */
+#feedback-report-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin: 30px auto;
+    padding: 20px;
+    max-width: 90%;
+    box-sizing: border-box;
+}
+
+/* For medium screens */
+@media (max-width: 1000px) {
+    #feedback-report-buttons {
+        max-width: 800px;
+    }
+}
+
+/* For smaller screens */
+@media (max-width: 800px) {
+    #feedback-report-buttons {
+        max-width: 600px;
+    }
+}
+
+/* For even smaller screens - 2 buttons per row */
+@media (max-width: 600px) {
+    #feedback-report-buttons {
+        max-width: 500px;
+        justify-content: space-around;
+    }
+}
+
+/* For very small screens - single column ONLY when absolutely necessary */
+@media (max-width: 400px) {
+    #feedback-report-buttons {
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        max-width: 300px;
+    }
+    
+    .dynamic-button {
+        width: 200px;
+    }
+}
 /* Loading screen */
 .spinner {
     border: 4px solid rgba(59, 130, 246, 0.1);
@@ -622,14 +699,6 @@ footer {
     text-align: center;
     border-top: 1px solid var(--border-color);
     margin-top: 3rem;
-}
-
-#feedback-report-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin: 0 auto;
-    max-width: 400px;
 }
 
 .feedback-button,
@@ -760,7 +829,6 @@ footer {
     
     #banner {
         height: 300px;
-        margin: 0.5rem;
     }
     
     .info-text {
@@ -768,10 +836,6 @@ footer {
         padding: 1rem;
     }
     
-    #feedback-report-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
     
     .feedback-button,
     .report-button {
