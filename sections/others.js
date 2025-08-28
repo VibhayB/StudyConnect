@@ -156,7 +156,7 @@ function populateApps() {
   appsContainer.style.backgroundColor = '#f8fafc';
   appsContainer.style.borderRadius = '12px';
   appsContainer.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.05)';
-  appsContainer.style.justifyContent = 'flex-start';
+  appsContainer.style.justifyContent = 'center';
   appsContainer.style.alignItems = 'flex-start';
 
   // Clear existing content
