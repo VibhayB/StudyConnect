@@ -18,7 +18,7 @@ function populateContacts(contacts) {
     contactsContainer.style.boxSizing = 'border-box';
     contactsContainer.style.backgroundColor = '#f8fafc';
     contactsContainer.style.borderRadius = '12px';
-    contactsContainer.style.justifyContent = 'flex-start';
+    contactsContainer.style.justifyContent = 'center';
     contactsContainer.style.alignItems = 'flex-start'; // Changed to flex-start
 
     // Clear existing content
