@@ -463,8 +463,116 @@ function handleHomeClick() {
     } console.log("Already signed in");
 }
 
-// Function to show home content
+// Replace the existing initializeScrollAnimations function with this enhanced version
+function initializeScrollAnimations() {
+    const observerOptions = {
+        root: null,
+        rootMargin: '-50px 0px -50px 0px',
+        threshold: [0.1, 0.3, 0.6]
+    };
 
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            const element = entry.target;
+            
+            if (entry.isIntersecting) {
+                // Remove any existing animation classes
+                element.classList.remove('animate-slide-left', 'animate-slide-right');
+                
+                // Determine animation direction based on flex-direction
+                const flexDirection = window.getComputedStyle(element).flexDirection;
+                const isReversed = flexDirection === 'row-reverse';
+                
+                // Add appropriate animation class
+                if (isReversed) {
+                    element.classList.add('animate-slide-left');
+                } else {
+                    element.classList.add('animate-slide-right');
+                }
+                
+                // Don't unobserve - allow for re-triggering when scrolling back
+            } else {
+                // Reset animation when out of view
+                element.classList.remove('animate-slide-left', 'animate-slide-right');
+                // Reset to initial state
+                element.style.opacity = '0';
+                element.style.transform = 'translateX(50px)'; // or -50px based on direction
+            }
+        });
+    }, observerOptions);
+
+    // Observe all info items
+    const infoItems = document.querySelectorAll('.info-item-animate');
+    infoItems.forEach((item, index) => {
+        // Set initial state based on whether it's even or odd (determines text position)
+        const isEven = index % 2 === 0;
+        item.style.opacity = '0';
+        item.style.transform = isEven ? 'translateX(-50px)' : 'translateX(50px)';
+        item.style.transition = 'none';
+        
+        observer.observe(item);
+    });
+}
+
+// Add the enhanced CSS animations - call this function after DOM is loaded
+function addEnhancedScrollAnimations() {
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes fadeInSlideLeft {
+            0% { 
+                opacity: 0; 
+                transform: translateX(50px);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        @keyframes fadeInSlideRight {
+            0% { 
+                opacity: 0; 
+                transform: translateX(-50px);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateX(0);
+            }
+        }
+        
+        .animate-slide-left {
+            animation: fadeInSlideLeft 0.8s ease-out forwards !important;
+        }
+        
+        .animate-slide-right {
+            animation: fadeInSlideRight 0.8s ease-out forwards !important;
+        }
+        
+        /* Enhanced hover effects for animated elements */
+        .info-item-animate {
+            transition: all 0.4s ease;
+        }
+        
+        .info-item-animate:hover {
+            transform: translateY(-8px) !important;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15) !important;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+// Enhanced showHome function - replace the existing setTimeout call with this
+function enhanceHomeScrollEffects() {
+    // Add the CSS animations first
+    addEnhancedScrollAnimations();
+    
+    // Initialize scroll animations after DOM is ready
+    setTimeout(() => {
+        initializeScrollAnimations();
+    }, 100);
+}
+
+// Function to show home content
 function showHome() { 
 // Function to search for relevant data
 function chatbotmechanism(input){
@@ -502,7 +610,7 @@ function handleUserPrompt(userPrompt) {
     }
 
     // Default action if no data or tab was found
-    return "I couldn't find exactly what you're looking for right now. I’ll be updated with more information soon!";
+    return "I couldn't find exactly what you're looking for right now. I'll be updated with more information soon!";
 }
 // Function to display search results
 function displaySearchResult(input) {
@@ -520,7 +628,7 @@ function displaySearchResult(input) {
         displayMessage(displayHTML, 'bot');
 }
 
-    document.querySelector("#header").innerHTML = 'AIML StudyConnnect';
+    document.querySelector("#header").innerHTML = 'AIML StudyConnect';
 
     const content = document.getElementsByClassName("content");
     signInMessage.style.display = 'none';
@@ -533,185 +641,167 @@ function displaySearchResult(input) {
     }
     const homeContent = document.getElementById('home');
     homeContent.style.display = "block";
-
+    homeContent.style.justifyContent = 'center';
     
+    // Create main container for better structure
+    const mainContainer = document.createElement('div');
+    mainContainer.style.width = '100%';
+    mainContainer.style.maxWidth = '1200px';
+    mainContainer.style.margin = '0 auto';
+    mainContainer.style.padding = '20px';
+    mainContainer.style.boxSizing = 'border-box';
+
     if(!document.getElementById('feedback-report-buttons')){
-        // Create and add the buttons
-        const buttonsContainer = document.createElement('div');
-        buttonsContainer.id = 'feedback-report-buttons';
-        buttonsContainer.style.textAlign = 'center';
-        buttonsContainer.style.margin = '30px auto'; // This already centers the container horizontally
-        buttonsContainer.style.padding = '20px';
-        buttonsContainer.style.justifyContent = 'center'; // Ensures buttons inside the container are centered
-        buttonsContainer.style.maxWidth = '90%';
-        buttonsContainer.style.boxSizing = 'border-box';
-        buttonsContainer.style.display = 'flex';
-        buttonsContainer.style.flexWrap = 'wrap';
-        buttonsContainer.style.gap = '10px'; // Space between buttons
+const buttonsContainer = document.createElement('div');
+    buttonsContainer.id = 'feedback-report-buttons';
+    buttonsContainer.style.display = 'flex';
+    buttonsContainer.style.flexWrap = 'wrap';
+    buttonsContainer.style.justifyContent = 'center';
+    buttonsContainer.style.gap = '20px';
+    buttonsContainer.style.margin = '40px 0';
+    buttonsContainer.style.padding = '0';
+    buttonsContainer.style.boxSizing = 'border-box';
 
-        // Define button data
-        const buttonData = [
-            { text: 'Course', tab: 'course' },
-            { text: 'Assignments', tab: 'assignments' },
-            { text: 'Docs', tab: 'forms' },
-            { text: 'Exams', tab: 'exams' },
-            { text: 'Feed', tab: 'feed' },
-            { text: 'Others', tab: 'others' }
-        ];
+const buttonData = [
+        { text: 'Course', tab: 'course', icon: 'fas fa-book' },
+        { text: 'Assignments', tab: 'assignments', icon: 'fas fa-tasks' },
+        { text: 'Docs', tab: 'forms', icon: 'fas fa-file-alt' },
+        { text: 'Exams', tab: 'exams', icon: 'fas fa-graduation-cap' },
+        { text: 'Feed', tab: 'feed', icon: 'fas fa-newspaper' },
+        { text: 'Others', tab: 'others', icon: 'fas fa-ellipsis-h' }
+    ];
 
-        buttonData.forEach(data => {
-            const button = document.createElement('button');
-            button.textContent = data.text;
-            button.className = 'dynamic-button';
-            button.style.minWidth = '100px';
-            button.style.minHeight = '40px';
-            button.style.display = 'inline-flex';
-            button.style.fontFamily = "'Nunito', sans-serif";
-            button.style.fontSize = '16px';
-            button.style.alignItems = 'center';
-            button.style.justifyContent = 'center';
-            button.style.textTransform = 'uppercase';
-            button.style.textAlign = 'center';
-            button.style.letterSpacing = '1.3px';
-            button.style.fontWeight = '700';
-            button.style.color = '#f0f0f0'; // Light color for text
-            button.style.backgroundColor = '#003366'; // Navy background
-            button.style.border = 'none';
-            button.style.borderRadius = '8px';
-            button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.4)';
-            button.style.transition = 'background-color 0.3s, transform 0.3s, box-shadow 0.3s';
-            button.style.cursor = 'pointer';
-            button.style.outline = 'none';
-            button.style.padding = '10px 15px';
-            button.style.margin = '5px';
+buttonData.forEach(data => {
+    const button = document.createElement('button');
+    button.textContent = data.text;
+    button.className = 'dynamic-button';
 
-            // Hover effect
-            button.addEventListener('mouseover', () => {
-                button.style.backgroundColor = '#002a5b'; // Darker navy
-                button.style.transform = 'scale(1.05)';
-                button.style.boxShadow = '0 6px 12px rgba(0,0,0,0.5)';
-            });
-            button.addEventListener('mouseout', () => {
-                button.style.backgroundColor = '#003366';
-                button.style.transform = 'scale(1)';
-                button.style.boxShadow = '0 4px 8px rgba(0,0,0,0.4)';
-            });
-
-            // Focus effect
-            button.addEventListener('focus', () => {
-                button.style.outline = '2px solid #004080'; // Focus outline color
-                button.style.outlineOffset = '4px';
-            });
-            button.addEventListener('blur', () => {
-                button.style.outline = 'none';
-            });
-
-            button.onclick = () => showTab(event, data.tab);
-            buttonsContainer.appendChild(button);
-        });
-
-    homeContent.appendChild(buttonsContainer);
-
-    // Create and add dynamic content
-    const infoSection = document.createElement('div');
-    infoSection.className = 'info-section';
-    infoSection.innerHTML = `
-        <div style="width: 80%; max-width: 800px; margin: 20px auto; padding: 20px; background-color: #f9f9f9; border: 1px solid #ddd; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); box-sizing: border-box;">
-            <h2 style="text-align: center; margin-bottom: 15px;">Some info. about this website:</h2>
-            <ul style="list-style-type: disc; padding-left: 20px;">
-                ${otheritems[0].map(point => `<li style="margin-bottom: 10px;">${point}</li>`).join('')}
-            </ul>
-        </div>
-    `;
-    homeContent.appendChild(infoSection);
-    
-    // Create a separate guide section
-const guideSection = document.createElement('div');
-guideSection.style.display = 'flex'; // Use flexbox for row layout
-guideSection.style.alignItems = 'center'; // Center align items vertically
-guideSection.style.justifyContent = 'center'; // Center align items horizontally
-guideSection.style.margin = '30px auto'; // Center and add spacing around the section
-guideSection.style.textAlign = 'center'; // Center align the text
-guideSection.style.width = '90%'; // Responsive width
-
-const guideText = document.createElement('p');
-guideText.textContent = 'Tap the guide button to know more';
-guideText.style.marginRight = '15px'; // Space to the right of the text
-guideText.style.fontSize = '18px'; // Larger font size
-guideText.style.fontWeight = '600'; // Bold text
-guideText.style.color = '#333'; // Dark text color
-
-const showGuideButton = document.createElement('button');
-showGuideButton.textContent = 'Show Guide';
-showGuideButton.style.padding = '10px 20px'; // Add padding to the button
-showGuideButton.style.fontSize = '16px'; // Adjust button font size
-showGuideButton.style.cursor = 'pointer'; // Change cursor to pointer
-showGuideButton.style.backgroundColor = '#6f42c1'; // Orange background
-showGuideButton.style.color = '#fff'; // White text color
-showGuideButton.style.border = 'none'; // No border
-showGuideButton.style.borderRadius = '5px'; // Rounded corners
-showGuideButton.style.boxShadow = '0 2px 5px rgba(0, 0, 0, 0.2)'; // Subtle shadow
-showGuideButton.style.transition = 'background 0.3s, transform 0.3s'; // Transition for hover effect
-
-// Hover effect for button
-showGuideButton.addEventListener('mouseover', () => {
-    showGuideButton.style.transform = 'scale(1.05)'; // Slightly grow the button
-});
-showGuideButton.addEventListener('mouseout', () => {
-    showGuideButton.style.transform = 'scale(1)'; // Reset to original size
+    button.onclick = () => showTab(event, data.tab);
+    buttonsContainer.appendChild(button);
 });
 
-// Add event listener to the button
-showGuideButton.addEventListener('click', () => {
-    showTab(null, "guide"); // Function to display the guide
-});
+mainContainer.appendChild(buttonsContainer);
 
-// Append elements to the guide section
-guideSection.appendChild(guideText);
-guideSection.appendChild(showGuideButton);
-
-// Append the guide section to homeContent (separate from the timetable section)
-homeContent.appendChild(guideSection);
-
+// Create timetable section with improved styling
     const timetableSection = document.createElement('div');
-timetableSection.className = 'timetable-section';
-timetableSection.style.textAlign = 'center'; // Center align the text and image
-timetableSection.style.margin = '30px auto'; // Add spacing around the section and center it
-timetableSection.style.padding = '20px'; // Add padding inside the section
-timetableSection.style.maxWidth = '90%'; // Limit the width for responsiveness
-timetableSection.style.boxSizing = 'border-box'; // Ensure padding is included in width
+    timetableSection.className = 'timetable-section';
+    timetableSection.style.textAlign = 'center';
+    timetableSection.style.margin = '50px 0';
+    timetableSection.style.padding = '30px';
+    timetableSection.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)';
+    timetableSection.style.borderRadius = '16px';
+    timetableSection.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
 
-const heading = document.createElement('h3');
-heading.textContent = 'Timetable (AIML7A)';
-heading.style.fontSize = '24px'; // Adjust font size for the heading
-heading.style.marginBottom = '20px'; // Add space below the heading
+    const heading = document.createElement('h3');
+    heading.textContent = 'Timetable (AIML7A)';
+    heading.style.fontSize = '1.8rem';
+    heading.style.color = '#2d3748';
+    heading.style.marginBottom = '25px';
+    heading.style.fontWeight = '700';
 
 const image = document.createElement('img');
-image.src = imageMap.TimeTable;
-image.alt = 'Timetable';
-image.style.width = '100%'; // Make image responsive to container width
-image.style.maxWidth = '800px'; // Set a maximum width for the image to prevent it from getting too large
-image.style.height = 'auto'; // Maintain aspect ratio
+    image.src = imageMap.TimeTable;
+    image.alt = 'Timetable';
+    image.style.width = '100%';
+    image.style.maxWidth = '900px';
+    image.style.height = 'auto';
+    image.style.borderRadius = '12px';
+    image.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+    image.style.transition = 'transform 0.3s ease';
+    
+    image.onmouseover = () => image.style.transform = 'scale(1.02)';
+    image.onmouseout = () => image.style.transform = 'scale(1)';
 
-timetableSection.appendChild(heading);
-timetableSection.appendChild(image);
+    timetableSection.appendChild(heading);
+    timetableSection.appendChild(image);
+    mainContainer.appendChild(timetableSection);
 
-homeContent.appendChild(timetableSection);
+// Create info section with improved styling and scroll animations
+    const infoSection = document.createElement('div');
+    infoSection.className = 'info-section';
+    infoSection.style.margin = '60px 0';
+    
+    infoSection.innerHTML = `
+        <div style="width: 100%; margin: 0 auto; padding: 0; background-color: transparent; box-sizing: border-box;">
+            <h2 style="text-align: center; margin-bottom: 40px; font-size: 2.2rem; color: #2d3748; font-weight: 800; position: relative;">
+                About This Website
+                <div style="height: 5px; width: 80px; background: linear-gradient(135deg, var(--primary-color), var(--primary-light)); margin: 20px auto; border-radius: 3px;"></div>
+            </h2>
+            
+            <div style="display: flex; flex-direction: column; gap: 50px;">
+                ${otheritems[0].map((point, index) => {
+                    const isEven = index % 2 === 0;
+                    return `
+                    <div class="info-item-animate" style="display: flex; flex-direction: ${isEven ? 'row' : 'row-reverse'}; align-items: center; gap: 50px; background: white; border-radius: 20px; padding: 40px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1); transition: all 0.4s ease; border: 1px solid rgba(0,0,0,0.05);" 
+                         onmouseover="this.style.transform='translateY(-8px)'; this.style.boxShadow='0 15px 40px rgba(0, 0, 0, 0.15)'" 
+                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 30px rgba(0, 0, 0, 0.1)'">
+                        <div style="flex: 1.2;">
+                            <p style="font-size: 1.2rem; line-height: 1.8; color: #4a5568; margin: 0; font-weight: 500;">${point}</p>
+                        </div>
+                        <div style="flex: 1; display: flex; justify-content: center;">
+                            <div style="width: 100%; max-width: 320px; height: 220px; background: linear-gradient(135deg, #f1f5f9, #e2e8f0); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #6b7280; font-size: 1.5rem; box-shadow: inset 0 4px 12px rgba(0,0,0,0.05);">
+                                <i class="${getIconForIndex(index)}" style="font-size: 3.5rem; color: var(--primary-color); opacity: 0.8;"></i>
+                            </div>
+                        </div>
+                    </div>
+                    `;
+                }).join('')}
+            </div>
+        </div>
+    `;
+    mainContainer.appendChild(infoSection);
+// Create footer with improved styling
+    const footer = document.createElement('footer');
+    footer.id = 'footer';
+    footer.className = isSignedIn ? '' : 'hidden';
+    footer.style.marginTop = '60px';
+    footer.style.padding = '30px';
+    footer.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)';
+    footer.style.borderRadius = '16px';
+    footer.style.textAlign = 'center';
+    
+    const footerButtons = document.createElement('div');
+    footerButtons.style.display = 'flex';
+    footerButtons.style.justifyContent = 'center';
+    footerButtons.style.gap = '20px';
+    footerButtons.style.marginTop = '20px';
+    
+    const feedbackButton = document.createElement('button');
+    feedbackButton.className = 'feedback-button';
+    feedbackButton.textContent = 'Feedback';
+    feedbackButton.style.padding = '12px 25px';
+    
+    const reportButton = document.createElement('button');
+    reportButton.className = 'report-button';
+    reportButton.textContent = 'Report';
+    reportButton.style.padding = '12px 25px';
+    
+    feedbackButton.onclick = () => window.open(feedbackurl, '_blank');
+    reportButton.onclick = () => window.open(reporturl, '_blank');
+    
+    footerButtons.appendChild(feedbackButton);
+    footerButtons.appendChild(reportButton);
+    footer.appendChild(footerButtons);
+    mainContainer.appendChild(footer);
 
+    homeContent.appendChild(mainContainer);
 
-const footer = document.createElement('footer');
-footer.id = 'footer';
-footer.className = isSignedIn ? '' : 'hidden';
-footer.innerHTML = `
-    <div id="feedback-report-buttons">
-        <button class="feedback-button">Feedback</button>
-        <button class="report-button">Report</button>
-    </div>
-`;
+    enhanceHomeScrollEffects();
 
-homeContent.appendChild(footer);
 }
-
+function getIconForIndex(index) {
+    const icons = [
+        'fas fa-globe',
+        'fas fa-users',
+        'fas fa-rocket',
+        'fas fa-cog',
+        'fas fa-chart-line',
+        'fas fa-lightbulb',
+        'fas fa-mobile-alt',
+        'fas fa-shield-alt'
+    ];
+    return icons[index % icons.length];
+}
     // Add event listeners for feedback and report buttons
     const feedbackButton = document.querySelector('.feedback-button');
     const reportButton = document.querySelector('.report-button');
@@ -726,31 +816,123 @@ homeContent.appendChild(footer);
             window.open(reporturl, '_blank');
         });
     }  
-    
     // Check if chatbot has already been added
-    if (!document.getElementById('chatbot-container')) {
-        // Create and add chatbot container
-        const chatbotContainer = document.createElement('div');
+// Check if chatbot has already been added
+if (!document.getElementById('chatbot-container')) {
+    // Create and add chatbot container
+    const chatbotContainer = document.createElement('div');
     chatbotContainer.id = 'chatbot-container';
     chatbotContainer.innerHTML = `
-        <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background-color: #007bff; color: white; padding: 10px; border-radius: 50%; z-index: 1000; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;">
-            <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 30px; height: 30px;">
+        <div id="chatbot-toggle" style="cursor: pointer; position: fixed; bottom: 20px; right: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 15px; border-radius: 50%; z-index: 1000; box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); border: none; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;">
+            <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" id="chatbot-image" style="width: 28px; height: 28px; transition: transform 0.3s ease;">
         </div>
-        <div id="chatbot" style="display: none; position: fixed; bottom: 60px; right: 20px; width: 300px; height: 400px; background-color: white; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); z-index: 1000; overflow: hidden;">
-            <div id="chatbot-header" style="background-color: #007bff; color: white; padding: 10px; text-align: left; position: relative;">
-                <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 20px; height: 20px; position: absolute; top: 10px; left: 10px;">
-                <span style="margin-left: 40px;">StudyBuddy</span>
-                <span id="close-chatbot" style="float: right; cursor: pointer;">&times;</span>
+        <div id="chatbot" style="display: none; position: fixed; bottom: 100px; right: 20px; width: 350px; height: 500px; background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border: none; border-radius: 20px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15); z-index: 1000; overflow: hidden; transform: scale(0.8) translateY(20px); opacity: 0; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); backdrop-filter: blur(10px);">
+            <div id="chatbot-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px; text-align: left; position: relative; box-shadow: 0 2px 10px rgba(102, 126, 234, 0.2);">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="width: 10px; height: 10px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite;"></div>
+                    <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 24px; height: 24px;">
+                    <span style="font-weight: 600; font-size: 16px;">StudyBuddy</span>
+                </div>
+                <span id="close-chatbot" style="position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 24px; font-weight: 300; transition: transform 0.2s ease; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; border-radius: 50%; hover-bg: rgba(255,255,255,0.1);">&times;</span>
             </div>
-            <div id="messages" style="padding: 10px; height: calc(100% - 80px); overflow-y: auto; background-color: #f9f9f9; display: flex; flex-direction: column-reverse;">
+            <div id="messages" style="padding: 20px; height: calc(100% - 140px); overflow-y: auto; background: transparent; display: flex; flex-direction: column; gap: 15px; scroll-behavior: smooth;">
+                <div style="display: flex; align-items: flex-end; gap: 8px;">
+                    <img src="https://cdn-icons-png.flaticon.com/512/8943/8943377.png" style="width: 24px; height: 24px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 4px;">
+                    <div style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); color: #334155; padding: 12px 16px; border-radius: 18px 18px 18px 4px; max-width: 80%; font-size: 14px; line-height: 1.4; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                        Hello! I'm StudyBuddy. How can I help you today? 🎓
+                    </div>
+                </div>
             </div>
-            <div style="padding: 10px; border-top: 1px solid #ddd; background-color: white; position: absolute; bottom: 0; width: calc(100% - 20px); box-sizing: border-box;">
-                <input id="message-input" type="text" placeholder="Type your message..." style="width: calc(100% - 50px); padding: 5px; box-sizing: border-box;" />
-                <button id="send-message" style="width: 40px; padding: 5px; background-color: #007bff; color: white; border: none; border-radius: 5px;">Send</button>
+            <div style="padding: 20px; border-top: 1px solid rgba(226, 232, 240, 0.5); background: rgba(248, 250, 252, 0.8); position: absolute; bottom: 0; width: calc(100% - 40px); box-sizing: border-box; backdrop-filter: blur(10px);">
+                <div style="display: flex; gap: 10px; align-items: center; background: white; border-radius: 25px; padding: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); border: 1px solid rgba(226, 232, 240, 0.5);">
+                    <input id="message-input" type="text" placeholder="Ask me anything..." style="flex: 1; padding: 12px 16px; border: none; outline: none; background: transparent; font-size: 14px; color: #334155;" />
+                    <button id="send-message" style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     `;
     document.body.appendChild(chatbotContainer);
+
+    // Add CSS animations including the new scroll animation
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        @keyframes slideInUp {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes fadeInSlideUp {
+            0% { 
+                opacity: 0; 
+                transform: translateY(50px);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translateY(0);
+            }
+        }
+        @keyframes bounceIn {
+            0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+            50% { transform: scale(1.05) rotate(-5deg); opacity: 0.8; }
+            70% { transform: scale(0.9) rotate(2deg); opacity: 0.9; }
+            100% { transform: scale(1) rotate(0deg); opacity: 1; }
+        }
+        #chatbot-toggle:hover {
+            transform: scale(1.1) rotate(5deg) !important;
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.6) !important;
+        }
+        #close-chatbot:hover {
+            transform: rotate(90deg) !important;
+            background: rgba(255,255,255,0.1) !important;
+        }
+        #send-message:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.5) !important;
+        }
+        #send-message:active {
+            transform: scale(0.95) !important;
+        }
+        #messages::-webkit-scrollbar {
+            width: 6px;
+        }
+        #messages::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        #messages::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+        }
+        .message-fade-in {
+            animation: slideInUp 0.4s ease-out;
+        }
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 12px 16px;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #94a3b8;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+        .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+        @keyframes typing {
+            0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+            40% { transform: scale(1.2); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
 
     // Chatbot functionality
     const chatbotToggle = document.getElementById('chatbot-toggle');
@@ -760,56 +942,127 @@ homeContent.appendChild(footer);
     const sendMessageButton = document.getElementById('send-message');
     const messagesContainer = document.getElementById('messages');
 
-    // Function to toggle chat visibility
+    // Function to toggle chat visibility with smooth animations
     chatImage.onclick = () => {
         const chatbot = document.getElementById('chatbot');
-        chatbot.style.display = chatbot.style.display === 'none' ? 'block' : 'none';
+        if (chatbot.style.display === 'none' || !chatbot.style.display) {
+            chatbot.style.display = 'block';
+            setTimeout(() => {
+                chatbot.style.transform = 'scale(1) translateY(0)';
+                chatbot.style.opacity = '1';
+            }, 10);
+            messageInput.focus();
+        } else {
+            chatbot.style.transform = 'scale(0.8) translateY(20px)';
+            chatbot.style.opacity = '0';
+            setTimeout(() => {
+                chatbot.style.display = 'none';
+            }, 300);
+        }
     };
 
-    // Function to close chat
+    // Function to close chat with animation
     closeChatbot.onclick = () => {
-        document.getElementById('chatbot').style.display = 'none';
+        const chatbot = document.getElementById('chatbot');
+        chatbot.style.transform = 'scale(0.8) translateY(20px)';
+        chatbot.style.opacity = '0';
+        setTimeout(() => {
+            chatbot.style.display = 'none';
+        }, 300);
     };
 
-    // Function to create and display messages
+    // Enhanced message display function
     function displayMessage(text, sender) {
-        const messageBubble = document.createElement('div');
-        messageBubble.classList.add('message');
-        messageBubble.style.display = 'flex';
-        messageBubble.style.alignItems = 'flex-end';
-        messageBubble.style.marginBottom = '10px';
-        messageBubble.style.flexDirection = sender === 'user' ? 'row-reverse' : 'row';
+        const messageWrapper = document.createElement('div');
+        messageWrapper.classList.add('message-fade-in');
+        messageWrapper.style.display = 'flex';
+        messageWrapper.style.alignItems = 'flex-end';
+        messageWrapper.style.gap = '8px';
+        messageWrapper.style.flexDirection = sender === 'user' ? 'row-reverse' : 'row';
 
         const messageText = document.createElement('div');
-        messageText.classList.add('message-text');
-        messageText.style.maxWidth = '70%';
-        messageText.style.padding = '10px';
-        messageText.style.borderRadius = '15px';
-        messageText.style.backgroundColor = sender === 'user' ? '#007bff' : '#ddd';
-        messageText.style.color = sender === 'user' ? 'white' : 'black';
-        messageText.style.margin = '5px';
+        messageText.style.maxWidth = '80%';
+        messageText.style.padding = '12px 16px';
+        messageText.style.borderRadius = sender === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px';
+        messageText.style.fontSize = '14px';
+        messageText.style.lineHeight = '1.4';
+        messageText.style.wordWrap = 'break-word';
+        messageText.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+        messageText.style.position = 'relative';
+        
+        if (sender === 'user') {
+            messageText.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            messageText.style.color = 'white';
+        } else {
+            messageText.style.background = 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)';
+            messageText.style.color = '#334155';
+        }
 
         const icon = document.createElement('img');
-        icon.classList.add('message-icon');
         icon.src = sender === 'user'
             ? 'https://cdn-icons-png.flaticon.com/512/552/552721.png'
             : 'https://cdn-icons-png.flaticon.com/512/8943/8943377.png';
-        icon.style.width = '20px';
-        icon.style.height = '20px';
-        icon.style.marginLeft = sender === 'user' ? '10px' : '0';
-        icon.style.marginRight = sender === 'user' ? '0' : '10px';
+        icon.style.width = '24px';
+        icon.style.height = '24px';
+        icon.style.borderRadius = '50%';
+        icon.style.flexShrink = '0';
+        
+        if (sender !== 'user') {
+            icon.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+            icon.style.padding = '4px';
+        }
         
         messageText.innerHTML = text;
-        messageBubble.appendChild(icon);
-        messageBubble.appendChild(messageText);
-        messagesContainer.appendChild(messageBubble);
+        messageWrapper.appendChild(icon);
+        messageWrapper.appendChild(messageText);
+        messagesContainer.appendChild(messageWrapper);
+        
+        // Smooth scroll to bottom
+        setTimeout(() => {
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }, 50);
+    }
+
+    // Enhanced typing indicator
+    function showTypingIndicator() {
+        const typingWrapper = document.createElement('div');
+        typingWrapper.id = 'typing-indicator';
+        typingWrapper.style.display = 'flex';
+        typingWrapper.style.alignItems = 'flex-end';
+        typingWrapper.style.gap = '8px';
+
+        const icon = document.createElement('img');
+        icon.src = 'https://cdn-icons-png.flaticon.com/512/8943/8943377.png';
+        icon.style.width = '24px';
+        icon.style.height = '24px';
+        icon.style.borderRadius = '50%';
+        icon.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+        icon.style.padding = '4px';
+
+        const typingBubble = document.createElement('div');
+        typingBubble.style.background = 'linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%)';
+        typingBubble.style.padding = '12px 16px';
+        typingBubble.style.borderRadius = '18px 18px 18px 4px';
+        typingBubble.style.boxShadow = '0 2px 8px rgba(0,0,0,0.05)';
+        typingBubble.classList.add('typing-indicator');
+        
+        for (let i = 0; i < 3; i++) {
+            const dot = document.createElement('div');
+            dot.classList.add('typing-dot');
+            typingBubble.appendChild(dot);
+        }
+
+        typingWrapper.appendChild(icon);
+        typingWrapper.appendChild(typingBubble);
+        messagesContainer.appendChild(typingWrapper);
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        messagesContainer.style.display = 'flex';
-        messagesContainer.style.flexDirection = 'column';
-        messagesContainer.style.padding = '10px';
-        messagesContainer.style.height = 'calc(100% - 80px)';
-        messagesContainer.style.overflowY = 'auto';
-        messagesContainer.style.backgroundColor = '#f9f9f9';
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
     }
 
     sendMessageButton.onclick = () => {
@@ -829,15 +1082,42 @@ homeContent.appendChild(footer);
         }
     };
 
-
+    // Enhanced input handling
     messageInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
             sendMessageButton.click();
         }
     });
 
+    // Add input focus effects
+    messageInput.addEventListener('focus', () => {
+        messageInput.parentElement.style.boxShadow = '0 4px 20px rgba(102, 126, 234, 0.2)';
+        messageInput.parentElement.style.borderColor = '#667eea';
+    });
+
+    messageInput.addEventListener('blur', () => {
+        messageInput.parentElement.style.boxShadow = '0 4px 12px rgba(0,0,0,0.1)';
+        messageInput.parentElement.style.borderColor = 'rgba(226, 232, 240, 0.5)';
+    });
+
+    // Add floating animation to toggle button
+    setInterval(() => {
+        if (document.getElementById('chatbot').style.display !== 'block') {
+            const toggle = document.getElementById('chatbot-toggle');
+            toggle.style.animation = 'none';
+            setTimeout(() => {
+                toggle.style.animation = 'bounceIn 0.6s ease-out';
+            }, 10);
+        }
+    }, 10000); // Subtle attention-grabber every 10 seconds
+
+    // Your displaySearchResult function should be defined elsewhere in your codebase
+
     // Call this function after the chatbot container is added to the DOM
-    addChatbotHoverEffects();
+    if (typeof addChatbotHoverEffects === 'function') {
+        addChatbotHoverEffects();
+    }
 }
 }
 // Function to add hover effects and shadow to the chatbot toggle button
@@ -922,7 +1202,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log("..")
     document.addEventListener('click', function(event) {
-        if (!menu.contains(event.target) && !menuButton.contains(event.target)) {
+        if (!menuButton.contains(event.target)) {
             if (!menu.classList.contains('closed')) {
                 toggleMenu();
             }
@@ -952,10 +1232,15 @@ document.addEventListener('DOMContentLoaded', function() {
 let isDropdownVisible = false;
 function updateHomeButton() {
     const homeButton = document.querySelector('.home-button');
+    const guideButton = document.querySelector('.guide-button');
     const menuButton = document.getElementById('menu');
     const feedbackReportButtons = document.getElementById('feedback-report-buttons');
     const signOutLink = document.getElementById('sign-out');
     if (isSignedIn) {
+        guideButton.style.display = 'flex'; // or 'inline-flex'
+        guideButton.addEventListener('click',(event)=>{
+            showTab(null, "guide");
+        });
         homeButton.innerHTML = '<i class="fas fa-user" alt="Profile"></i> <span class="arrow">&#9662;</span>';
         // Display user email in the dropdown
         const userEmail = localStorage.getItem("efusereId"); // Fetch user email from local storage
