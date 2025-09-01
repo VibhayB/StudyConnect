@@ -3,19 +3,22 @@ function generateCalendar() {
     container.innerHTML = "";
 
     // Create navigation controls
-    const nav = document.createElement('div');
-    nav.id = 'calendar-nav';
-    nav.style.display = 'flex';
-    nav.style.justifyContent = 'space-between';
-    nav.style.alignItems = 'center';
-    nav.style.marginBottom = '16px';
-    nav.style.width = '100%';
-    nav.style.maxWidth = 'min(900px, 90vw)'; // Dynamic width: 90% of viewport, max 900px
-    nav.style.margin = '0 auto';
-    nav.style.padding = '12px';
-    nav.style.background = 'linear-gradient(135deg, #3b82f6, #1e3a8a)';
-    nav.style.borderRadius = '10px';
-    nav.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+    // Create navigation controls
+const nav = document.createElement('div');
+nav.id = 'calendar-nav';
+nav.style.display = 'flex';
+nav.style.justifyContent = 'space-between';
+nav.style.alignItems = 'center';
+nav.style.marginBottom = '16px';
+nav.style.width = '100%';
+nav.style.maxWidth = 'min(900px, 90vw)';
+nav.style.margin = '0 auto 16px auto'; // Ensure bottom margin is preserved
+nav.style.padding = '12px';
+nav.style.background = 'linear-gradient(135deg, #3b82f6, #1e3a8a)';
+nav.style.borderRadius = '10px';
+nav.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.2)';
+nav.style.position = 'relative'; // Ensure it's not being positioned absolute
+nav.style.zIndex = '10'; // Ensure it's above other elements
 
     const prevButton = document.createElement('button');
     prevButton.textContent = 'Previous';
@@ -84,25 +87,26 @@ function generateCalendar() {
     const style = document.createElement('style');
     style.textContent = `
         #calendar-container {
-            display: flex;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(to bottom right, #e0f2fe, #bfdbfe);
-            min-height: 100vh;
-        }
+        display: flex;
+        justify-content: center;
+        padding: 20px 10px; /* Reduce horizontal padding on mobile */
+        background: linear-gradient(to bottom right, #e0f2fe, #bfdbfe);
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
 
-        #calendar {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 8px;
-            width: 100%;
-            max-width: min(900px, 90vw); /* Dynamic width */
-            margin: 0 auto;
-            background: white;
-            padding: 16px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-        }
+    #calendar {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 8px;
+        width: 100%;
+        max-width: min(900px, 90vw);
+        margin: 0 auto;
+        background: white;
+        padding: 16px;
+        border-radius: 12px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
 
         .day-header {
             font-weight: 600;
@@ -154,59 +158,84 @@ function generateCalendar() {
         }
 
         @media (max-width: 600px) {
+        #calendar-container {
+            padding: 10px 5px; /* Further reduce padding on small screens */
+        }
+            #calendar-nav {
+            margin: 10px auto 16px auto !important;
+            padding: 10px !important;
+            max-width: 95vw !important;
+            box-sizing: border-box;
+        }
             #calendar {
-                gap: 6px;
-                padding: 12px;
-            }
+            gap: 6px;
+            padding: 12px;
+            max-width: 95vw; /* Ensure it doesn't overflow */
+        }
 
-            .day {
-                min-height: 80px;
-                padding: 6px;
-            }
+        .day {
+            min-height: 80px;
+            padding: 6px;
+        }
 
-            .day-header {
-                font-size: 0.8rem;
-            }
+        .day-header {
+            font-size: 0.8rem;
+        }
 
             .event {
-                font-size: 0.7rem;
-                padding: 3px;
-            }
+            font-size: 0.7rem;
+            padding: 3px;
+        }
 
-            #calendar-nav {
-                padding: 10px;
-            }
-
-            #month-year {
-                font-size: 1rem;
-            }
+           #month-year {
+            font-size: 1rem !important;
+        }
 
             button {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
+            padding: 6px 12px !important;
+            font-size: 0.8rem !important;
+        }
         }
 
         @media (max-width: 400px) {
-            #calendar {
-                gap: 4px;
-                padding: 8px;
-            }
-
-            .day {
-                min-height: 60px;
-                padding: 4px;
-            }
-
-            .day-header {
-                font-size: 0.7rem;
-            }
-
-            .event {
-                font-size: 0.6rem;
-                padding: 2px;
-            }
+        #calendar-container {
+            padding: 5px;
         }
+        
+        #calendar-nav {
+            padding: 8px !important;
+            margin: 5px auto 12px auto !important;
+        }
+        
+        #calendar {
+            gap: 4px;
+            padding: 8px;
+            max-width: 98vw;
+        }
+
+        .day {
+            min-height: 60px;
+            padding: 4px;
+        }
+
+        .day-header {
+            font-size: 0.7rem;
+        }
+
+        .event {
+            font-size: 0.6rem;
+            padding: 2px;
+        }
+        
+        #month-year {
+            font-size: 0.9rem !important;
+        }
+        
+        button {
+            padding: 4px 8px !important;
+            font-size: 0.7rem !important;
+        }
+    }
     `;
     document.head.appendChild(style);
 
