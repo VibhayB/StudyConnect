@@ -492,24 +492,26 @@ function createTabs(abcData) {
             text-align: center;
         }
         
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 8px;
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-        }
-        
-        .video-iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
+.video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    min-height: 315px; /* Ensure minimum height for controls */
+}
+
+.video-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    min-width: 280px; /* Ensure controls are accessible */
+}
         
         .no-content {
             text-align: center;
@@ -557,40 +559,123 @@ function createTabs(abcData) {
         
         @media only screen and (max-width: 768px) {
             .tabs-container {
-                flex-direction: column;
-            }
+        flex-direction: column;
+        overflow-x: auto; /* Allow horizontal scrolling */
+        overflow-y: hidden;
+        flex-direction: row; /* Keep tabs horizontal */
+        white-space: nowrap;
+    }
             
             .tab {
-                border-radius: 0;
-                margin-right: 0;
-                margin-bottom: 4px;
-            }
+        border-radius: 0;
+        margin-right: 0;
+        margin-bottom: 4px;
+        flex-shrink: 0; /* Prevent tabs from shrinking */
+        white-space: nowrap;
+        min-width: 100px;
+        margin-right: 8px;
+    }
             
             .tab.active {
-                border-radius: 8px;
-            }
+        border-radius: 8px;
+    }
             
             #timers-container {
-                flex-direction: column;
-                align-items: center;
-            }
+        flex-direction: column;
+        align-items: center;
+    }
             
             .timer {
-                width: 100%;
-                max-width: 280px;
-            }
+        width: 100%;
+        max-width: 280px;
+    }
+    
             
             .tab-contents {
-                padding: 20px;
-            }
+        padding: 20px 15px; /* Reduce horizontal padding */
+    }
             
             .subject-container {
-                padding: 15px;
-            }
+        padding: 15px;
+        margin: 20px 0;
+    }
             
             .subject-title {
-                font-size: 26px;
-            }
+        font-size: 26px;
+    }
+
+    .video-container {
+        margin-bottom: 25px;
+        padding: 15px;
+    }
+
+    .video-wrapper {
+        min-height: 250px; /* Smaller but still accessible */
+        padding-bottom: 60%; /* Slightly taller aspect ratio for mobile */
+    }
+    
+    .video-iframe {
+        min-width: 100%; /* Use full container width */
+    }
+    
+    .video-title {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    @media only screen and (max-width: 480px) {
+    .tabs-container {
+        padding: 10px;
+        gap: 5px;
+    }
+    
+    .tab {
+        padding: 12px 16px;
+        font-size: 14px;
+        min-width: 80px;
+    }
+    
+    .tab-contents {
+        padding: 15px 10px;
+    }
+    
+    .video-wrapper {
+        min-height: 200px;
+        padding-bottom: 65%; /* Even taller for very small screens */
+    }
+    
+    .video-title {
+        font-size: 14px;
+    }
+    
+    .subject-title {
+        font-size: 22px;
+    }
+    
+    .section-title {
+        font-size: 18px;
+    }
+}
+
+/* Tabs scrollbar styling for mobile */
+.tabs-container::-webkit-scrollbar {
+    height: 4px;
+}
+
+.tabs-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 2px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb {
+    background: rgba(0, 123, 255, 0.5);
+    border-radius: 2px;
+}
+
+.tabs-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 123, 255, 0.7);
+}
+
         }
     `;
     document.head.appendChild(style);
