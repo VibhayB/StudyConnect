@@ -406,16 +406,21 @@ function populateProductivity(data, fxc = false) {
         overflow: 'hidden'
     });
 
-    // Create stunning tabs container
-    const tabsContainer = document.createElement('div');
-    Object.assign(tabsContainer.style, {
-        display: 'flex',
-        justifyContent: 'center',
-        gap: '15px',
-        padding: '20px',
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-        flexShrink: '0'
-    });
+// Create stunning tabs container
+const tabsContainer = document.createElement('div');
+Object.assign(tabsContainer.style, {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    gap: '15px',
+    padding: '20px',
+    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    flexShrink: '0',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+    scrollbarWidth: 'thin',
+    scrollbarColor: 'rgba(255, 255, 255, 0.3) transparent'
+});
+
 
     // Create beautiful content container
     const contentContainer = document.createElement('div');
@@ -505,19 +510,21 @@ function populateProductivity(data, fxc = false) {
     // Create beautiful tab buttons
     data.forEach(item => {
         const tabButton = document.createElement('button');
-        tabButton.textContent = item.title;
-        Object.assign(tabButton.style, {
-            padding: '12px 25px',
-            cursor: 'pointer',
-            background: 'rgba(255, 255, 255, 0.2)',
-            border: 'none',
-            borderRadius: '25px',
-            color: '#fff',
-            fontWeight: '600',
-            fontSize: '1rem',
-            transition: 'all 0.3s ease',
-            backdropFilter: 'blur(10px)'
-        });
+    tabButton.textContent = item.title;
+    Object.assign(tabButton.style, {
+        padding: '12px 25px',
+        cursor: 'pointer',
+        background: 'rgba(255, 255, 255, 0.2)',
+        border: 'none',
+        borderRadius: '25px',
+        color: '#fff',
+        fontWeight: '600',
+        fontSize: '1rem',
+        transition: 'all 0.3s ease',
+        backdropFilter: 'blur(10px)',
+        flexShrink: '0',  // Add this line
+        whiteSpace: 'nowrap'  // Add this line to prevent text wrapping
+    });
 
         tabButton.addEventListener('mouseenter', () => {
             tabButton.style.background = 'rgba(255, 255, 255, 0.3)';
@@ -562,6 +569,30 @@ function populateProductivity(data, fxc = false) {
             border-radius: 50%;
             width: 20px;
             height: 20px;
+        }
+            /* Mobile tabs scrolling */
+    @media (max-width: 768px) {
+        .tabs-container {
+            justify-content: flex-start !important;
+            padding: 15px !important;
+        }
+        
+        .tabs-container::-webkit-scrollbar {
+            height: 6px;
+        }
+        
+        .tabs-container::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+        }
+        
+        .tabs-container::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 3px;
+        }
+        
+        .tabs-container::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
         }
     `;
     document.head.appendChild(style);
