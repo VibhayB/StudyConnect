@@ -580,6 +580,7 @@ function injectCSS() {
     flex: 0 0 400px;
     height: 225px;
     border: none;
+    min-width: 280px;  /* Ensure minimum width for YouTube controls */
 }
 
 .video-info {
@@ -709,11 +710,11 @@ function injectCSS() {
     }
     
     .video-item iframe {
-        width: 100%;
-        max-width: 400px;
-        height: 225px;
-        flex: none;
-    }
+    width: 100%;
+    min-width: 280px;  /* Ensure minimum width for controls */
+    height: 225px;
+    flex: none;
+}
     
     .video-info {
         margin-left: 0;
