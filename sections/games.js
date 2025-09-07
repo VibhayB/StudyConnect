@@ -1,19 +1,57 @@
 const games = [
-    { name: "Bouncing Ball", url: "", thumbnail: "https://w7.pngwing.com/pngs/731/1016/png-transparent-crazy-bouncing-ball-game-app-store-bouncy-balls-others-game-sphere-jump-thumbnail.png", openInNewWindow: false, htmlContent: "htmlfiles/ball balancer.html" },
-    { name: "Pomodoro", url: "", thumbnail: "https://st4.depositphotos.com/37073554/38209/v/450/depositphotos_382092468-stock-illustration-kitchen-timer-form-red-tomato.jpg", openInNewWindow: false, htmlContent: "htmlfiles/pomodoro.html" },
-    { name: "Snake", url: "", thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMJHVz4Ytq3Uxj1AATP9I0jLizBzZHZX-1tg&s", openInNewWindow: false, htmlContent: "htmlfiles/snake.html" },
-    { name: "2048", url: "", thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/800px-2048_logo.svg.png", openInNewWindow: false, htmlContent: "htmlfiles/2048.html" },
-    { name: "MineSweeper", url: "", thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZTutjb5iTEx5ePulQ7Z0dXLyZZKvEVO2jTQ&s", openInNewWindow: false, htmlContent: "htmlfiles/minesweeper.html" },
-    { name: "Plane Defense", url: "https://vibhayb.github.io/Plane-Defense/", thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FOIG2.TU754WuobyvyHpwCC%20(1).png?alt=media&token=4be3c85a-2127-4045-8a32-dd326dcd50c6", openInNewWindow: true, htmlContent: null },
-    { name: "OverNight Assignment", url: "https://drive.google.com/file/d/1SCK7GQ0eaj9ecpNnLMRo_2qxkn9sgYK5/view?usp=sharing", thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FPicture1.png?alt=media&token=0bf2766a-54d1-4fcd-835b-a71cd2468c79", openInNewWindow: true, htmlContent: null }
+    { 
+        name: "Bouncing Ball", 
+        url: "", 
+        thumbnail: "https://w7.pngwing.com/pngs/731/1016/png-transparent-crazy-bouncing-ball-game-app-store-bouncy-balls-others-game-sphere-jump-thumbnail.png", 
+        openInNewWindow: false, 
+        htmlContent: "htmlfiles/ball balancer.html" 
+    },
+    { 
+        name: "Pomodoro", 
+        url: "", 
+        thumbnail: "https://st4.depositphotos.com/37073554/38209/v/450/depositphotos_382092468-stock-illustration-kitchen-timer-form-red-tomato.jpg", 
+        openInNewWindow: false, 
+        htmlContent: "htmlfiles/pomodoro.html" 
+    },
+    { 
+        name: "Snake", 
+        url: "", 
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRMJHVz4Ytq3Uxj1AATP9I0jLizBzZHZX-1tg&s", 
+        openInNewWindow: false, 
+        htmlContent: "htmlfiles/snake.html" 
+    },
+    { 
+        name: "2048", 
+        url: "", 
+        thumbnail: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/18/2048_logo.svg/800px-2048_logo.svg.png", 
+        openInNewWindow: false, 
+        htmlContent: "htmlfiles/2048.html" 
+    },
+    { 
+        name: "MineSweeper", 
+        url: "", 
+        thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZTutjb5iTEx5ePulQ7Z0dXLyZZKvEVO2jTQ&s", 
+        openInNewWindow: false, 
+        htmlContent: "htmlfiles/minesweeper.html" 
+    },
+    { 
+        name: "Plane Defense", 
+        url: "https://vibhayb.github.io/Plane-Defense/", 
+        thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FOIG2.TU754WuobyvyHpwCC%20(1).png?alt=media&token=4be3c85a-2127-4045-8a32-dd326dcd50c6", 
+        openInNewWindow: true, 
+        htmlContent: null 
+    },
+    { 
+        name: "OverNight Assignment", 
+        url: "https://drive.google.com/file/d/1SCK7GQ0eaj9ecpNnLMRo_2qxkn9sgYK5/view?usp=sharing", 
+        thumbnail: "https://firebasestorage.googleapis.com/v0/b/aiml-studyconnect.appspot.com/o/images%2FPicture1.png?alt=media&token=0bf2766a-54d1-4fcd-835b-a71cd2468c79", 
+        openInNewWindow: true, 
+        htmlContent: null 
+    }
 ]; 
 
-// Function to create app items and add them to the div
 function populateGames() {
-    // Apply styles using JavaScript
     const appsContainer = document.getElementById('games');
-
-    // Set styles for the container
     appsContainer.style.display = 'flex';
     appsContainer.style.flexWrap = 'wrap';
     appsContainer.style.justifyContent = 'center';
@@ -25,11 +63,8 @@ function populateGames() {
     appsContainer.style.backgroundColor = '#f8fafc';
     appsContainer.style.borderRadius = '12px';
     appsContainer.style.boxShadow = '0 5px 15px rgba(0, 0, 0, 0.05)';
-    
-    // Clear existing content
     appsContainer.innerHTML = '';
 
-    // Create and append new app items
     games.forEach(game => {
         const appItem = document.createElement('div');
         appItem.style.display = 'flex';
@@ -48,14 +83,13 @@ function populateGames() {
         appItem.style.boxSizing = 'border-box';
         appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
         appItem.style.position = 'relative';
-        
-        // Add a subtle top accent
         appItem.style.borderTop = '4px solid #3b82f6';
 
         appItem.onmouseover = () => {
             appItem.style.transform = 'translateY(-8px) scale(1.02)';
             appItem.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)';
         };
+
         appItem.onmouseout = () => {
             appItem.style.transform = 'translateY(0) scale(1)';
             appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
@@ -66,16 +100,9 @@ function populateGames() {
                 fetch(game.htmlContent)
                 .then(response => response.text())
                 .then(htmlContent => {
-                    // Create a Blob object with the HTML content
                     const blob = new Blob([htmlContent], { type: 'text/html' });
-
-                    // Generate a URL for the Blob
                     const url = URL.createObjectURL(blob);
-
-                    // Open the Blob URL in a new window
                     window.open(url, '_blank');
-
-                    // Optionally, revoke the Blob URL after some time to free up resources
                     setTimeout(() => URL.revokeObjectURL(url), 10000);
                 })
                 .catch(error => {
@@ -86,7 +113,6 @@ function populateGames() {
             }
         };
 
-        // Image container with fixed aspect ratio
         const imgContainer = document.createElement('div');
         imgContainer.style.width = '100%';
         imgContainer.style.height = '140px';
@@ -110,6 +136,7 @@ function populateGames() {
             appItem.style.boxShadow = '0 15px 35px rgba(0, 0, 0, 0.1), 0 5px 15px rgba(0, 0, 0, 0.07)';
             img.style.transform = 'scale(1.1)';
         };
+
         appItem.onmouseout = () => {
             appItem.style.transform = 'translateY(0) scale(1)';
             appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
@@ -135,7 +162,6 @@ function populateGames() {
 
         appItem.appendChild(imgContainer);
         appItem.appendChild(name);
-
         appsContainer.appendChild(appItem);
     });
 }
