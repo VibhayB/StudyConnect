@@ -1,7 +1,5 @@
-// Function to create app items and add them to the div
 function populateApps() {
   const examScheduleJSON = JSON.stringify(examSchedule);
-  // Use JSON directly in the HTML string
   const timerContent = `
   <!DOCTYPE html>
   <html lang="en">
@@ -66,7 +64,6 @@ function populateApps() {
     <h1>List of Events</h1>
     <div id="timers-container"></div>
     <script>
-      // Define exam schedule using JSON
       const examSchedule = ${examScheduleJSON};
 
       function createCountdownElement(exam) {
@@ -143,10 +140,8 @@ function populateApps() {
     }
   }
   
-  // Apply styles using JavaScript
   const appsContainer = document.getElementById('others');
 
-  // Set styles for the container
   appsContainer.style.display = 'flex';
   appsContainer.style.flexWrap = 'wrap';
   appsContainer.style.gap = '25px';
@@ -159,10 +154,8 @@ function populateApps() {
   appsContainer.style.justifyContent = 'center';
   appsContainer.style.alignItems = 'flex-start';
 
-  // Clear existing content
   appsContainer.innerHTML = '';
 
-  // Create and append new app items
   applist.forEach(app => {
     const appItem = document.createElement('div');
     appItem.style.display = 'flex';
@@ -182,7 +175,6 @@ function populateApps() {
     appItem.style.boxShadow = '0 10px 25px rgba(0, 0, 0, 0.05), 0 5px 10px rgba(0, 0, 0, 0.03)';
     appItem.style.position = 'relative';
     
-    // Add a subtle top accent
     appItem.style.borderTop = '4px solid #3b82f6';
 
     appItem.onmouseover = () => {
@@ -196,29 +188,22 @@ function populateApps() {
 
     appItem.onclick = () => {
       if(app.name == "Timers"){
-        // Create a Blob object with the HTML content
         const blob = new Blob([timerContent], { type: 'text/html' });
 
-        // Generate a URL for the Blob
         const url = URL.createObjectURL(blob);
 
-        // Open the Blob URL in a new window
         window.open(url, '_blank');
       }
       else if (app.htmlContent) {
         fetch(app.htmlContent)
         .then(response => response.text())
         .then(htmlContent => {
-          // Create a Blob object with the HTML content
           const blob = new Blob([htmlContent], { type: 'text/html' });
 
-          // Generate a URL for the Blob
           const url = URL.createObjectURL(blob);
 
-          // Open the Blob URL in a new window
           window.open(url, '_blank');
 
-          // Optionally, revoke the Blob URL after some time to free up resources
           setTimeout(() => URL.revokeObjectURL(url), 10000);
         })
         .catch(error => {
@@ -229,7 +214,6 @@ function populateApps() {
       }
     };
 
-    // Image container with fixed aspect ratio
     const imgContainer = document.createElement('div');
     imgContainer.style.width = '100%';
     imgContainer.style.height = '140px';
