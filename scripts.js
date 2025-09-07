@@ -15,9 +15,7 @@ var courseData;
 var showbanner = "show"; //set to 'dont show' to disable and 'show' to enable
 const classLists = {"course":"Course","feed":"Feed","exams":"Exams","games":"Games","calendar":"Academic Calendar","forms":"Important Docs","contacts":"Important Contacts","installers":"Installers","sites":"Online Sites","others":"Others","productivity":"Productivity","guide":"Guide"};
 
-  
-
-// Tab names mapping
+// Tab names mapped to firebase document name
 const tabNames = {
     "courseData": "course",
     "posts": "feed",
@@ -34,7 +32,7 @@ const tabNames = {
     "guide": "guide"
 };
 
-// Keywords mapping
+// Keywords for chatbot
 const keywords = {
     "courseData": ["course", "study material", "course content"],
     "posts": ["posts", "feed"],
@@ -82,13 +80,12 @@ function showLoadingScreen() {
     const loadingText = document.createElement('p');
     loadingText.textContent = 'Loading, please wait...';
     loadingText.style.marginTop = '20px';
-    loadingText.style.color = 'black';  // Set the text color to black
+    loadingText.style.color = 'black';  
 
     loadingScreen.appendChild(loader);
     loadingScreen.appendChild(loadingText);
     document.body.appendChild(loadingScreen);
 
-    // Keyframes for the spinning animation
     const styleSheet = document.styleSheets[0];
     styleSheet.insertRule(`
         @keyframes spin {
@@ -98,7 +95,6 @@ function showLoadingScreen() {
     `, styleSheet.cssRules.length);
 }
 
-// Function to hide the loading screen
 function hideLoadingScreen() {
     document.getElementById("screen").style.display = '';
     document.getElementById("banner").style.display = '';
@@ -113,7 +109,6 @@ function hideLoadingScreen() {
         loadingScreen.style.opacity = '0';
         loadingScreen.style.transition = 'opacity 1s';
 
-        // Wait for the transition to finish before removing the element
         setTimeout(() => {
             if (loadingScreen && loadingScreen.parentNode) {
                 loadingScreen.parentNode.removeChild(loadingScreen);
@@ -127,38 +122,33 @@ function updateStatusBar() {
     const statusBar = document.getElementById('status-bar');
 
     if (navigator.onLine) {
-        // User is online
         statusBar.textContent = 'You are back online';
         statusBar.className = 'online';
-        statusBar.style.display = 'block'; // Make sure it's visible
-        statusBar.style.opacity = '1'; // Ensure full opacity
+        statusBar.style.display = 'block'; 
+        statusBar.style.opacity = '1'; 
         
-        // Fade out after 2-3 seconds
         clearTimeout(fadeTimeout);
         fadeTimeout = setTimeout(() => {
-            statusBar.style.opacity = '0'; // Start fading out
+            statusBar.style.opacity = '0'; 
             setTimeout(() => {
-                statusBar.style.display = 'none'; // Hide completely after fade
-            }, 500); // Match this duration with the CSS transition time
-        }, 2000); // Adjust the delay before fading out (2 seconds)
+                statusBar.style.display = 'none'; 
+            }, 500);
+        }, 2000); 
     } else {
-        // User is offline
         statusBar.textContent = 'You are offline';
         statusBar.className = 'offline';
-        statusBar.style.display = 'block'; // Ensure it's visible
-        statusBar.style.opacity = '1'; // Ensure full opacity
+        statusBar.style.display = 'block';
+        statusBar.style.opacity = '1';
     }
 }
 
-// Listen for online/offline events
 window.addEventListener('online', updateStatusBar);
 window.addEventListener('offline', updateStatusBar);
 
 function userRead() {
     if (readability) {
-        readability = false; // Set variable to false
+        readability = false;
         console.log("Loading started");
-        // Set timeout to revert variable back to true after the specified duration
         setTimeout(() => {
             readability = true;
             console.log("Free to load again");
@@ -170,22 +160,18 @@ var currenttab = localStorage.getItem("tabcurrentx");
 var currentheader = localStorage.getItem("tabcurrenty");
 var examSchedule;
 var applist;
-//python -m http.server 8000
 
-// Call the function after a 1-second delay
 
 async function fetchAndDisplayData() {
     try {
-      // Replace 'your-collection-name' with the actual collection name
       const lastlogStr = localStorage.getItem("lastlog");
       const lastlog = lastlogStr ? new Date(parseInt(lastlogStr, 10)) : null;
       
     console.log(".....")
       
-    // Check if lastlog exists
     const currentTime = new Date();
     let abctime = localStorage.getItem("tries") || "2024-09-28T00:00:00";
-    let abctimeParsed = new Date(abctime).getTime(); // Parse the time correctly
+    let abctimeParsed = new Date(abctime).getTime(); 
     
     console.log("......")
     if (Date.now() - abctimeParsed > 5000) {
@@ -202,7 +188,6 @@ async function fetchAndDisplayData() {
     console.log(".......")
     localStorage.setItem("tries", new Date().toISOString());
     console.log('Website Loaded');
-      // You can process or display the data as needed here
       const storedData = JSON.parse(localStorage.getItem("maindataxh"));
       if((!maindata || !maindata.some(item => item.id === 'courseData'))){
         if(storedData){
@@ -292,30 +277,26 @@ async function fetchAndDisplayData() {
     }
 };
   
-  
-  // Immediately invo
 const signInMessage = document.createElement('div');
 signInMessage.id = 'sign-in-message';
 signInMessage.className = 'sign-in-message';
 signInMessage.textContent = 'Sign in to access content';
 
-// Apply styles to the sign-in message
 signInMessage.style.position = 'fixed';
 signInMessage.style.bottom = '0';
 signInMessage.style.left = '0'; 
-signInMessage.style.width = '100%'; // Make it span the full width
+signInMessage.style.width = '100%'; 
 signInMessage.style.height = 'auto';
 signInMessage.style.backgroundColor = 'black';
 signInMessage.style.color = 'white';
-signInMessage.style.borderTop = '1px solid #f5c6cb'; // Add a border at the top
-signInMessage.style.borderRadius = '8px 8px 0 0'; // Rounded corners at the top
-signInMessage.style.padding = '15px'; // Adjust padding for a footer look
-signInMessage.style.boxShadow = '0 -2px 4px rgba(0, 0, 0, 0.1)'; // Shadow for the footer
+signInMessage.style.borderTop = '1px solid #f5c6cb'; 
+signInMessage.style.borderRadius = '8px 8px 0 0'; 
+signInMessage.style.padding = '15px'; 
+signInMessage.style.boxShadow = '0 -2px 4px rgba(0, 0, 0, 0.1)'; 
 signInMessage.style.zIndex = '999';
 signInMessage.style.textAlign = 'center';
 signInMessage.style.fontFamily = 'Arial, sans-serif';
 
-// Append the sign-in message to the body
 document.body.appendChild(signInMessage);
 
 const homeContent = document.getElementById('home');
@@ -323,14 +304,11 @@ const homeContent = document.getElementById('home');
 function showAlert(message,icon="load.png") {
     closeAlert();
     document.getElementById("alertimg").src=icon;
-    // Update the message in the alert
     document.querySelector('.alert-message').innerHTML = message;
 
-    // Display the custom alert
     const alertBox = document.getElementById('custom-alert');
     alertBox.style.display = 'block';
     
-    // Trigger the fade-in effect by forcing a reflow and then changing the opacity
     requestAnimationFrame(() => {
         alertBox.style.opacity = '1';
         alertBox.style.visibility = 'visible';
@@ -340,7 +318,6 @@ function showAlert(message,icon="load.png") {
   function closeAlert() {
     const alertBox = document.getElementById('custom-alert');
 
-    // Trigger the fade-out effect by changing the opacity
     alertBox.style.opacity = '0';
     alertBox.style.visibility = 'hidden';
     if(showbanner == "show later"){
@@ -353,7 +330,6 @@ function showAlert(message,icon="load.png") {
     }
   }
 
-// Function to toggle the menu visibility
 function toggleMenu() {
     const nav = document.getElementById('hamburger-menu');
     const overlay = document.getElementById('overlay');
@@ -366,12 +342,10 @@ function toggleMenu() {
     main.classList.toggle('dimmed');
 
     if (!nav.classList.contains('closed')) {
-        // Apply staggered animation delay for each menu item
         menuItems.forEach((item, index) => {
             item.style.animation = `fadeInSlideRight 0.5s forwards ${index * 0.1}s`;
         });
     } else {
-        // Reset the styles when closing the menu
         menuItems.forEach((item) => {
             item.style.animation = '';
             item.style.opacity = '0';
@@ -381,7 +355,6 @@ function toggleMenu() {
 }
 
 
-// Function to show a specific tab
 function showTab(event, tabName, pushToHistory = true) {  
     if(tabName == "assignments"){
         tabName = 'feed';
@@ -404,9 +377,8 @@ function showTab(event, tabName, pushToHistory = true) {
         
         document.getElementById("home").style.display = 'none';
         try{
-            event.preventDefault(); // Prevent default link behavior
+            event.preventDefault(); 
         } catch(error){
-            //if event not defined
         }
         const content = document.getElementsByClassName("content");
         for (let i = 0; i < content.length; i++) {
@@ -455,7 +427,6 @@ window.addEventListener('popstate', function(event) {
        showTab(null,event.state.tab,false);
     }
  });
-// Function to handle Home button click
 function handleHomeClick() {
     if(!isSignedIn){
         signInWithGoogleDirectly(false);
@@ -463,7 +434,6 @@ function handleHomeClick() {
     } console.log("Already signed in");
 }
 
-// Replace the existing initializeScrollAnimations function with this enhanced version
 function initializeScrollAnimations() {
     const observerOptions = {
         root: null,
@@ -476,35 +446,27 @@ function initializeScrollAnimations() {
             const element = entry.target;
             
             if (entry.isIntersecting) {
-                // Remove any existing animation classes
                 element.classList.remove('animate-slide-left', 'animate-slide-right');
                 
-                // Determine animation direction based on flex-direction
                 const flexDirection = window.getComputedStyle(element).flexDirection;
                 const isReversed = flexDirection === 'row-reverse';
                 
-                // Add appropriate animation class
                 if (isReversed) {
                     element.classList.add('animate-slide-left');
                 } else {
                     element.classList.add('animate-slide-right');
                 }
                 
-                // Don't unobserve - allow for re-triggering when scrolling back
             } else {
-                // Reset animation when out of view
                 element.classList.remove('animate-slide-left', 'animate-slide-right');
-                // Reset to initial state
                 element.style.opacity = '0';
-                element.style.transform = 'translateX(50px)'; // or -50px based on direction
+                element.style.transform = 'translateX(50px)'; 
             }
         });
     }, observerOptions);
 
-    // Observe all info items
     const infoItems = document.querySelectorAll('.info-item-animate');
     infoItems.forEach((item, index) => {
-        // Set initial state based on whether it's even or odd (determines text position)
         const isEven = index % 2 === 0;
         item.style.opacity = '0';
         item.style.transform = isEven ? 'translateX(-50px)' : 'translateX(50px)';
@@ -514,7 +476,6 @@ function initializeScrollAnimations() {
     });
 }
 
-// Add the enhanced CSS animations - call this function after DOM is loaded
 function addEnhancedScrollAnimations() {
     const style = document.createElement('style');
     style.textContent = `
@@ -548,7 +509,6 @@ function addEnhancedScrollAnimations() {
             animation: fadeInSlideRight 0.8s ease-out forwards !important;
         }
         
-        /* Enhanced hover effects for animated elements */
         .info-item-animate {
             transition: all 0.4s ease;
         }
@@ -561,29 +521,21 @@ function addEnhancedScrollAnimations() {
     document.head.appendChild(style);
 }
 
-// Enhanced showHome function - replace the existing setTimeout call with this
 function enhanceHomeScrollEffects() {
-    // Add the CSS animations first
     addEnhancedScrollAnimations();
     
-    // Initialize scroll animations after DOM is ready
     setTimeout(() => {
         initializeScrollAnimations();
     }, 100);
 }
 
-// Function to show home content
 function showHome() { 
-// Function to search for relevant data
 function chatbotmechanism(input){
     return handleUserPrompt(input);
 }
-// Main function to handle user prompt
 function handleUserPrompt(userPrompt) {
-    // Normalize user prompt
     const normalizedPrompt = userPrompt.toLowerCase();
 
-    // Search for keywords and match tab names
     let foundTab = null;
     for (const [id, keywordsList] of Object.entries(keywords)) {
         for (const keyword of keywordsList) {
@@ -593,38 +545,30 @@ function handleUserPrompt(userPrompt) {
             }
         }
         if (foundTab) break;
-    } //additional logic
+    }
     for (let i = 0; i < intents.intents.length; i++) {
         const intent = intents.intents[i];
         for (let j = 0; j < intent.patterns.length; j++) {
             const pattern = intent.patterns[j];
             if (userPrompt.toLowerCase().includes(pattern.toLowerCase())) {
-            // Randomly select a response
             return intent.responses[Math.floor(Math.random() * intent.responses.length)];
             }
         }
     }
-    // If a tab was found through keywords but no other data was found
     if (foundTab) {
         return showTab(null, foundTab);
     }
 
-    // Default action if no data or tab was found
     return "I couldn't find exactly what you're looking for right now. I'll be updated with more information soon!";
 }
-// Function to display search results
 function displaySearchResult(input) {
     
-        // Construct display text with HTML formatting
         let displayHTML = chatbotmechanism(input);
 
-        // Replace URLs with clickable links (with better handling of long URLs)
         displayHTML = displayHTML.replace(/(https?:\/\/[^\s<>"']{20,})/g, '<a href="$1" target="_blank" title="$1">$1</a>');
 
-        // Replace phone numbers with clickable tel links
         displayHTML = displayHTML.replace("\\n", '<br>');
 
-        // Display the formatted HTML content in the chat
         displayMessage(displayHTML, 'bot');
 }
 
@@ -643,7 +587,6 @@ function displaySearchResult(input) {
     homeContent.style.display = "block";
     homeContent.style.justifyContent = 'center';
     
-    // Create main container for better structure
     const mainContainer = document.createElement('div');
     mainContainer.style.width = '100%';
     mainContainer.style.maxWidth = '1200px';
@@ -682,7 +625,6 @@ buttonData.forEach(data => {
 
 mainContainer.appendChild(buttonsContainer);
 
-// Create timetable section with improved styling
     const timetableSection = document.createElement('div');
     timetableSection.className = 'timetable-section';
     timetableSection.style.textAlign = 'center';
@@ -716,7 +658,6 @@ const image = document.createElement('img');
     timetableSection.appendChild(image);
     mainContainer.appendChild(timetableSection);
 
-// Create info section with improved styling and scroll animations
     const infoSection = document.createElement('div');
     infoSection.className = 'info-section';
     infoSection.style.margin = '60px 0';
@@ -750,7 +691,6 @@ const image = document.createElement('img');
         </div>
     `;
     mainContainer.appendChild(infoSection);
-// Create footer with improved styling
     const footer = document.createElement('footer');
     footer.id = 'footer';
     footer.className = isSignedIn ? '' : 'hidden';
@@ -802,7 +742,6 @@ function getIconForIndex(index) {
     ];
     return icons[index % icons.length];
 }
-    // Add event listeners for feedback and report buttons
     const feedbackButton = document.querySelector('.feedback-button');
     const reportButton = document.querySelector('.report-button');
 
@@ -816,10 +755,7 @@ function getIconForIndex(index) {
             window.open(reporturl, '_blank');
         });
     }  
-    // Check if chatbot has already been added
-// Check if chatbot has already been added
 if (!document.getElementById('chatbot-container')) {
-    // Create and add chatbot container
     const chatbotContainer = document.createElement('div');
     chatbotContainer.id = 'chatbot-container';
     chatbotContainer.innerHTML = `
@@ -857,7 +793,6 @@ if (!document.getElementById('chatbot-container')) {
     `;
     document.body.appendChild(chatbotContainer);
 
-    // Add CSS animations including the new scroll animation
     const style = document.createElement('style');
     style.textContent = `
         @keyframes pulse {
@@ -934,7 +869,6 @@ if (!document.getElementById('chatbot-container')) {
     `;
     document.head.appendChild(style);
 
-    // Chatbot functionality
     const chatbotToggle = document.getElementById('chatbot-toggle');
     const closeChatbot = document.getElementById('close-chatbot');
     const chatImage = document.getElementById('chatbot-image');
@@ -942,7 +876,6 @@ if (!document.getElementById('chatbot-container')) {
     const sendMessageButton = document.getElementById('send-message');
     const messagesContainer = document.getElementById('messages');
 
-    // Function to toggle chat visibility with smooth animations
     chatImage.onclick = () => {
         const chatbot = document.getElementById('chatbot');
         if (chatbot.style.display === 'none' || !chatbot.style.display) {
@@ -961,7 +894,6 @@ if (!document.getElementById('chatbot-container')) {
         }
     };
 
-    // Function to close chat with animation
     closeChatbot.onclick = () => {
         const chatbot = document.getElementById('chatbot');
         chatbot.style.transform = 'scale(0.8) translateY(20px)';
@@ -971,7 +903,6 @@ if (!document.getElementById('chatbot-container')) {
         }, 300);
     };
 
-    // Enhanced message display function
     function displayMessage(text, sender) {
         const messageWrapper = document.createElement('div');
         messageWrapper.classList.add('message-fade-in');
@@ -1017,13 +948,11 @@ if (!document.getElementById('chatbot-container')) {
         messageWrapper.appendChild(messageText);
         messagesContainer.appendChild(messageWrapper);
         
-        // Smooth scroll to bottom
         setTimeout(() => {
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }, 50);
     }
 
-    // Enhanced typing indicator
     function showTypingIndicator() {
         const typingWrapper = document.createElement('div');
         typingWrapper.id = 'typing-indicator';
@@ -1071,18 +1000,14 @@ if (!document.getElementById('chatbot-container')) {
             displayMessage(userMessage, 'user');
             messageInput.value = '';
 
-            // Process user input and search the nested data
             const searchTerm = userMessage.toLowerCase();
-            //const results = searchKeys(maindata, searchTerm);
 
-            // Display the search result
             setTimeout(() => {
                 displaySearchResult(searchTerm);
             }, 700);
         }
     };
 
-    // Enhanced input handling
     messageInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault();
@@ -1090,7 +1015,6 @@ if (!document.getElementById('chatbot-container')) {
         }
     });
 
-    // Add input focus effects
     messageInput.addEventListener('focus', () => {
         messageInput.parentElement.style.boxShadow = '0 4px 20px rgba(102, 126, 234, 0.2)';
         messageInput.parentElement.style.borderColor = '#667eea';
@@ -1101,7 +1025,6 @@ if (!document.getElementById('chatbot-container')) {
         messageInput.parentElement.style.borderColor = 'rgba(226, 232, 240, 0.5)';
     });
 
-    // Add floating animation to toggle button
     setInterval(() => {
         if (document.getElementById('chatbot').style.display !== 'block') {
             const toggle = document.getElementById('chatbot-toggle');
@@ -1110,17 +1033,13 @@ if (!document.getElementById('chatbot-container')) {
                 toggle.style.animation = 'bounceIn 0.6s ease-out';
             }, 10);
         }
-    }, 10000); // Subtle attention-grabber every 10 seconds
+    }, 10000);
 
-    // Your displaySearchResult function should be defined elsewhere in your codebase
-
-    // Call this function after the chatbot container is added to the DOM
     if (typeof addChatbotHoverEffects === 'function') {
         addChatbotHoverEffects();
     }
 }
 }
-// Function to add hover effects and shadow to the chatbot toggle button
 function addChatbotHoverEffects() {
     const chatbotToggle = document.getElementById('chatbot-toggle');
     chatbotToggle.addEventListener('mouseover', () => {
@@ -1158,7 +1077,6 @@ function signInWithGoogleDirectly(val = false, onpurpose = false) {
   } 
   
 
-// Functions for handling slides
 function changeSlide(n) {
     showSlides(slideIndex += n);
 }
@@ -1189,10 +1107,8 @@ function nextSlide() {
     showSlides(slideIndex);
 }
 
-// Set interval to run nextSlide every 5 seconds
 setInterval(nextSlide, 5000);
 
-// Initial setup when the DOM is fully loaded
 document.addEventListener('DOMContentLoaded', function() {
     showLoadingScreen(); 
     console.log(".")
@@ -1210,11 +1126,9 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log("...")
-    // Set up Home button
     document.querySelector('.home-button').addEventListener('click', handleHomeClick);
 
     
-    // Set up Sign In button
     const signInButton = document.querySelector('.sign-in-button');
     if (signInButton) {
         signInButton.addEventListener('click', signInWithGoogleDirectly);
@@ -1237,30 +1151,29 @@ function updateHomeButton() {
     const feedbackReportButtons = document.getElementById('feedback-report-buttons');
     const signOutLink = document.getElementById('sign-out');
     if (isSignedIn) {
-        guideButton.style.display = 'flex'; // or 'inline-flex'
+        guideButton.style.display = 'flex'; 
         guideButton.addEventListener('click',(event)=>{
             showTab(null, "guide");
         });
         homeButton.innerHTML = '<i class="fas fa-user" alt="Profile"></i> <span class="arrow">&#9662;</span>';
-        // Display user email in the dropdown
-        const userEmail = localStorage.getItem("efusereId"); // Fetch user email from local storage
+        const userEmail = localStorage.getItem("efusereId"); 
         const userEmailElement = document.getElementById('user-email');
         if (userEmailElement) {
-            userEmailElement.textContent = userEmail; // Set the user email in the dropdown
+            userEmailElement.textContent = userEmail; 
         }
         menuButton.style.display = 'block';
         if(feedbackReportButtons){
             feedbackReportButtons.classList.remove('hidden');
         }
-        // Show dropdown on click
+        
         homeButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent the click event from bubbling up
+            event.stopPropagation();
             toggleDropdown();
         });
         
-        // Sign out action
+        
         signOutLink.addEventListener('click', () => {
-            event.preventDefault(); // Prevent default anchor behavior
+            event.preventDefault(); 
             localStorage.removeItem("tabcurrentx");
             localStorage.removeItem("tabcurrenty");
             localStorage.removeItem("efusereId");
@@ -1271,23 +1184,22 @@ function updateHomeButton() {
             localStorage.removeItem("tries");
             localStorage.removeItem("sitestate");
             signInWithGoogleDirectly(true, true);
-            window.location.reload(true); // For most modern browsers
+            window.location.reload(true); 
         });
     } else {
-        homeButton.innerHTML = ''; // Remove arrow if exists
+        homeButton.innerHTML = ''; 
         homeButton.textContent = 'Sign In';
         menuButton.style.display = 'none';
         if (feedbackReportButtons) {
             feedbackReportButtons.classList.add('hidden');
         }
     }
-} // Toggle dropdown visibility
+} 
 function toggleDropdown() {
     const dropdownMenu = document.getElementById('dropdown-menu');
     isDropdownVisible = !isDropdownVisible;
     dropdownMenu.style.display = isDropdownVisible ? 'block' : 'none';
 
-    // Add or remove event listener to close dropdown when clicking outside
     if (isDropdownVisible) {
         document.addEventListener('click', closeDropdown);
     } else {
@@ -1295,7 +1207,6 @@ function toggleDropdown() {
     }
 }
 
-// Close dropdown when clicking outside of it
 function closeDropdown(event) {
     const dropdownMenu = document.getElementById('dropdown-menu');
     if (!dropdownMenu.contains(event.target) && !document.querySelector('.home-button-container').contains(event.target)) {
