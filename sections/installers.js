@@ -1,8 +1,6 @@
-// Function to create installer items and add them to the div
 function populateInstallers(installers) {
     const installersContainer = document.getElementById('installers');
     
-    // Enhanced responsive flexbox layout
     installersContainer.style.display = 'flex';
     installersContainer.style.flexWrap = 'wrap';
     installersContainer.style.gap = '16px';
@@ -14,19 +12,16 @@ function populateInstallers(installers) {
     installersContainer.style.border = '1px solid #e5e5e5';
     installersContainer.style.justifyContent = 'center';
 
-    // Clear existing content
     installersContainer.innerHTML = '';
 
-    // Create and append enhanced installer items
     installers.forEach(installer => {
         const installerItem = document.createElement('div');
         
-        // Improved flexible sizing - will adjust to fill available space
         installerItem.style.display = 'flex';
         installerItem.style.flexDirection = 'column';
         installerItem.style.alignItems = 'center';
         installerItem.style.justifyContent = 'center';
-        installerItem.style.flex = '1 1 calc(20% - 16px)'; // 5 items per row with gap accounted for
+        installerItem.style.flex = '1 1 calc(20% - 16px)'; 
         installerItem.style.minWidth = '150px';
         installerItem.style.maxWidth = '200px';
         installerItem.style.height = '180px';
@@ -40,7 +35,6 @@ function populateInstallers(installers) {
         installerItem.style.textAlign = 'center';
         installerItem.style.boxShadow = '0 2px 4px rgba(0, 0, 0, 0.05)';
         
-        // Professional hover effects
         installerItem.onmouseover = () => {
             installerItem.style.transform = 'translateY(-2px)';
             installerItem.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
@@ -57,7 +51,6 @@ function populateInstallers(installers) {
             window.open(installer.url, '_blank');
         };
 
-        // Professional app icon styling
         const img = document.createElement('img');
         img.src = installer.icon;
         img.alt = installer.name;
@@ -69,10 +62,8 @@ function populateInstallers(installers) {
         img.style.marginBottom = '12px';
         img.style.boxShadow = '0 2px 8px rgba(0, 0, 0, 0.1)';
         
-        // Handle image loading errors
         img.onerror = () => {
             img.style.display = 'none';
-            // Create fallback icon
             const fallbackIcon = document.createElement('div');
             fallbackIcon.style.width = '80px';
             fallbackIcon.style.height = '80px';
@@ -88,7 +79,6 @@ function populateInstallers(installers) {
             installerItem.insertBefore(fallbackIcon, img.nextSibling);
         };
 
-        // App name with proper text handling
         const name = document.createElement('div');
         name.textContent = installer.name;
         name.style.fontSize = '14px';
@@ -102,7 +92,7 @@ function populateInstallers(installers) {
         name.style.webkitLineClamp = '2';
         name.style.webkitBoxOrient = 'vertical';
         name.style.margin = '0';
-        name.title = installer.name; // Show full name on hover
+        name.title = installer.name; 
 
         installerItem.appendChild(img);
         installerItem.appendChild(name);
