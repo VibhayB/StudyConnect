@@ -1,7 +1,5 @@
-/* Import Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 
-/* CSS Variables for consistent theming */
 :root {
     --primary-color: #2563eb;
     --primary-dark: #1d4ed8;
@@ -31,7 +29,6 @@
     --transition-slow: 0.5s ease-in-out;
 }
 
-/* Reset and base styles */
 * {
     margin: 0;
     padding: 0;
@@ -47,7 +44,6 @@ body {
     position: relative;
 }
 
-/* Header */
 header {
     display: flex;
     align-items: center;
@@ -58,8 +54,8 @@ header {
     color: var(--text-primary);
     padding: 1rem 2rem;
     position: fixed;
-    top: 0; /* Add this line - explicitly position at top */
-    left: 0; /* Add this line for full width positioning */
+    top: 0; 
+    left: 0; 
     width: 100%;
     z-index: 1010;
     box-shadow: var(--shadow-md);
@@ -99,11 +95,10 @@ header {
     background-clip: text;
 }
 
-/* Home button and dropdown */
 .home-button-container {
     position: relative;
-    display: flex; /* use flex so children are laid out in a row */
-    gap: 0.5rem; /* spacing between buttons */
+    display: flex;
+    gap: 0.5rem; 
     align-items: center;
 }
 
@@ -139,11 +134,10 @@ header {
     transform: rotate(180deg);
 }
 
-/* Home button and dropdown */
 .guide-button-container {
-    display: none; /* JS toggles this */
+    display: none; 
     position: relative;
-    min-width: 100px; /* ensure visible width */
+    min-width: 100px; 
     text-align: center;
 }
 
@@ -223,7 +217,7 @@ nav {
     top: 0;
     bottom: 0;
     left: 0;
-    padding-top: 90px; /* Account for header height */
+    padding-top: 90px;
     overflow-y: auto;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1002;
@@ -254,7 +248,6 @@ nav ul li {
     overflow: hidden;
 }
 
-/* Subtle hover effect */
 nav ul li::before {
     content: '';
     position: absolute;
@@ -287,7 +280,6 @@ nav ul li.active {
     font-weight: 600;
 }
 
-/* Close button - cleaner design */
 nav .close-menu {
     position: absolute;
     top: 1.5rem;
@@ -313,7 +305,6 @@ nav .close-menu:hover {
     transform: rotate(90deg);
 }
 
-/* Closed state */
 nav.closed {
     transform: translateX(-280px);
 }
@@ -323,7 +314,6 @@ nav.closed ul li {
     transform: translateX(-20px);
 }
 
-/* Add animation for menu items when sidebar opens */
 nav:not(.closed) ul li {
     animation: fadeInSlideRight 0.4s ease-out forwards;
 }
@@ -344,7 +334,6 @@ nav:not(.closed) ul li:nth-child(8) { animation-delay: 0.8s; }
     }
 }
 
-/* Add some nice icons or indicators if you want */
 nav ul li::after {
     content: '';
     position: absolute;
@@ -363,7 +352,6 @@ nav ul li.active::after {
     opacity: 1;
 }
 
-/* Mobile responsiveness for sidebar */
 @media (max-width: 768px) {
     nav {
         width: 100%;
@@ -390,7 +378,6 @@ nav ul li.active::after {
     display: block;
 }
 
-/* Banner section */
 #banner {
     position: relative;
     width: 100%;
@@ -443,7 +430,6 @@ nav ul li.active::after {
     -webkit-backdrop-filter: blur(10px);
 }
 
-/* Navigation arrows */
 .prev, .next {
     position: absolute;
     top: 50%;
@@ -478,7 +464,6 @@ nav ul li.active::after {
     transform: scale(1.1);
 }
 
-/* Dots navigation */
 .dots {
     position: absolute;
     bottom: 1.5rem;
@@ -505,8 +490,6 @@ nav ul li.active::after {
     transform: scale(1.2);
 }
 
-/* Button styles */
-/* Button styles - UNCHANGED */
 .dynamic-button {
     background: linear-gradient(135deg, var(--primary-color), var(--primary-light));
     color: white;
@@ -535,7 +518,6 @@ nav ul li.active::after {
     transform: translateY(-1px);
 }
 
-/* Container and responsive styles */
 #feedback-report-buttons {
     display: flex;
     flex-wrap: wrap;
@@ -547,21 +529,18 @@ nav ul li.active::after {
     box-sizing: border-box;
 }
 
-/* For medium screens */
 @media (max-width: 1000px) {
     #feedback-report-buttons {
         max-width: 800px;
     }
 }
 
-/* For smaller screens */
 @media (max-width: 800px) {
     #feedback-report-buttons {
         max-width: 600px;
     }
 }
 
-/* For even smaller screens - 2 buttons per row */
 @media (max-width: 600px) {
     #feedback-report-buttons {
         max-width: 500px;
@@ -569,7 +548,6 @@ nav ul li.active::after {
     }
 }
 
-/* For very small screens - single column ONLY when absolutely necessary */
 @media (max-width: 400px) {
     #feedback-report-buttons {
         flex-direction: column;
@@ -582,7 +560,7 @@ nav ul li.active::after {
         width: 200px;
     }
 }
-/* Loading screen */
+
 .spinner {
     border: 4px solid rgba(59, 130, 246, 0.1);
     border-top: 4px solid var(--primary-color);
@@ -601,7 +579,6 @@ nav ul li.active::after {
     100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* Custom Alert */
 #custom-alert {
     position: fixed;
     top: 50%;
@@ -692,7 +669,6 @@ nav ul li.active::after {
     color: white;
 }
 
-/* Footer */
 footer {
     background: var(--bg-secondary);
     padding: 2rem;
@@ -733,7 +709,6 @@ footer {
     background: linear-gradient(135deg, #dc2626, #b91c1c);
 }
 
-/* Status bar */
 #status-bar {
     display: none;
     padding: 1rem;
@@ -760,7 +735,6 @@ footer {
     color: white;
 }
 
-/* Detail items */
 .details-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -809,7 +783,6 @@ footer {
     filter: drop-shadow(var(--shadow-sm));
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
     .menu-button {
         display: block;
@@ -853,7 +826,6 @@ footer {
     }
 }
 
-/* Overlay */
 #overlay {
     position: fixed;
     top: 0;
@@ -872,12 +844,10 @@ footer {
     display: block;
 }
 
-/* Utility classes */
 .hidden {
     display: none !important;
 }
 
-/* Chatbot styles */
 #chatbot-toggle {
     position: fixed;
     bottom: 2rem;
@@ -991,7 +961,6 @@ footer {
     margin: 0 0.5rem;
 }
 
-/* Scrollbar styling */
 ::-webkit-scrollbar {
     width: 6px;
 }
