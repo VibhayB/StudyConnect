@@ -57,28 +57,7 @@ function createTabs(abcData) {
             specialData.subjects.forEach(subjectGroup => {
                 Object.entries(subjectGroup).forEach(([subjectName, subjectData]) => {
                     const syllabus = (subjectData.syllabus || 'No syllabus available').replace(/\\n/g, '<br>');
-                    
-                    // Check if topics is a URL
-                    let topicsContent = '';
-                    const topicsValue = subjectData.topics || 'No Important topics are specified';
-                    
-                    if (isValidUrl(topicsValue)) {
-                        // If it's a URL, create an image container
-                        topicsContent = `
-                            <div class="topics-image-container">
-                                <h3 class="section-subtitle">Important Topics:</h3>
-                                <img src="${topicsValue}" alt="Important Topics for ${subjectName}" class="topics-image"/>
-                            </div>
-                        `;
-                    } else {
-                        // If it's text, display as before
-                        topicsContent = `
-                            <div class="subject-section">
-                                <h2 class="section-title">Important Topics:</h2>
-                                <p class="section-content">${topicsValue.replace(/\\n/g, '<br>')}</p>
-                            </div>
-                        `;
-                    }
+                    const topics = (subjectData.topics || 'No Important topics are specified').replace(/\\n/g, '<br>');
             
                     content += `
                         <div class="subject-container">
@@ -87,7 +66,23 @@ function createTabs(abcData) {
                                 <h2 class="section-title">Syllabus:</h2>
                                 <p class="section-content">${syllabus}</p>
                             </div>
-                            ${topicsContent}
+                            <div class="subject-section">
+                                <h2 class="section-title">Important Topics:</h2>`;
+                    
+                    // SIMPLE CHECK: If topics starts with http, treat it as image URL
+                    if (subjectData.topics && subjectData.topics.startsWith('http')) {
+                        // Embed as image
+                        content += `
+                                <div class="topics-image-container">
+                                    <img src="${subjectData.topics}" alt="Important Topics for ${subjectName}" class="topics-image"/>
+                                </div>`;
+                    } else {
+                        // Display as text
+                        content += `<p class="section-content">${topics}</p>`;
+                    }
+                    
+                    content += `
+                            </div>
                             <div class="subject-section">
                                 <h2 class="section-title">Study Material:</h2>
                                 <div class="drive-container">
@@ -128,25 +123,6 @@ function createTabs(abcData) {
         
         content += '</div>';
         return content;
-    }
-    
-    // Helper function to check if a string is a valid URL
-    function isValidUrl(string) {
-        try {
-            // Basic URL validation
-            const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
-            if (!urlPattern.test(string)) return false;
-            
-            // Additional check for common image extensions
-            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
-            const hasImageExtension = imageExtensions.some(ext => 
-                string.toLowerCase().includes(ext)
-            );
-            
-            return hasImageExtension;
-        } catch {
-            return false;
-        }
     }
     
     // Helper function to create card HTML
@@ -482,15 +458,6 @@ function createTabs(abcData) {
             border-left: 4px solid #007bff;
         }
         
-        .section-subtitle {
-            font-size: 20px;
-            font-weight: 600;
-            color: #2d3748;
-            margin-bottom: 15px;
-            padding-left: 10px;
-            border-left: 3px solid #007bff;
-        }
-        
         .section-content {
             font-size: 17px;
             line-height: 1.7;
@@ -502,8 +469,8 @@ function createTabs(abcData) {
         }
         
         .topics-image-container {
-            margin-bottom: 25px;
             text-align: center;
+            margin: 15px 0;
         }
         
         .topics-image {
@@ -512,11 +479,6 @@ function createTabs(abcData) {
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             border: 1px solid #e0e0e0;
-            transition: transform 0.3s ease;
-        }
-        
-        .topics-image:hover {
-            transform: scale(1.02);
         }
         
         .drive-container {
@@ -686,10 +648,6 @@ function createTabs(abcData) {
                 margin-bottom: 12px;
             }
 
-            .topics-image {
-                max-width: 95%;
-            }
-
             @media only screen and (max-width: 480px) {
                 .tabs-container {
                     padding: 10px;
@@ -721,14 +679,6 @@ function createTabs(abcData) {
                 
                 .section-title {
                     font-size: 18px;
-                }
-                
-                .section-subtitle {
-                    font-size: 16px;
-                }
-                
-                .topics-image {
-                    max-width: 100%;
                 }
             }
 
