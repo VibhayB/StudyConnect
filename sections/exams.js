@@ -332,8 +332,12 @@ function createTabs(abcData) {
         }
         
         .special-section {
-            line-height: 1.6;
-            color: #444;
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            color: #856404;
         }
         
         #timers-container {
@@ -703,3 +707,4 @@ function createTabs(abcData) {
     `;
     document.head.appendChild(style);
 }
+
