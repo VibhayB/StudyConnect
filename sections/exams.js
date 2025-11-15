@@ -57,7 +57,28 @@ function createTabs(abcData) {
             specialData.subjects.forEach(subjectGroup => {
                 Object.entries(subjectGroup).forEach(([subjectName, subjectData]) => {
                     const syllabus = (subjectData.syllabus || 'No syllabus available').replace(/\\n/g, '<br>');
-                    const topics = (subjectData.topics || 'No Important topics are specified').replace(/\\n/g, '<br>');
+                    
+                    // Check if topics is a URL
+                    let topicsContent = '';
+                    const topicsValue = subjectData.topics || 'No Important topics are specified';
+                    
+                    if (isValidUrl(topicsValue)) {
+                        // If it's a URL, create an image container
+                        topicsContent = `
+                            <div class="topics-image-container">
+                                <h3 class="section-subtitle">Important Topics:</h3>
+                                <img src="${topicsValue}" alt="Important Topics for ${subjectName}" class="topics-image"/>
+                            </div>
+                        `;
+                    } else {
+                        // If it's text, display as before
+                        topicsContent = `
+                            <div class="subject-section">
+                                <h2 class="section-title">Important Topics:</h2>
+                                <p class="section-content">${topicsValue.replace(/\\n/g, '<br>')}</p>
+                            </div>
+                        `;
+                    }
             
                     content += `
                         <div class="subject-container">
@@ -66,10 +87,7 @@ function createTabs(abcData) {
                                 <h2 class="section-title">Syllabus:</h2>
                                 <p class="section-content">${syllabus}</p>
                             </div>
-                            <div class="subject-section">
-                                <h2 class="section-title">Important Topics:</h2>
-                                <p class="section-content">${topics}</p>
-                            </div>
+                            ${topicsContent}
                             <div class="subject-section">
                                 <h2 class="section-title">Study Material:</h2>
                                 <div class="drive-container">
@@ -110,6 +128,25 @@ function createTabs(abcData) {
         
         content += '</div>';
         return content;
+    }
+    
+    // Helper function to check if a string is a valid URL
+    function isValidUrl(string) {
+        try {
+            // Basic URL validation
+            const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/i;
+            if (!urlPattern.test(string)) return false;
+            
+            // Additional check for common image extensions
+            const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.svg'];
+            const hasImageExtension = imageExtensions.some(ext => 
+                string.toLowerCase().includes(ext)
+            );
+            
+            return hasImageExtension;
+        } catch {
+            return false;
+        }
     }
     
     // Helper function to create card HTML
@@ -445,6 +482,15 @@ function createTabs(abcData) {
             border-left: 4px solid #007bff;
         }
         
+        .section-subtitle {
+            font-size: 20px;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 15px;
+            padding-left: 10px;
+            border-left: 3px solid #007bff;
+        }
+        
         .section-content {
             font-size: 17px;
             line-height: 1.7;
@@ -453,6 +499,24 @@ function createTabs(abcData) {
             background: #f8f9fa;
             border-radius: 8px;
             border-left: 3px solid #007bff;
+        }
+        
+        .topics-image-container {
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        
+        .topics-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e0e0e0;
+            transition: transform 0.3s ease;
+        }
+        
+        .topics-image:hover {
+            transform: scale(1.02);
         }
         
         .drive-container {
@@ -492,26 +556,26 @@ function createTabs(abcData) {
             text-align: center;
         }
         
-.video-wrapper {
-    position: relative;
-    width: 100%;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    border-radius: 8px;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-    min-height: 315px; /* Ensure minimum height for controls */
-}
+        .video-wrapper {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+            min-height: 315px;
+        }
 
-.video-iframe {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    border: none;
-    min-width: 280px; /* Ensure controls are accessible */
-}
+        .video-iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+            min-width: 280px;
+        }
         
         .no-content {
             text-align: center;
@@ -559,123 +623,132 @@ function createTabs(abcData) {
         
         @media only screen and (max-width: 768px) {
             .tabs-container {
-        flex-direction: column;
-        overflow-x: auto; /* Allow horizontal scrolling */
-        overflow-y: hidden;
-        flex-direction: row; /* Keep tabs horizontal */
-        white-space: nowrap;
-    }
+                flex-direction: column;
+                overflow-x: auto;
+                overflow-y: hidden;
+                flex-direction: row;
+                white-space: nowrap;
+            }
             
             .tab {
-        border-radius: 0;
-        margin-right: 0;
-        margin-bottom: 4px;
-        flex-shrink: 0; /* Prevent tabs from shrinking */
-        white-space: nowrap;
-        min-width: 100px;
-        margin-right: 8px;
-    }
+                border-radius: 0;
+                margin-right: 0;
+                margin-bottom: 4px;
+                flex-shrink: 0;
+                white-space: nowrap;
+                min-width: 100px;
+                margin-right: 8px;
+            }
             
             .tab.active {
-        border-radius: 8px;
-    }
+                border-radius: 8px;
+            }
             
             #timers-container {
-        flex-direction: column;
-        align-items: center;
-    }
+                flex-direction: column;
+                align-items: center;
+            }
             
             .timer {
-        width: 100%;
-        max-width: 280px;
-    }
-    
+                width: 100%;
+                max-width: 280px;
+            }
             
             .tab-contents {
-        padding: 20px 15px; /* Reduce horizontal padding */
-    }
+                padding: 20px 15px;
+            }
             
             .subject-container {
-        padding: 15px;
-        margin: 20px 0;
-    }
+                padding: 15px;
+                margin: 20px 0;
+            }
             
             .subject-title {
-        font-size: 26px;
-    }
+                font-size: 26px;
+            }
 
-    .video-container {
-        margin-bottom: 25px;
-        padding: 15px;
-    }
+            .video-container {
+                margin-bottom: 25px;
+                padding: 15px;
+            }
 
-    .video-wrapper {
-        min-height: 250px; /* Smaller but still accessible */
-        padding-bottom: 60%; /* Slightly taller aspect ratio for mobile */
-    }
-    
-    .video-iframe {
-        min-width: 100%; /* Use full container width */
-    }
-    
-    .video-title {
-        font-size: 16px;
-        margin-bottom: 12px;
-    }
+            .video-wrapper {
+                min-height: 250px;
+                padding-bottom: 60%;
+            }
+            
+            .video-iframe {
+                min-width: 100%;
+            }
+            
+            .video-title {
+                font-size: 16px;
+                margin-bottom: 12px;
+            }
 
-    @media only screen and (max-width: 480px) {
-    .tabs-container {
-        padding: 10px;
-        gap: 5px;
-    }
-    
-    .tab {
-        padding: 12px 16px;
-        font-size: 14px;
-        min-width: 80px;
-    }
-    
-    .tab-contents {
-        padding: 15px 10px;
-    }
-    
-    .video-wrapper {
-        min-height: 200px;
-        padding-bottom: 65%; /* Even taller for very small screens */
-    }
-    
-    .video-title {
-        font-size: 14px;
-    }
-    
-    .subject-title {
-        font-size: 22px;
-    }
-    
-    .section-title {
-        font-size: 18px;
-    }
-}
+            .topics-image {
+                max-width: 95%;
+            }
 
-/* Tabs scrollbar styling for mobile */
-.tabs-container::-webkit-scrollbar {
-    height: 4px;
-}
+            @media only screen and (max-width: 480px) {
+                .tabs-container {
+                    padding: 10px;
+                    gap: 5px;
+                }
+                
+                .tab {
+                    padding: 12px 16px;
+                    font-size: 14px;
+                    min-width: 80px;
+                }
+                
+                .tab-contents {
+                    padding: 15px 10px;
+                }
+                
+                .video-wrapper {
+                    min-height: 200px;
+                    padding-bottom: 65%;
+                }
+                
+                .video-title {
+                    font-size: 14px;
+                }
+                
+                .subject-title {
+                    font-size: 22px;
+                }
+                
+                .section-title {
+                    font-size: 18px;
+                }
+                
+                .section-subtitle {
+                    font-size: 16px;
+                }
+                
+                .topics-image {
+                    max-width: 100%;
+                }
+            }
 
-.tabs-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1);
-    border-radius: 2px;
-}
+            .tabs-container::-webkit-scrollbar {
+                height: 4px;
+            }
 
-.tabs-container::-webkit-scrollbar-thumb {
-    background: rgba(0, 123, 255, 0.5);
-    border-radius: 2px;
-}
+            .tabs-container::-webkit-scrollbar-track {
+                background: rgba(0, 0, 0, 0.1);
+                border-radius: 2px;
+            }
 
-.tabs-container::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 123, 255, 0.7);
-}
+            .tabs-container::-webkit-scrollbar-thumb {
+                background: rgba(0, 123, 255, 0.5);
+                border-radius: 2px;
+            }
 
+            .tabs-container::-webkit-scrollbar-thumb:hover {
+                background: rgba(0, 123, 255, 0.7);
+            }
         }
     `;
     document.head.appendChild(style);
