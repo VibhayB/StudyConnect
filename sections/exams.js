@@ -21,7 +21,11 @@ function createTabs(abcData) {
     function createSpecialSection(specialData) {
         if (!specialData) return "No Exams there<br><br>Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.";
         
-        let content = '<div class="special-section">Note: The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.<br><br>';
+        let content = `<div class="special-section">
+            <div class="important-note">
+                <strong>Important Note:</strong> The study videos here may miss or cover an extra topic, so it is advised to have a look over the syllabus and notes as well.
+            </div>
+        <br><br>`;
         
         // Add Timer Section
         if (specialData.timer && specialData.timer.length > 0) {
@@ -269,6 +273,16 @@ function createTabs(abcData) {
     // Add CSS styles
     const style = document.createElement('style');
     style.textContent = `
+        .important-note {
+            background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 20px;
+            font-size: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            color: #856404;
+            font-weight: 500;
+        }
         .tabs-container {
             display: flex;
             flex-wrap: wrap;
@@ -332,12 +346,8 @@ function createTabs(abcData) {
         }
         
         .special-section {
-            background: #fff3cd;
-            border: 1px solid #ffeaa7;
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: #856404;
+            line-height: 1.6;
+            color: #444;
         }
         
         #timers-container {
@@ -707,4 +717,5 @@ function createTabs(abcData) {
     `;
     document.head.appendChild(style);
 }
+
 
