@@ -664,22 +664,21 @@ closureInfo.style.marginTop = '20px';
 const closureDate = document.createElement('div');
 closureDate.innerHTML = `
     <p style="font-size: 1.4rem; color: #555; margin-bottom: 10px; font-weight: 600;">
-        AIML StudyConnect will close permanently on:
+        AIML StudyConnect will disconnect on:
     </p>
     <div style="font-size: 2.2rem; font-weight: bold; color: #ff4444; margin: 15px 0; padding: 15px; background: linear-gradient(135deg, #fff8f8 0%, #ffeded 100%); border-radius: 10px; border: 2px solid #ff6b6b;">
-        December 31, 2026
+        December, 2026
     </div>
 `;
 
 const details = document.createElement('div');
 details.innerHTML = `
     <p style="font-size: 1.2rem; color: #666; margin: 15px 0; line-height: 1.5;">
-        • All features available until December 31, 2026<br>
-        • Complete shutdown: January 1, 2027<br>
+        • The website will still be usable but most of the content and probably features will be removed<br>
         • Please save any important data before the closure
     </p>
     <p style="font-size: 1.1rem; color: #777; font-style: italic; margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ddd;">
-        Thank you for being part of our community
+        Thank you for using the website
     </p>
 `;
 
@@ -1250,4 +1249,5 @@ function closeDropdown(event) {
         document.removeEventListener('click', closeDropdown);
     }
 }
+
 
