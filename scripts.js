@@ -625,38 +625,73 @@ buttonData.forEach(data => {
 
 mainContainer.appendChild(buttonsContainer);
 
-    const timetableSection = document.createElement('div');
-    timetableSection.className = 'timetable-section';
-    timetableSection.style.textAlign = 'center';
-    timetableSection.style.margin = '50px 0';
-    timetableSection.style.padding = '30px';
-    timetableSection.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)';
-    timetableSection.style.borderRadius = '16px';
-    timetableSection.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+    // Website Closure Notice Section (replaces timetable completely)
+const closureNoticeSection = document.createElement('div');
+closureNoticeSection.className = 'closure-notice-section';
+closureNoticeSection.style.textAlign = 'center';
+closureNoticeSection.style.margin = '50px 0';
+closureNoticeSection.style.padding = '30px';
+closureNoticeSection.style.background = 'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)';
+closureNoticeSection.style.borderRadius = '16px';
+closureNoticeSection.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
 
-    const heading = document.createElement('h3');
-    heading.textContent = 'Timetable (AIML7A)';
-    heading.style.fontSize = '1.8rem';
-    heading.style.color = '#2d3748';
-    heading.style.marginBottom = '25px';
-    heading.style.fontWeight = '700';
+const heading = document.createElement('h3');
+heading.textContent = 'Website Closure Notice';
+heading.style.fontSize = '1.8rem';
+heading.style.color = '#ff4444';
+heading.style.marginBottom = '25px';
+heading.style.fontWeight = '700';
 
 const image = document.createElement('img');
-    image.src = imageMap.TimeTable;
-    image.alt = 'Timetable';
-    image.style.width = '100%';
-    image.style.maxWidth = '900px';
-    image.style.height = 'auto';
-    image.style.borderRadius = '12px';
-    image.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
-    image.style.transition = 'transform 0.3s ease';
-    
-    image.onmouseover = () => image.style.transform = 'scale(1.02)';
-    image.onmouseout = () => image.style.transform = 'scale(1)';
+image.src = imageMap.TimeTable; // Using the same timetable image
+image.alt = 'Website Closure';
+image.style.width = '100%';
+image.style.maxWidth = '900px';
+image.style.height = 'auto';
+image.style.borderRadius = '12px';
+image.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+image.style.border = '3px solid #ff6b6b';
+image.style.marginBottom = '25px';
+image.style.opacity = '0.9';
 
-    timetableSection.appendChild(heading);
-    timetableSection.appendChild(image);
-    mainContainer.appendChild(timetableSection);
+const closureInfo = document.createElement('div');
+closureInfo.style.textAlign = 'center';
+closureInfo.style.padding = '20px';
+closureInfo.style.background = 'rgba(255, 255, 255, 0.8)';
+closureInfo.style.borderRadius = '10px';
+closureInfo.style.marginTop = '20px';
+
+const closureDate = document.createElement('div');
+closureDate.innerHTML = `
+    <p style="font-size: 1.4rem; color: #555; margin-bottom: 10px; font-weight: 600;">
+        AIML StudyConnect will close permanently on:
+    </p>
+    <div style="font-size: 2.2rem; font-weight: bold; color: #ff4444; margin: 15px 0; padding: 15px; background: linear-gradient(135deg, #fff8f8 0%, #ffeded 100%); border-radius: 10px; border: 2px solid #ff6b6b;">
+        December 31, 2026
+    </div>
+`;
+
+const details = document.createElement('div');
+details.innerHTML = `
+    <p style="font-size: 1.2rem; color: #666; margin: 15px 0; line-height: 1.5;">
+        • All features available until December 31, 2026<br>
+        • Complete shutdown: January 1, 2027<br>
+        • Please save any important data before the closure
+    </p>
+    <p style="font-size: 1.1rem; color: #777; font-style: italic; margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ddd;">
+        Thank you for being part of our community
+    </p>
+`;
+
+closureInfo.appendChild(closureDate);
+closureInfo.appendChild(details);
+
+// Assemble the section
+closureNoticeSection.appendChild(heading);
+closureNoticeSection.appendChild(image); // Using the timetable image here
+closureNoticeSection.appendChild(closureInfo);
+
+mainContainer.appendChild(closureNoticeSection);
 
     const infoSection = document.createElement('div');
     infoSection.className = 'info-section';
@@ -1215,3 +1250,4 @@ function closeDropdown(event) {
         document.removeEventListener('click', closeDropdown);
     }
 }
+
