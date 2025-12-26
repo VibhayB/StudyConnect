@@ -609,7 +609,7 @@ const buttonData = [
         { text: 'Course', tab: 'course', icon: 'fas fa-book' },
         { text: 'Assignments', tab: 'assignments', icon: 'fas fa-tasks' },
         { text: 'Docs', tab: 'forms', icon: 'fas fa-file-alt' },
-        { text: 'Exams', tab: 'exams', icon: 'fas fa-graduation-cap' },
+        { text: 'Games', tab: 'games', icon: 'fas fa-graduation-cap' },
         { text: 'Feed', tab: 'feed', icon: 'fas fa-newspaper' },
         { text: 'Others', tab: 'others', icon: 'fas fa-ellipsis-h' }
     ];
@@ -1249,5 +1249,6 @@ function closeDropdown(event) {
         document.removeEventListener('click', closeDropdown);
     }
 }
+
 
 
