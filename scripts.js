@@ -675,7 +675,8 @@ const details = document.createElement('div');
 details.innerHTML = `
     <p style="font-size: 1.2rem; color: #666; margin: 15px 0; line-height: 1.5;">
         • The website will still be usable but most of the content and probably features will be removed<br>
-        • Please save any important data before the closure
+        • Please save any important data before the closure.<br>
+        • You can contact at the email: bakshivibhay@gmail.com for queries or content request
     </p>
     <p style="font-size: 1.1rem; color: #777; font-style: italic; margin-top: 20px; padding-top: 15px; border-top: 1px dashed #ddd;">
         Thank you for using the website
@@ -1249,6 +1250,7 @@ function closeDropdown(event) {
         document.removeEventListener('click', closeDropdown);
     }
 }
+
 
 
 
