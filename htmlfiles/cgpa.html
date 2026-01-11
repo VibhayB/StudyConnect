@@ -152,7 +152,7 @@
           error.textContent = "Training value must be 0–10.";
           return;
         }
-        total += training * 2; credits += 2;
+        total += training * 3; credits += 3;
       }
 
       if (["7", "8"].includes(mode)) {
@@ -170,7 +170,7 @@
           error.textContent = "Semester 8 value must be 0–10.";
           return;
         }
-        total += sgpa8 * 8; credits += 8;
+        total += sgpa8 * 12; credits += 12;
       }
 
       result.textContent = (total / credits).toFixed(2);
@@ -179,4 +179,5 @@
 
 </body>
 </html>
+
 
