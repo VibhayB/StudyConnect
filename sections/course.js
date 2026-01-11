@@ -1542,7 +1542,7 @@ function showSubjectContent(subject) {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/2393/2393574.png";
         } else if (detailName.includes('Study Material') && !detailName.includes('Online')) {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/1089/1089109.png";
-        } else if (detailName.includes(' pic')) {
+        } else if (detailName.includes('Picture')) {
             iconUrl = "https://www.freeiconspng.com/uploads/multimedia-photo-icon-31.png";
         }  else if (detailName.includes('Project') || detailName.includes('Literature Survey Folder')) {
             iconUrl = "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/512/folder-icon.png";
@@ -1735,5 +1735,6 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
 
 
