@@ -1210,7 +1210,7 @@ function isSemesterSelected(semesterId) {
 
 function getSelectedSemesters() {
     const storedSemesters = localStorage.getItem('selectedSemesters');
-    return storedSemesters ? JSON.parse(storedSemesters) : ['sem7']; // Default to Semester 7
+    return storedSemesters ? JSON.parse(storedSemesters) : ['sem8']; // Default to Semester 8
 }
 
 // Function to save selected semesters to local storage
@@ -1233,7 +1233,7 @@ function updateSubjectList() {
 
     const selectedSemesters = getSelectedSemesters();
     if (selectedSemesters.length === 0) {
-        selectedSemesters.push('sem7'); // Default to Semester 7 if none selected
+        selectedSemesters.push('sem8'); // Default to Semester 8 if none selected
     }
 
     selectedSemesters.forEach(semesterId => {
@@ -1735,6 +1735,7 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
 
 
 
