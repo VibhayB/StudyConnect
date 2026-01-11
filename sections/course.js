@@ -1375,7 +1375,7 @@ function checkdetailname(detailName){
         return "https://cdn-icons-png.flaticon.com/512/1089/1089109.png";
     } if (detailName.includes('Picture')) {
         return "https://cdn-icons-png.flaticon.com/512/1375/1375106.png";
-    }  if (detailName.includes('Project') || detailName.includes('Literature Survey Folder')) {
+    }  if (detailName.includes('Project') && !detailName.includes('Report') || detailName.includes('Literature Survey Folder')) {
         return "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/512/folder-icon.png";
     }  if (detailName === 'Class Notebook') {
         return "https://static.vecteezy.com/system/resources/previews/027/179/341/original/microsoft-one-note-icon-logo-symbol-free-png.png";
@@ -1387,7 +1387,7 @@ function checkdetailname(detailName){
         return "https://cdn.pixabay.com/photo/2016/06/15/15/02/info-1459077_1280.png";
     } if (detailName === 'Videos') {
         return "https://cdn-icons-png.freepik.com/256/1324/1324244.png?semt=ais_hybrid";
-    }  if (detailName.includes('certificate')) {
+    }  if (detailName.includes('Certificate')) {
         return "https://cdn-icons-png.flaticon.com/512/10771/10771301.png";
     } if (detailName.includes('Report')) {
         return "https://cdn-icons-png.flaticon.com/512/1055/1055644.png";
@@ -1710,6 +1710,7 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
 
 
 
