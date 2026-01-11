@@ -1536,17 +1536,19 @@ function showSubjectContent(subject) {
             iconUrl = "https://t4.ftcdn.net/jpg/05/07/19/83/360_F_507198344_PPZmZ0ShfTohJBPUv7Dh0ATswkJrPjtr.jpg";
         } else if (detailName.includes('Online') || detailName.includes('NPTEL Dashboard') || detailName.includes('Website')) {
             iconUrl = "https://i.pinimg.com/564x/4b/b0/37/4bb037397915f5efa68fdd79b604b822.jpg";
-        } else if (detailName === 'Tutorials') {
+        } else if (detailName === 'Tutorials'|| detailName.includes('Rubrics')) {
             iconUrl = "https://ift.world/wp-content/uploads/2017/01/wsi-imageoptim-q-bank-300x300.png";
         } else if (detailName === 'Labs') {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/2393/2393574.png";
         } else if (detailName.includes('Study Material') && !detailName.includes('Online')) {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/1089/1089109.png";
-        } else if (detailName.includes('Project') || detailName.includes('Literature Survey Folder')) {
-            iconUrl = "https://static-00.iconduck.com/assets.00/folder-icon-256x204-0171zqe6.png";
+        } else if (detailName.includes(' pic')) {
+            iconUrl = "https://www.freeiconspng.com/uploads/multimedia-photo-icon-31.png";
+        }  else if (detailName.includes('Project') || detailName.includes('Literature Survey Folder')) {
+            iconUrl = "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/512/folder-icon.png";
         } else if (detailName === 'Class Notebook') {
             iconUrl = "https://static.vecteezy.com/system/resources/previews/027/179/341/original/microsoft-one-note-icon-logo-symbol-free-png.png";
-        } else if (detailName === 'Evaluation Sheet') {
+        } else if (detailName === 'Evaluation Sheet'|| detailName.includes('Assessment')) {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/5361/5361284.png";
         } else if (detailName.includes('ppt')) {
             iconUrl = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsdPmt20JSFqweGX13Ib7KM5xbeWFqXCfuog&s";
@@ -1554,6 +1556,12 @@ function showSubjectContent(subject) {
             iconUrl = "https://cdn.pixabay.com/photo/2016/06/15/15/02/info-1459077_1280.png";
         } else if (detailName === 'Videos') {
             iconUrl = "https://cdn-icons-png.freepik.com/256/1324/1324244.png?semt=ais_hybrid";
+        } else if (detailName.includes('certificate')) {
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/10771/10771301.png";
+        } else if (detailName.includes('Report Content')) {
+            iconUrl = "https://cdn-icons-png.freepik.com/512/5738/5738277.png";
+        } else if (detailName.includes('Report')) {
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/8922/8922091.png";
         } else {
             iconUrl = "https://i.pinimg.com/originals/c0/f6/c9/c0f6c97d6669e7bfb41727e884aeb801.png"; // Default icon
         }
@@ -1727,4 +1735,5 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
 
