@@ -1540,10 +1540,12 @@ function showSubjectContent(subject) {
             iconUrl = "https://ift.world/wp-content/uploads/2017/01/wsi-imageoptim-q-bank-300x300.png";
         } else if (detailName === 'Labs') {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/2393/2393574.png";
+        } else if (detailName.includes('Report Content')) {
+            iconUrl = "https://cdn-icons-png.freepik.com/512/5738/5738277.png";
         } else if (detailName.includes('Study Material') && !detailName.includes('Online')) {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/1089/1089109.png";
         } else if (detailName.includes('Picture')) {
-            iconUrl = "https://www.freeiconspng.com/uploads/multimedia-photo-icon-31.png";
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/1375/1375106.png";
         }  else if (detailName.includes('Project') || detailName.includes('Literature Survey Folder')) {
             iconUrl = "https://icons.iconarchive.com/icons/custom-icon-design/flatastic-1/512/folder-icon.png";
         } else if (detailName === 'Class Notebook') {
@@ -1558,10 +1560,8 @@ function showSubjectContent(subject) {
             iconUrl = "https://cdn-icons-png.freepik.com/256/1324/1324244.png?semt=ais_hybrid";
         } else if (detailName.includes('certificate')) {
             iconUrl = "https://cdn-icons-png.flaticon.com/512/10771/10771301.png";
-        } else if (detailName.includes('Report Content')) {
-            iconUrl = "https://cdn-icons-png.freepik.com/512/5738/5738277.png";
         } else if (detailName.includes('Report')) {
-            iconUrl = "https://cdn-icons-png.flaticon.com/512/8922/8922091.png";
+            iconUrl = "https://cdn-icons-png.flaticon.com/512/1055/1055644.png";
         } else {
             iconUrl = "https://i.pinimg.com/originals/c0/f6/c9/c0f6c97d6669e7bfb41727e884aeb801.png"; // Default icon
         }
@@ -1735,6 +1735,7 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
 
 
 
