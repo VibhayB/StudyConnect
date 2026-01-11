@@ -298,6 +298,10 @@ function injectCSS() {
     background: linear-gradient(135deg, #fdf2f8, #f9a8d4);
     border-left: 4px solid #ec4899;
 }
+ .semester-sem8 {
+    background: linear-gradient(135deg, #f5f5f5, #d6d6d6); /* light gray to medium gray */
+    border-left: 4px solid #9ca3af; /* subtle but defined gray accent */
+}
 
 /* Enhanced popup styling */
 .popup, .popup2 {
@@ -1723,3 +1727,4 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
