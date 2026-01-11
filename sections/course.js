@@ -1063,7 +1063,7 @@ function saveSemesterSelection() {
     
     // If no semesters selected, default to sem7
     if (selectedSemesters.length === 0) {
-        selectedSemesters.push('sem7');
+        selectedSemesters.push('sem8');
     }
     
     localStorage.setItem('selectedSemesters', JSON.stringify(selectedSemesters));
@@ -1138,10 +1138,10 @@ function openSemesterPopup() {
     closeButton.classList.add('popup2-close');
     closeButton.textContent = '×';
     closeButton.addEventListener('click', () => {
-        // If no semesters are selected, default to sem7
+        // If no semesters are selected, default to sem8
         const selectedCheckboxes = document.querySelectorAll('#semester-popup input[type="checkbox"]:checked');
         if (selectedCheckboxes.length === 0) {
-            localStorage.setItem('selectedSemesters', JSON.stringify(['sem7']));
+            localStorage.setItem('selectedSemesters', JSON.stringify(['sem8']));
         }
         popup.remove();
         updateSubjectList();
@@ -1735,6 +1735,7 @@ function showDetailContent(detailName, detailValues) {
 
     subjectContent.appendChild(detailContent);
 }
+
 
 
 
