@@ -46,10 +46,13 @@ function createTabs(abcData) {
             content += '<div class="main-images">';
             specialData.mainimages.forEach(imageGroup => {
                 Object.entries(imageGroup).forEach(([imageName, imageUrl]) => {
+                    // Construct local path - assuming images are in same folder or 'images' subfolder
+                    const localImagePath = `./${imageUrl}`; // or `./images/${imageUrl}`
+                    
                     content += `
                         <div class="main-image-container">
                             <h1 class="image-title">${imageName}</h1>
-                            <img src="${imageUrl}" alt="${imageName}" class="main-image"/>
+                            <img src="${localImagePath}" alt="${imageName}" class="main-image"/>
                         </div>`;
                 });
             });
